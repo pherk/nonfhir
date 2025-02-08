@@ -1,0 +1,558 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "0.1.0",
+    "title": "NonFHIR API",
+    "description": "This is the place to add your own path endpoints"
+  },
+  "servers": [
+    {
+      "description": "Endpoint for testing on localhost",
+      "url": "http://localhost:8080/exist/apps/nonfhir"
+    }
+  ],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "route handles login, logout"
+    },
+    {
+      "name": "pages",
+      "description": "pages API"
+    },
+    {
+      "name": "read",
+      "description": "get instance"
+    },
+    {
+      "name": "query",
+      "description": "search type"
+    },
+    {
+      "name": "update",
+      "description": "put instance"
+    }
+  ],
+  "paths": {
+    "/metadata": {
+      "get": {
+        "tags": [
+          "read",
+          "Capabilities"
+        ],
+        "operationId": "nbase:metadata",
+        "summary": "get Capabilities",
+        "parameters": [
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "nbase: Capabilities resource not found"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "read",
+          "Capabilities"
+        ],
+        "operationId": "nbase:health",
+        "summary": "check health",
+        "parameters": [
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "nbase: health not found"
+          }
+        }
+      }
+    },
+    "/Leave/{id}": {
+      "get": {
+        "tags": [
+          "read",
+          "Leave"
+        ],
+        "operationId": "nleave:read-leave",
+        "summary": "read Leave",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "nonfhir: Leave resource not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "update",
+          "create",
+          "Leave"
+        ],
+        "operationId": "nleave:update-leave",
+        "summary": "update Leave",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "nonfhir: Leave resource not found"
+          }
+        }
+      }
+    },
+    "/Leave/{id}/_history/{vid}": {
+      "get": {
+        "summary": "Leave instance history with vid",
+        "description": "",
+        "tags": [
+          "history",
+          "Leave"
+        ],
+        "operationId": "nleave:vread-leave",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "vid",
+            "in": "path",
+            "description": "The resource history VID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "Leave:get instance history failed"
+          }
+        }
+      }
+    },
+    "/Leave/{id}/_history": {
+      "get": {
+        "summary": "Leave instance history",
+        "description": "",
+        "tags": [
+          "history",
+          "Leave"
+        ],
+        "operationId": "nleave:history-leave",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "Leave:get instance history failed"
+          }
+        }
+      }
+    },
+    "/Leave": {
+      "get": {
+        "tags": [
+          "query",
+          "Leave"
+        ],
+        "operationId": "nleave:search-leave",
+        "summary": "search Leave type",
+        "parameters": [
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "_format",
+            "in": "query",
+            "description": "xml, json, d3",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "_elements",
+            "in": "query",
+            "description": "array of props",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "owner",
+            "in": "query",
+            "description": "uuid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "description": "name of group",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "epoch of leave",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "leave status",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "403": {
+            "description": "Leave: search failed"
+          }
+        }
+      }
+    }
+  }
+}

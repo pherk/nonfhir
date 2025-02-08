@@ -1,0 +1,168 @@
+src/FHIR/Device/device-routes.xqm-    %rest:GET
+src/FHIR/Device/device-routes.xqm:    %rest:path("/metis/devices/{$id}")
+--
+src/FHIR/Device/device-routes.xqm-    %rest:GET
+src/FHIR/Device/device-routes.xqm:    %rest:path("/metis/devices/{$id}/_history")
+src/FHIR/Device/device-routes.xqm:    %rest:path("/metis/devices/{$id}")
+--
+src/FHIR/Device/device-routes.xqm-    %rest:GET
+src/FHIR/Device/device-routes.xqm:    %rest:path("/metis/devices/{$id}/_history/{$vid}")
+--
+src/FHIR/Device/device-routes.xqm-    %rest:GET
+src/FHIR/Device/device-routes.xqm:    %rest:path("/metis/devices")
+--
+src/FHIR/Device/device-routes.xqm-    %rest:GET
+src/FHIR/Device/device-routes.xqm:    %rest:path("/metis/devices2csv")
+--
+src/FHIR/Device/device-routes.xqm-    %rest:PUT("{$content}")
+src/FHIR/Device/device-routes.xqm:    %rest:path("/metis/devices")
+--
+src/FHIR/Group/group-routes.xqm-    %rest:GET
+src/FHIR/Group/group-routes.xqm:    %rest:path("/metis/groups/{$id}")
+--
+src/FHIR/Group/group-routes.xqm-    %rest:GET
+src/FHIR/Group/group-routes.xqm:    %rest:path("/metis/groups/{$id}/_history")
+--
+src/FHIR/Group/group-routes.xqm-    %rest:GET
+src/FHIR/Group/group-routes.xqm:    %rest:path("/metis/groups/{$id}/_history/{$vid}")
+--
+src/FHIR/Group/group-routes.xqm-    %rest:GET
+src/FHIR/Group/group-routes.xqm:    %rest:path("/metis/groups")
+--
+src/FHIR/Group/group-routes.xqm-    %rest:PUT("{$content}")
+src/FHIR/Group/group-routes.xqm:    %rest:path("/metis/groups")
+--
+src/FHIR/Group/group-routes.xqm-    %rest:GET
+src/FHIR/Group/group-routes.xqm:    %rest:path("/metis/roles")
+--
+src/FHIR/Group/group-routes.xqm-    %rest:GET
+src/FHIR/Group/group-routes.xqm:    %rest:path("/metis/roles/{$alias}/alias")
+--
+src/FHIR/Group/group-routes.xqm-    %rest:GET
+src/FHIR/Group/group-routes.xqm:    %rest:path("metis/roles")
+--
+src/FHIR/Leave/leave-routes.xqm-    %rest:GET
+src/FHIR/Leave/leave-routes.xqm:    %rest:path("metis/leaves/{$uuid}")
+--
+src/FHIR/Leave/leave-routes.xqm-    %rest:GET
+src/FHIR/Leave/leave-routes.xqm:    %rest:path("metis/leaves")
+--
+src/FHIR/Leave/leave-routes.xqm-    %rest:GET
+src/FHIR/Leave/leave-routes.xqm:    %rest:path("metis/leaves")
+--
+src/FHIR/Leave/leave-routes.xqm-    %rest:GET
+src/FHIR/Leave/leave-routes.xqm:    %rest:path("/metis/leaves2csv")
+--
+src/FHIR/Leave/leave-routes.xqm-    %rest:GET
+src/FHIR/Leave/leave-routes.xqm:    %rest:path("/metis/leaves2pdf")
+--
+src/FHIR/Leave/leave-routes.xqm-    %rest:GET
+src/FHIR/Leave/leave-routes.xqm:    %rest:path("metis/leavesd3")
+--
+src/FHIR/Leave/leave-routes.xqm-    %rest:PUT("{$content}")
+src/FHIR/Leave/leave-routes.xqm:    %rest:path("metis/leaves")
+--
+src/FHIR/Location/location-routes.xqm-    %rest:GET
+src/FHIR/Location/location-routes.xqm:    %rest:path("/metis/locations/{$id}")
+--
+src/FHIR/Location/location-routes.xqm-    %rest:GET
+src/FHIR/Location/location-routes.xqm:    %rest:path("/metis/locations/{$id}/_history")
+--
+src/FHIR/Location/location-routes.xqm-    %rest:GET
+src/FHIR/Location/location-routes.xqm:    %rest:path("/metis/locations/{$id}/_history/{$vid}")
+--
+src/FHIR/Location/location-routes.xqm-    %rest:GET
+src/FHIR/Location/location-routes.xqm:    %rest:path("/metis/locations")
+--
+src/FHIR/Location/location-routes.xqm-    %rest:PUT("{$content}")
+src/FHIR/Location/location-routes.xqm:    %rest:path("/metis/locations")
+--
+src/FHIR/Organization/organization-routes.xqm-    %rest:GET
+src/FHIR/Organization/organization-routes.xqm:    %rest:path("/metis/organizations/{$id}")
+--
+src/FHIR/Organization/organization-routes.xqm-    %rest:GET
+src/FHIR/Organization/organization-routes.xqm:    %rest:path("/metis/organizations/{$id}/_history")
+--
+src/FHIR/Organization/organization-routes.xqm-    %rest:GET
+src/FHIR/Organization/organization-routes.xqm:    %rest:path("/metis/organizations/{$id}/_history/{$vid}")
+--
+src/FHIR/Organization/organization-routes.xqm-    %rest:GET
+src/FHIR/Organization/organization-routes.xqm:    %rest:path("/metis/organizations")
+--
+src/FHIR/Organization/organization-routes.xqm-    %rest:GET
+src/FHIR/Organization/organization-routes.xqm:    %rest:path("/metis/organizations")
+--
+src/FHIR/Organization/organization-routes.xqm-    %rest:PUT("{$content}")
+src/FHIR/Organization/organization-routes.xqm:    %rest:path("/metis/organizations")
+--
+src/FHIR/Practitioner/practitioner-routes.xqm-    %rest:GET
+src/FHIR/Practitioner/practitioner-routes.xqm:    %rest:path("/metis/practitioners/{$id}")
+--
+src/FHIR/Practitioner/practitioner-routes.xqm-    %rest:GET
+src/FHIR/Practitioner/practitioner-routes.xqm:    %rest:path("/metis/practitioners/{$id}/_history")
+--
+src/FHIR/Practitioner/practitioner-routes.xqm-    %rest:GET
+src/FHIR/Practitioner/practitioner-routes.xqm:    %rest:path("/metis/practitioners/{$id}/_history/{$vid}")
+--
+src/FHIR/Practitioner/practitioner-routes.xqm-    %rest:GET
+src/FHIR/Practitioner/practitioner-routes.xqm:    %rest:path("/metis/practitioners/{$id}/account")
+--
+src/FHIR/Practitioner/practitioner-routes.xqm-    %rest:GET
+src/FHIR/Practitioner/practitioner-routes.xqm:    %rest:path("/metis/practitioners")
+--
+src/FHIR/Practitioner/practitioner-routes.xqm-    %rest:GET
+src/FHIR/Practitioner/practitioner-routes.xqm:    %rest:path("/metis/practitioners")
+--
+src/FHIR/Practitioner/practitioner-routes.xqm-    %rest:GET
+src/FHIR/Practitioner/practitioner-routes.xqm:    %rest:path("/metis/practitioners2pdf")
+--
+src/FHIR/Practitioner/practitioner-routes.xqm-    %rest:PUT("{$content}")
+src/FHIR/Practitioner/practitioner-routes.xqm:    %rest:path("/metis/practitioners")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("/metis/PractitionerRole/{$id}")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("/metis/PractitionerRole/{$id}/_history")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("/metis/PractitionerRole/{$id}/_history/{$vid}")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("/metis/PractitionerRole/{$id}/alias")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("/metis/PractitionerRole")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("/metis/PractitionerRole")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("/metis/PractitionerRole2pdf")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:PUT("{$content}")
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("/metis/PractitionerRole")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("metis/PractitionerRole/{$uid}/perms")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("metis/PractitionerRole/{$uid}/group")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("metis/PractitionerRole/{$uid}/roles")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("metis/PractitionerRole/{$uid}")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("metis/PractitionerRole/{$alias}/alias")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("metis/PractitionerRole/users")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:GET
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("metis/Practitioner2birthdates")
+--
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm-    %rest:PUT("{$content}")
+src/FHIR/PractitionerRole/practitionerrole-routes.xqm:    %rest:path("/metis/PractitionerRole/{$uid}/passwd")

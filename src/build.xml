@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="xar" name="nonfhir">
+    <property name="project.version" value="0.1.0"/>
+    <property name="project.app" value="nonfhir"/>
+    <property name="build.dir" value="build"/>
+    <property name="data.dir" value="data"/>
+    <target name="xar">
+        <mkdir dir="${build.dir}"/>
+        <zip basedir="." destfile="${build.dir}/${project.app}-${project.version}.xar" excludes="${build.dir}/*/"/>
+    </target>
+</project>

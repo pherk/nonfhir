@@ -1,0 +1,11 @@
+
+Practitioners
+- tag management
+
+User
+- user id uuid -> NameV scheme (caution versions)
+
+
+Security
+    - web.xml EXistServlet hidden configuration prop 'true'
+	- eXide und WebDAv servlet disable

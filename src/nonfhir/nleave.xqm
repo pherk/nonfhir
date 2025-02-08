@@ -1,0 +1,216 @@
+xquery version "3.1";
+
+module namespace nleave = "http://eNahar.org/ns/nonfhir/nleave";
+
+import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
+
+import module namespace config="http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
+import module namespace roaster="http://e-editiones.org/roaster";
+import module namespace errors="http://e-editiones.org/roaster/errors";
+import module namespace date  ="http://eNahar.org/ns/lib/date";
+
+declare namespace fhir   = "http://hl7.org/fhir";
+
+declare variable $nleave:data-perms := "rwxrwxr-x";
+declare variable $nleave:data-group := "spz";
+declare variable $nleave:perms      := "rwxr-xr-x";
+declare variable $nleave:leaves     := "/db/apps/metisData/data/FHIR/Leaves";
+declare variable $nleave:history    := "/db/apps/metisHistory/data/Leave";
+
+
+(:~
+ : GET: nonfhir/Leave/{uuid}
+ : get leave by id
+ :
+ : @param $id  uuid
+ :
+ : @return <leave/>
+ :)
+declare function nleave:read-leave($request as map(*)) as item()
+{
+    let $realm  := $request?parameters?realm
+    let $loguid := $request?parameters?loguid
+    let $lognam := $request?parameters?lognam
+    let $format := $request?parameters?_format
+    let $elems  := $request?parameters?_elements
+    let $uuid   := $request?parameters?id
+    let $leaves := collection($nleave:leaves)/leave[id[@value=$uuid]]
+    return
+        if (count($leaves)=1)
+        then $leaves
+        else  error(404, 'icals: uuid not valid.')
+};
+
+(:~
+ : GET: nonfhir/Leave?query
+ : get leave owner
+ :
+ : @param $owner   string
+ : @param $group   string
+ : @param $active  boolean
+ : @return bundle of <leave/>
+ :)
+declare function nleave:search-leave($request as map(*)){
+    let $user   := sm:id()//sm:real/sm:username/string()
+    let $realm  := $request?parameters?realm
+    let $loguid := $request?parameters?loguid
+    let $lognam := $request?parameters?lognam
+    let $format := $request?parameters?_format
+    let $elems  := mutil:analyzeQuery($request?parameters?_elements,"string")
+    let $owner  := mutil:analyzeQuery($request?parameters?owner,"reference")
+    let $group  := $request?parameters?group
+    let $period := mutil:analyzeQuery($request?parameters?period, "date")
+    let $status := mutil:analyzeQuery($request?parameters?status, "token")
+    let $coll := collection($nleave:leaves)
+    let $now := date:now()
+    let $tmax := if ($period)
+	then $period[prefix/@value="lt"]/value/@value
+	else $now
+    let $tmin := if ($period)
+	then $period[prefix/@value="gt"]/value/@value
+	else $now
+    let $hits0 := if (count($owner)=0)
+        then $coll/leave[period[start[@value lt $tmax]][end[@value gt $tmin]]][status[coding/code/@value=$status]]
+        else let $oref := concat('metis/practitioners/', $owner)
+            return 
+                $coll/leave[actor/reference[@value=$oref]][period[start[@value lt $tmax]][end[@value gt $tmin]]][status[coding/code/@value=$status]]
+
+    let $sorted-hits :=
+        for $c in $hits0
+        order by lower-case($c/actor/display/@value/string())
+        return
+(: TODO analyze elements id, owner, schedule :)
+            if (count($elems)>0)
+            then
+                <leave>
+                    {$c/id}
+                    {$c/actor}
+                </leave>
+            else $c
+    return
+      switch ($format)
+      case "xml" return
+        mutil:prepareResultBundleXML($sorted-hits, 1, "*")
+      case "json" return
+        mutil:prepareResultBundleJSON($sorted-hits, 1, "*")
+      case "d3" return
+    <json:value xmlns:json="http://www.json.org">
+        <items>
+        {
+ (: TODO line 424 too much computing, ranks can be precomputed :)
+(:
+         for $item at $i in $matched
+            let $rank := index-of($actors//*:reference/@value/string(), $item/actor/reference/@value/string()) - 1
+            let $start := if ($item/allDay/@value='true')
+                then xs:string(fn:dateTime(date:iso2date($l/period/start/@value),xs:time('00:00:00')))
+                else $item/period/start/@value/string()
+            let $end := if ($item/allDay/@value='true')
+                then xs:string(fn:dateTime(date:iso2date($l/period/start/@value),xs:time('23:59:59')))
+                else $item/period/end/@value/string()
+            let $class := if (xs:dateTime($start) > $now)
+                then 
+                    switch($item/status//code/@value)
+                    case 'confirmed' return 'confirmed'
+                    default return 'tentative'
+                else 'past'
+            order by $item/period/start/@value/string()
+            return
+            <json:value  json:array="true">
+                <id>{$i}</id>
+                <desc>{$item/summary/@value/string()}</desc>
+                <start>{$start}</start>
+                <end>{$end}</end>
+                <lane>{$rank}</lane>
+                <class>{$class}</class>
+            </json:value>
+:)
+        }
+        </items>
+        {
+(:
+            for $a at $i in $actors/*:user
+            return
+                <lanes  json:array="true">
+                    <id>{xs:integer($i) - 1}</id>
+                    <label>{$a//*:display/@value/string()}</label>
+                </lanes>
+:)
+        }
+    </json:value>
+      default return
+        mutil:prepareResultBundleJSON($sorted-hits, 1, "*")
+};
+
+(:~
+ : PUT: nonfhir/Leave
+ : Update an existing leaveendar or store a new one.
+ :
+ : @param $content
+ :)
+declare function nleave:update-leave($request as map(*)){
+    let $user := sm:id()//sm:real/sm:username/string()
+    let $realm := $request?parameters?realm
+    let $loguid := $request?parameters?loguid
+    let $lognam := $request?parameters?lognam
+    let $content := $request?body/node()
+
+    let $isNew   := not($content/leave/@xml:id)
+    let $cid   := if ($isNew)
+        then "l-" || substring-after($content/leave/owner/reference/@value,'Practitioner/')
+        else
+            let $id := $content/leave/id/@value/string()
+            let $leaves := collection($nleave:leaves)/leave[id[@value = $id]]
+            let $move := mutil:moveToHistory($leaves, $nleave:history)
+            return
+                $id
+
+    let $version := if ($isNew)
+        then "0"
+        else xs:integer($content/leave/meta/versionID/@value/string()) + 1
+    let $elems := $content/leave/*[not(
+                    self::meta
+                or  self::id
+                or  self::period
+                )]
+    let $meta := $content//meta/fhir:*[not(
+                                               self::fhir:versionId
+                                            or self::fhir:lastUpdated
+                                            or self::fhir:extension
+                                            )]
+    let $period := $content//period
+    let $uuid := if ($isNew)
+        then $cid
+        else "l-" || util:uuid()
+    let $data :=
+        <leave xml:id="{$uuid}">
+            <id value="{$cid}"/>
+            <meta>
+                <versionId value="{$version}"/>
+                <extension url="https://eNahar.org/nabu/extension/lastModifiedBy">
+                    <valueReference>
+                        <reference value="Practitioner/{$loguid}"/>
+                        <display value="{$lognam}"/>
+                    </valueReference>
+                </extension>
+                <lastUpdated value="{date:now()}"/>
+            </meta>
+            { $elems }
+            { $period }
+        </leave>
+
+    let $lll := util:log-app('DEBUG','apps.nabu',$data)
+
+    let $file := $uuid || ".xml"
+    return
+    try {
+        let $store := system:as-user('vdba', 'kikl823!', (
+            xmldb:store($nleave:leaves || '/' || $cudir  , $file, $data)
+            , sm:chmod(xs:anyURI($nleave:leaves || '/' || $cudir || '/' || $file), $nleave:data-perms)
+            , sm:chgrp(xs:anyURI($nleave:leaves || '/' || $cudir || '/' || $file), $nleave:data-group)))
+        return
+            $data
+    } catch * {
+        error(401, 'permission denied. Ask the admin.')
+    }
+};
+

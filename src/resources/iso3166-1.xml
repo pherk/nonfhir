@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<countries><!-- iso3166-1 -->
+    <country value="AD" label="ANDORRA"/>
+    <country value="AE" label="UNITED ARAB EMIRATES"/>
+    <country value="AF" label="AFGHANISTAN"/>
+    <country value="AG" label="ANTIGUA AND BARBUDA"/>
+    <country value="AI" label="ANGUILLA"/>
+    <country value="AL" label="ALBANIA"/>
+    <country value="AM" label="ARMENIA"/>
+    <country value="AO" label="ANGOLA"/>
+    <country value="AQ" label="ANTARCTICA"/>
+    <country value="AR" label="ARGENTINA"/>
+    <country value="AS" label="AMERICAN SAMOA"/>
+    <country value="AT" label="AUSTRIA"/>
+    <country value="AU" label="AUSTRALIA"/>
+    <country value="AW" label="ARUBA"/>
+    <country value="AX" label="ÅLAND ISLANDS"/>
+    <country value="AZ" label="AZERBAIJAN"/>
+    <country value="BA" label="BOSNIA AND HERZEGOVINA"/>
+    <country value="BB" label="BARBADOS"/>
+    <country value="BD" label="BANGLADESH"/>
+    <country value="BE" label="BELGIUM"/>
+    <country value="BF" label="BURKINA FASO"/>
+    <country value="BG" label="BULGARIA"/>
+    <country value="BH" label="BAHRAIN"/>
+    <country value="BI" label="BURUNDI"/>
+    <country value="BJ" label="BENIN"/>
+    <country value="BL" label="SAINT BARTHÉLEMY"/>
+    <country value="BM" label="BERMUDA"/>
+    <country value="BN" label="BRUNEI DARUSSALAM"/>
+    <country value="BO" label="BOLIVIA, PLURINATIONAL STATE OF"/>
+    <country value="BQ" label="BONAIRE, SINT EUSTATIUS AND SABA"/>
+    <country value="BR" label="BRAZIL"/>
+    <country value="BS" label="BAHAMAS"/>
+    <country value="BT" label="BHUTAN"/>
+    <country value="BU" label="Burma"/>
+    <country value="BV" label="BOUVET ISLAND"/>
+    <country value="BW" label="BOTSWANA"/>
+    <country value="BY" label="BELARUS"/>
+    <country value="BZ" label="BELIZE"/>
+    <country value="CA" label="CANADA"/>
+    <country value="CC" label="COCOS (KEELING) ISLANDS"/>
+    <country value="CD" label="CONGO, THE DEMOCRATIC REPUBLIC OF THE"/>
+    <country value="CF" label="CENTRAL AFRICAN REPUBLIC"/>
+    <country value="CG" label="CONGO"/>
+    <country value="CH" label="SWITZERLAND"/>
+    <country value="CI" label="CÔTE D'IVOIRE"/>
+    <country value="CK" label="COOK ISLANDS"/>
+    <country value="CL" label="CHILE"/>
+    <country value="CM" label="CAMEROON"/>
+    <country value="CN" label="CHINA"/>
+    <country value="CO" label="COLOMBIA"/>
+    <country value="CR" label="COSTA RICA"/>
+    <country value="CS" label="SERBIA AND MONTENEGRO"/>
+    <country value="CU" label="CUBA"/>
+    <country value="CV" label="CAPE VERDE"/>
+    <country value="CW" label="CURAÇAO"/>
+    <country value="CX" label="CHRISTMAS ISLAND"/>
+    <country value="CY" label="CYPRUS"/>
+    <country value="CZ" label="CZECH REPUBLIC"/>
+    <country value="DEU" label="GERMANY"/>
+    <country value="DJ" label="DJIBOUTI"/>
+    <country value="DK" label="DENMARK"/>
+    <country value="DM" label="DOMINICA"/>
+    <country value="DO" label="DOMINICAN REPUBLIC"/>
+    <country value="DZ" label="ALGERIA"/>
+    <country value="EC" label="ECUADOR"/>
+    <country value="EE" label="ESTONIA"/>
+    <country value="EG" label="EGYPT"/>
+    <country value="EH" label="WESTERN SAHARA"/>
+    <country value="ER" label="ERITREA"/>
+    <country value="ES" label="SPAIN"/>
+    <country value="ET" label="ETHIOPIA"/>
+    <country value="EW" label="Estonia"/>
+    <country value="FI" label="FINLAND"/>
+    <country value="FJ" label="FIJI"/>
+    <country value="FK" label="FALKLAND ISLANDS (MALVINAS)"/>
+    <country value="FM" label="MICRONESIA, FEDERATED STATES OF"/>
+    <country value="FO" label="FAROE ISLANDS"/>
+    <country value="FR" label="FRANCE"/>
+    <country value="GA" label="GABON"/>
+    <country value="GB" label="UNITED KINGDOM"/>
+    <country value="GD" label="GRENADA"/>
+    <country value="GE" label="GEORGIA"/>
+    <country value="GF" label="FRENCH GUIANA"/>
+    <country value="GG" label="GUERNSEY"/>
+    <country value="GH" label="GHANA"/>
+    <country value="GI" label="GIBRALTAR"/>
+    <country value="GL" label="GREENLAND"/>
+    <country value="GM" label="GAMBIA"/>
+    <country value="GN" label="GUINEA"/>
+    <country value="GP" label="GUADELOUPE"/>
+    <country value="GQ" label="EQUATORIAL GUINEA"/>
+    <country value="GR" label="GREECE"/>
+    <country value="GS" label="SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS"/>
+    <country value="GT" label="GUATEMALA"/>
+    <country value="GU" label="GUAM"/>
+    <country value="GW" label="GUINEA-BISSAU"/>
+    <country value="GY" label="GUYANA"/>
+    <country value="HK" label="HONG KONG"/>
+    <country value="HM" label="HEARD ISLAND AND MCDONALD ISLANDS"/>
+    <country value="HN" label="HONDURAS"/>
+    <country value="HR" label="CROATIA"/>
+    <country value="HT" label="HAITI"/>
+    <country value="HU" label="HUNGARY"/>
+    <country value="ID" label="INDONESIA"/>
+    <country value="IE" label="IRELAND"/>
+    <country value="IL" label="ISRAEL"/>
+    <country value="IM" label="ISLE OF MAN"/>
+    <country value="IN" label="INDIA"/>
+    <country value="IO" label="BRITISH INDIAN OCEAN TERRITORY"/>
+    <country value="IQ" label="IRAQ"/>
+    <country value="IR" label="IRAN, ISLAMIC REPUBLIC OF"/>
+    <country value="IS" label="ICELAND"/>
+    <country value="IT" label="ITALY"/>
+    <country value="JA" label="Jamaica"/>
+    <country value="JE" label="JERSEY"/>
+    <country value="JM" label="JAMAICA"/>
+    <country value="JO" label="JORDAN"/>
+    <country value="JP" label="JAPAN"/>
+    <country value="KE" label="KENYA"/>
+    <country value="KG" label="KYRGYZSTAN"/>
+    <country value="KH" label="CAMBODIA"/>
+    <country value="KI" label="KIRIBATI"/>
+    <country value="KM" label="COMOROS"/>
+    <country value="KN" label="SAINT KITTS AND NEVIS"/>
+    <country value="KP" label="KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"/>
+    <country value="KR" label="KOREA, REPUBLIC OF"/>
+    <country value="KW" label="KUWAIT"/>
+    <country value="KY" label="CAYMAN ISLANDS"/>
+    <country value="KZ" label="KAZAKHSTAN"/>
+    <country value="LA" label="LAO PEOPLE'S DEMOCRATIC REPUBLIC"/>
+    <country value="LB" label="LEBANON"/>
+    <country value="LC" label="SAINT LUCIA"/>
+    <country value="LI" label="LIECHTENSTEIN"/>
+    <country value="LK" label="SRI LANKA"/>
+    <country value="LR" label="LIBERIA"/>
+    <country value="LS" label="LESOTHO"/>
+    <country value="LT" label="LITHUANIA"/>
+    <country value="LU" label="LUXEMBOURG"/>
+    <country value="LV" label="LATVIA"/>
+    <country value="LY" label="LIBYA"/>
+    <country value="MA" label="MOROCCO"/>
+    <country value="MC" label="MONACO"/>
+    <country value="MD" label="MOLDOVA, REPUBLIC OF"/>
+    <country value="ME" label="MONTENEGRO"/>
+    <country value="MF" label="SAINT MARTIN (FRENCH PART)"/>
+    <country value="MG" label="MADAGASCAR"/>
+    <country value="MH" label="MARSHALL ISLANDS"/>
+    <country value="MK" label="MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF"/>
+    <country value="ML" label="MALI"/>
+    <country value="MM" label="MYANMAR"/>
+    <country value="MN" label="MONGOLIA"/>
+    <country value="MO" label="MACAO"/>
+    <country value="MP" label="NORTHERN MARIANA ISLANDS"/>
+    <country value="MQ" label="MARTINIQUE"/>
+    <country value="MR" label="MAURITANIA"/>
+    <country value="MS" label="MONTSERRAT"/>
+    <country value="MT" label="MALTA"/>
+    <country value="MU" label="MAURITIUS"/>
+    <country value="MV" label="MALDIVES"/>
+    <country value="MW" label="MALAWI"/>
+    <country value="MX" label="MEXICO"/>
+    <country value="MY" label="MALAYSIA"/>
+    <country value="MZ" label="MOZAMBIQUE"/>
+    <country value="NA" label="NAMIBIA"/>
+    <country value="NC" label="NEW CALEDONIA"/>
+    <country value="NE" label="NIGER"/>
+    <country value="NF" label="NORFOLK ISLAND"/>
+    <country value="NG" label="NIGERIA"/>
+    <country value="NI" label="NICARAGUA"/>
+    <country value="NL" label="NETHERLANDS"/>
+    <country value="NO" label="NORWAY"/>
+    <country value="NP" label="NEPAL"/>
+    <country value="NR" label="NAURU"/>
+    <country value="NU" label="NIUE"/>
+    <country value="NZ" label="NEW ZEALAND"/>
+    <country value="OM" label="OMAN"/>
+    <country value="PA" label="PANAMA"/>
+    <country value="PE" label="PERU"/>
+    <country value="PF" label="FRENCH POLYNESIA"/>
+    <country value="PG" label="PAPUA NEW GUINEA"/>
+    <country value="PH" label="PHILIPPINES"/>
+    <country value="PK" label="PAKISTAN"/>
+    <country value="PL" label="POLAND"/>
+    <country value="PM" label="SAINT PIERRE AND MIQUELON"/>
+    <country value="PN" label="PITCAIRN"/>
+    <country value="PR" label="PUERTO RICO"/>
+    <country value="PS" label="PALESTINE, STATE OF"/>
+    <country value="PT" label="PORTUGAL"/>
+    <country value="PW" label="PALAU"/>
+    <country value="PY" label="PARAGUAY"/>
+    <country value="QA" label="QATAR"/>
+    <country value="RE" label="RÉUNION"/>
+    <country value="RO" label="ROMANIA"/>
+    <country value="RS" label="SERBIA"/>
+    <country value="RU" label="RUSSIAN FEDERATION"/>
+    <country value="RW" label="RWANDA"/>
+    <country value="SA" label="SAUDI ARABIA"/>
+    <country value="SB" label="SOLOMON ISLANDS"/>
+    <country value="SC" label="SEYCHELLES"/>
+    <country value="SD" label="SUDAN"/>
+    <country value="SE" label="SWEDEN"/>
+    <country value="SG" label="SINGAPORE"/>
+    <country value="SH" label="SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA"/>
+    <country value="SI" label="SLOVENIA"/>
+    <country value="SJ" label="SVALBARD AND JAN MAYEN"/>
+    <country value="SK" label="SLOVAKIA"/>
+    <country value="SL" label="SIERRA LEONE"/>
+    <country value="SM" label="SAN MARINO"/>
+    <country value="SN" label="SENEGAL"/>
+    <country value="SO" label="SOMALIA"/>
+    <country value="SR" label="SURINAME"/>
+    <country value="SS" label="SOUTH SUDAN"/>
+    <country value="ST" label="SAO TOME AND PRINCIPE"/>
+    <country value="SU" label="USSR"/>
+    <country value="SV" label="EL SALVADOR"/>
+    <country value="SX" label="SINT MAARTEN (DUTCH PART)"/>
+    <country value="SY" label="SYRIAN ARAB REPUBLIC"/>
+    <country value="SZ" label="SWAZILAND"/>
+    <country value="TC" label="TURKS AND CAICOS ISLANDS"/>
+    <country value="TD" label="CHAD"/>
+    <country value="TF" label="FRENCH SOUTHERN TERRITORIES"/>
+    <country value="TG" label="TOGO"/>
+    <country value="TH" label="THAILAND"/>
+    <country value="TJ" label="TAJIKISTAN"/>
+    <country value="TK" label="TOKELAU"/>
+    <country value="TL" label="TIMOR-LESTE"/>
+    <country value="TM" label="TURKMENISTAN"/>
+    <country value="TN" label="TUNISIA"/>
+    <country value="TO" label="TONGA"/>
+    <country value="TP" label="East Timor"/>
+    <country value="TR" label="TURKEY"/>
+    <country value="TT" label="TRINIDAD AND TOBAGO"/>
+    <country value="TV" label="TUVALU"/>
+    <country value="TW" label="TAIWAN, PROVINCE OF CHINA"/>
+    <country value="TZ" label="TANZANIA, UNITED REPUBLIC OF"/>
+    <country value="UA" label="UKRAINE"/>
+    <country value="UG" label="UGANDA"/>
+    <country value="UK" label="United Kingdom"/>
+    <country value="UM" label="UNITED STATES MINOR OUTLYING ISLANDS"/>
+    <country value="US" label="UNITED STATES"/>
+    <country value="UY" label="URUGUAY"/>
+    <country value="UZ" label="UZBEKISTAN"/>
+    <country value="VA" label="HOLY SEE (VATICAN CITY STATE)"/>
+    <country value="VC" label="SAINT VINCENT AND THE GRENADINES"/>
+    <country value="VE" label="VENEZUELA, BOLIVARIAN REPUBLIC"/>
+    <country value="VG" label="VIRGIN ISLANDS, BRITISH"/>
+    <country value="VI" label="VIRGIN ISLANDS, U.S."/>
+    <country value="VN" label="VIET NAM"/>
+    <country value="VU" label="VANUATU"/>
+    <country value="WF" label="WALLIS AND FUTUNA"/>
+    <country value="WS" label="SAMOA"/>
+</countries>

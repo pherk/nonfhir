@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<regions><!-- ISO 3166-2:DE -->
+    <de>
+        <region value="BW" label="Baden-Württemberg"/>
+        <region value="BY" label="Bayern"/>
+        <region value="BE" label="Berlin"/>
+        <region value="BB" label="Brandenburg"/>
+        <region value="HB" label="Bremen"/>
+        <region value="HH" label="Hamburg"/>
+        <region value="HE" label="Hessen"/>
+        <region value="MV" label="Mecklenburg-Vorpommern"/>
+        <region value="NI" label="Niedersachsen"/>
+        <region value="NW" label="Nordrhein-Westfalen"/>
+        <region value="RP" label="Rheinland-Pfalz"/>
+        <region value="SL" label="Saarland"/>
+        <region value="SN" label="Sachsen"/>
+        <region value="ST" label="Sachsen-Anhalt"/>
+        <region value="SH" label="Schleswig-Holstein"/>
+        <region value="TH" label="Thüringen"/>
+    </de>
+</regions>

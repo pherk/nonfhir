@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <agent default="spz"/><!-- 
+        The root collection which should be scanned for app data.
+        Relative paths will be resolved relative to the app root.
+    -->
+    <root>/db/apps/nabuData/data</root>
+</configuration>
