@@ -23,9 +23,16 @@ declare function nbase:metadata($request as map(*)) as item()
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
-    return
+    let $accept := $request?accept
+    let $c :=
       <Capabilities>
+          <id value="123"/>
       </Capabilities>
+    return
+        switch ($accept)
+        case "application/xml" return $c
+        case "application/json" return serialize:resource2json($c, false(), "4.3")
+        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
 
 (:~

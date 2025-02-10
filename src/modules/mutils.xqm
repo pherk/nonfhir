@@ -1,5 +1,8 @@
 xquery version "3.1";
-
+(: 
+ : Bundle creation only for testing, not usable otherwise
+ : 
+ :)
 module namespace mutil ="http://eNahar.org/ns/nonfhir/util";
 
 import module namespace date      = "http://eNahar.org/ns/lib/date";

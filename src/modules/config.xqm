@@ -39,21 +39,21 @@ declare variable $config:app-root :=
  : returns the server
  :)
 declare variable $config:server      := concat('http://', request:get-header('host'));
-declare variable $config:app-path    := '/db/apps/metis';
+declare variable $config:app-path    := '/db/apps/nonfhir';
 declare variable $config:redirectURL := concat($config:server,'/',$config:app-path,'/index.html');
 
 (:
     Returns the configuration document for the app.
 :)
-declare variable $config:metis-config :=
+declare variable $config:nonfhir-config :=
     doc(concat($config:app-root, "/configuration.xml"))
 ;
 
 (:
     The root collection to be scanned for app data.
 :)
-declare variable $config:metis-root := 
-    let $root := $config:metis-config/configuration/root/string()
+declare variable $config:nonfhir-root := 
+    let $root := $config:nonfhir-config/configuration/root/string()
     return
         if (starts-with($root, "/db")) then
             $root
@@ -61,46 +61,23 @@ declare variable $config:metis-root :=
             concat($config:app-root, "/", $root)
 ;
 
-declare variable $config:metis-rbac          := concat($config:metis-root,'/rbac');
-declare variable $config:metis-users         := concat($config:metis-root,'/users');
-declare variable $config:metis-fhir          := concat($config:metis-root,'/FHIR');
-declare variable $config:metis-groups        := concat($config:metis-fhir,'/Groups');
-declare variable $config:metis-organizations := concat($config:metis-fhir,'/Organizations');
-declare variable $config:metis-locations     := concat($config:metis-fhir,'/Locations');
-declare variable $config:metis-devices       := concat($config:metis-fhir,'/Devices');
-declare variable $config:metis-practitioners := concat($config:metis-fhir,'/Practitioners');
-declare variable $config:metis-persons       := concat($config:metis-fhir,'/Persons');
-declare variable $config:metis-hcs           := concat($config:metis-fhir,'/HealthcareServices');
-declare variable $config:metis-leaves        := concat($config:metis-fhir,'/Leaves');
-declare variable $config:metis-fhir-data     := "/db/apps/metisData/data/FHIR";
-declare variable $config:metis-nonfhir-data  := "/db/apps/metisData/data/NonFHIR";
-declare variable $config:metis-history-data  := "/db/apps/metisHistory/data";
-declare variable $config:metis-device-data   := concat($config:metis-fhir-data,'/Devices');
-declare variable $config:metis-deviceHistory := concat($config:metis-history-data,'/Device');
-declare variable $config:metis-group-data    := concat($config:metis-fhir-data,'/Groups');
-declare variable $config:metis-groupHistory  := concat($config:metis-history-data,'/Group');
-declare variable $config:metis-hcs-data      := concat($config:metis-fhir-data,'/HealthcareServices');
-declare variable $config:metis-hcsHistory    := concat($config:metis-history-data,'/HealthcareService');
-declare variable $config:metis-location-data := concat($config:metis-fhir-data,'/Locations');
-declare variable $config:metis-locationHistory := concat($config:metis-history-data,'/Location');
-declare variable $config:metis-leave-data    := concat($config:metis-nonfhir-data,'/Leaves');
-declare variable $config:metis-leaveHistory  := concat($config:metis-history-data,'/Leave');
-declare variable $config:metis-organization-data := concat($config:metis-fhir-data,'/Organizations');
-declare variable $config:metis-organizationHistory := concat($config:metis-history-data,'/Organization');
-declare variable $config:metis-pract-data    := concat($config:metis-fhir-data,'/Practitioners');
-declare variable $config:metis-practHistory  := concat($config:metis-history-data,'/Practitioner');
-declare variable $config:metis-practrole-data := concat($config:metis-fhir-data,'/PractitionerRoles');
-declare variable $config:metis-practroleHistory := concat($config:metis-history-data,'/Practitioner');
+declare variable $config:fhir-data     := "/db/apps/metisData/data/FHIR";
+declare variable $config:nonfhir-data  := "/db/apps/metisData/data/NonFHIR";
+declare variable $config:history-data  := "/db/apps/metisHistory/data";
+declare variable $config:holiday-data    := concat($config:nonfhir-data,'/Holiday');
+declare variable $config:holidayHistory  := concat($config:history-data,'/Holiday');
+declare variable $config:leave-data    := concat($config:nonfhir-data,'/Leaves');
+declare variable $config:leaveHistory  := concat($config:history-data,'/Leave');
 
-declare variable $config:metis-resources := concat($config:metis-root,'/resources');
-declare variable $config:metis-templs    := concat($config:metis-root,'/templates');
-declare variable $config:metis-data-collections :=
+declare variable $config:resources := concat($config:root,'/resources');
+declare variable $config:templs    := concat($config:root,'/templates');
+declare variable $config:data-collections :=
     (   '/resources'
     ,   '/templates'
     );
     
 declare variable $config:items-per-page := 
-    let $itemsPerPage := $config:metis-config/configuration/items-per-page/string()
+    let $itemsPerPage := $config:config/configuration/items-per-page/string()
     return
         if ($itemsPerPage) then
             xs:int($itemsPerPage)
@@ -109,7 +86,7 @@ declare variable $config:items-per-page :=
 ;
 
 declare variable $config:default-agent :=
-    $config:metis-config/configuration/agent/@default/string()
+    $config:config/configuration/agent/@default/string()
 ;
 
 
