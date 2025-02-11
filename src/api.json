@@ -244,7 +244,395 @@
             }
           },
           "403": {
-            "description": "Leave: search failed"
+            "description": "nholiday: search failed"
+          }
+        }
+      }
+    },
+    "/ICal/{id}": {
+      "get": {
+        "tags": [
+          "read",
+          "ICal"
+        ],
+        "operationId": "nical:read-ical",
+        "summary": "read ICal",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "nonfhir: ICal resource not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "update",
+          "create",
+          "ICal"
+        ],
+        "operationId": "nical:update-ical",
+        "summary": "update ICal",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "nonfhir: ICal resource not found"
+          }
+        }
+      }
+    },
+    "/ICal/{id}/_history/{vid}": {
+      "get": {
+        "summary": "ICal instance history with vid",
+        "description": "",
+        "tags": [
+          "history",
+          "ICal"
+        ],
+        "operationId": "nical:vread-ical",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "vid",
+            "in": "path",
+            "description": "The resource history VID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "ICal:get instance history failed"
+          }
+        }
+      }
+    },
+    "/ICal/{id}/_history": {
+      "get": {
+        "summary": "ICal instance history",
+        "description": "",
+        "tags": [
+          "history",
+          "ICal"
+        ],
+        "operationId": "nical:history-ical",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "ICal:get instance history failed"
+          }
+        }
+      }
+    },
+    "/ICal": {
+      "get": {
+        "tags": [
+          "query",
+          "ICal"
+        ],
+        "operationId": "nical:search-ical",
+        "summary": "search ICal type",
+        "parameters": [
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "_format",
+            "in": "query",
+            "description": "xml, json, d3",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "_elements",
+            "in": "query",
+            "description": "array of props",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "identifier",
+            "in": "query",
+            "description": "identifier of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "ical status",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "403": {
+            "description": "ICal: search failed"
           }
         }
       }
@@ -649,6 +1037,394 @@
           },
           "403": {
             "description": "Leave: search failed"
+          }
+        }
+      }
+    },
+    "/Schedule/{id}": {
+      "get": {
+        "tags": [
+          "read",
+          "Schedule"
+        ],
+        "operationId": "nschedule:read-schedule",
+        "summary": "read Schedule",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "nonfhir: Schedule resource not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "update",
+          "create",
+          "Schedule"
+        ],
+        "operationId": "nschedule:update-schedule",
+        "summary": "update Schedule",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "nonfhir: Schedule resource not found"
+          }
+        }
+      }
+    },
+    "/Schedule/{id}/_history/{vid}": {
+      "get": {
+        "summary": "Schedule instance history with vid",
+        "description": "",
+        "tags": [
+          "history",
+          "Schedule"
+        ],
+        "operationId": "nschedule:vread-schedule",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "vid",
+            "in": "path",
+            "description": "The resource history VID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "Schedule:get instance history failed"
+          }
+        }
+      }
+    },
+    "/Schedule/{id}/_history": {
+      "get": {
+        "summary": "Schedule instance history",
+        "description": "",
+        "tags": [
+          "history",
+          "Schedule"
+        ],
+        "operationId": "nschedule:history-schedule",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The resource ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "minimum": 1,
+              "type": "string",
+              "example": "null"
+            },
+            "example": "123"
+          },
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "401": {
+            "description": "Schedule:get instance history failed"
+          }
+        }
+      }
+    },
+    "/Schedule": {
+      "get": {
+        "tags": [
+          "query",
+          "Schedule"
+        ],
+        "operationId": "nschedule:search-schedule",
+        "summary": "search Schedule type",
+        "parameters": [
+          {
+            "name": "realm",
+            "in": "query",
+            "description": "realm of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "loguid",
+            "in": "query",
+            "description": "uid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lognam",
+            "in": "query",
+            "description": "name of user",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "_format",
+            "in": "query",
+            "description": "xml, json, d3",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "_elements",
+            "in": "query",
+            "description": "array of props",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "identifier",
+            "in": "query",
+            "description": "identifier of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "schedule status",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-XML-RESOURCE"
+                },
+                "example": null
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FHIR-JSON-RESOURCE"
+                },
+                "example": null
+              }
+            }
+          },
+          "403": {
+            "description": "Schedule: search failed"
           }
         }
       }
