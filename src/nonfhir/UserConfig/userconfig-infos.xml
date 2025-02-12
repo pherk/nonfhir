@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<userconfig-infos>
+  <verified>
+        <code label-de="aktiv" value="active"/>
+  </verified>
+  <bricks version="4.3">
+    <UserConfig xmlns="http://hl7.org/fhir">
+        <id value=""/>
+        <meta>
+            <versionId value="0"/>
+        </meta>
+        <identifier>
+            <use value="secondary"/>
+            <system value="http://eNahar.org/nabu/system/account-name"/>
+            <value value="pmh"/>
+        </identifier>
+        <active value="true"/>
+        <subject>
+            <reference value=""/>
+            <display value=""/>
+        </subject>
+        <welcome value="Willkommen"/>
+        <welcomeSub value="???"/>
+        <avatar value="oldman"/>
+        <email value=""/>
+        <displayName value=""/>
+        <title value=""/>
+        <gender value=""/>
+        <education value="Arzt"/>
+        <profession value="Kinderarzt"/>
+        <registered value="1980-10-01"/>
+        <lastLogin value="1900-01-01T00:00:00Z"/>
+        <lastRoom value="spzn"/>
+        <verified value="false"/>
+        <room value="spzn"/>
+        <card>
+            <card value="user_kvlist_edit"/>
+            <title value=""/>
+            <subtitle value=""/>
+            <model value="user"/>
+            <icon value="file-alt"/>
+            <iconColor value="green"/>
+            <persistence value="permanent"/>
+            <status value="open"/>
+        </card>
+    </UserConfig>
+    <email value=""/>
+    <education value=""/>
+    <room value=""/>
+    <workSet>
+        <reference value=""/>
+        <display value=""/>
+    </workSet>
+    <card>
+        <id value=""/>
+        <title value=""/>
+        <subtitle value=""/>
+        <model value=""/>
+        <icon value="file-alt"/>
+        <iconColor value="green"/>
+        <persistence value="permanent"/>
+        <status value="open"/>
+    </card>
+    <template>
+        <name value="extensions"/>
+        <image value=""/>
+        <description value=""/>
+        <tei>
+            <status value=""/>
+            <div xmlns="http://www.w3.org/1999/xhtml">
+                    <p xmlns="http://www.tei-c.org/ns/1.0"/>
+                </div>
+        </tei>
+    </template>
+  </bricks>
+</userconfig-infos>

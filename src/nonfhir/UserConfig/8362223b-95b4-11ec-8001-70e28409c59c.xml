@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UserConfig xmlns="http://hl7.org/fhir">
+    <id value="8362223b-95b4-11ec-8001-70e28409c59c"/>
+    <meta>
+        <extension url="http://eNahar.org/nabu/extension#lastUpdatedBy">
+            <valueReference>
+                <reference value="metis/practitioners/u-pmh"/>
+                <display value="Herkenrath, Peter"/>
+            </valueReference>
+        </extension>
+        <versionId value="0"/>
+        <lastUpdated value="2022-02-24 20:58:27.254123919Z"/>
+    </meta>
+    <identifier>
+        <use value="secondary"/>
+        <system value="http://eNahar.org/nabu/account-name"/>
+        <value value="pmh"/>
+    </identifier>
+    <active value="true"/>
+    <subject>
+        <reference value="metis/practitioners/u-pmh"/>
+        <display value="Peter Herkenrath"/>
+    </subject>
+    <welcome value="Willkommen"/>
+    <welcomeSub value="???"/>
+    <avatar value="oldman"/>
+    <email value="peter.herkenrath@uk-koeln.de"/>
+    <displayName value="pmh"/>
+    <title value="Dr.med."/>
+    <gender value="male"/>
+    <education value="Arzt"/>
+    <profession value="Kinderarzt"/>
+    <registered value="1980-10-01"/>
+    <lastLogin value="2022-02-25T10:00:00Z"/>
+    <verified value="true"/>
+    <room value="spzn"/>
+    <card>
+        <id value="user_kvlist_edit"/>
+        <title value=""/>
+        <subtitle value=""/>
+        <model value="user"/>
+        <icon value="file-alt"/>
+        <iconColor value="green"/>
+        <persistence value="permanent"/>
+        <status value="open"/>
+    </card>
+</UserConfig>

@@ -64,11 +64,11 @@ declare function nleave:search-leave($request as map(*)){
     let $coll := collection($nleave:leaves)
     let $now := date:now()
     let $tmax := if ($period)
-	then $period[prefix/@value="lt"]/value/@value
-	else $now
+      	then $period[prefix/@value="lt"]/value/@value
+	      else $now
     let $tmin := if ($period)
-	then $period[prefix/@value="gt"]/value/@value
-	else $now
+	      then $period[prefix/@value="gt"]/value/@value
+	      else $now
     let $hits0 := if (count($owner)=0)
         then $coll/leave[period[start[@value lt $tmax]][end[@value gt $tmin]]][status[coding/code/@value=$status]]
         else let $oref := concat('metis/practitioners/', $owner)

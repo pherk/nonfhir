@@ -20,10 +20,10 @@ declare namespace fhir   = "http://hl7.org/fhir";
  :)
 declare function nbase:metadata($request as map(*)) as item()
 {
+    let $accept := $request?accept
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
-    let $accept := $request?accept
     let $c :=
       <Capabilities>
           <id value="123"/>
@@ -44,10 +44,16 @@ declare function nbase:metadata($request as map(*)) as item()
  :)
 declare function nbase:health($request as map(*)) as item()
 {
+    let $accept := $request?accept
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     return
-      <ok/>
+        switch ($accept)
+        case "application/xml" return 
+                <ok/>
+        case "application/json" return 
+                map {"ok": true()}
+        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
 
