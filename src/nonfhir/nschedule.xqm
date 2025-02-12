@@ -183,7 +183,7 @@ declare function nschedule:update-schedule($request as map(*))
             , sm:chmod(xs:anyURI($r-sched:schedule-data || '/' || $file), $r-sched:data-perms)
             , sm:chgrp(xs:anyURI($r-sched:schedule-data || '/' || $file), $r-sched:data-group)))
     } catch * {
-        errors:error($errors:PERMISSION_DENIED, "Permission denied", map { "info": "ask the admin"})
+        errors:error($errors:UNAUTHORIZED, "Permission denied", map { "info": "ask the admin"})
     }
 };
 
