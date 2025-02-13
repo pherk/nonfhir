@@ -35,7 +35,7 @@ declare function nholiday:read-holiday($request as map(*))
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $uuid := $request?parameters?uuid
-    let $hdes := doc($config:holiday-data || "holidays.xml")//event[name/@value=$uuid]
+    let $hdes := doc($config:holiday-data || "holidays.xml")//CalEvent[name/@value=$uuid]
     return
       if (count($hdes)=1) then
         switch ($accept)
@@ -104,25 +104,21 @@ declare function nholiday:search-holiday($request as map(*))
         default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
 
-declare %private function nholiday:fc-event($e as element(event), $date as xs:date, $attributes as item()*) as element(event)?
+declare %private function nholiday:fc-event($e as element(CalEvent), $date as xs:date, $attributes as item()*) as element(CalEvent)?
 {
-  <event>
+  <CalEvent>
     <id value="{$e/name/@value/string()}"/>
     <title value="{$e/description/@value/string()}"/>
     <type value="{$e/type/@value/string()}"/>
-    <start>{dateTime($date, xs:time(xs:dateTime($e/start/@value)))}</start>
-    { if ($e/type/@value='official')
-      then
-        <allDay value="true"/>
-      else
-        (
-          <end value="{if ($e/type/@value='traditional')
-                       then dateTime($date, xs:time(xs:dateTime($e/end/@value)))
+    <period>
+      <start>{dateTime($date, xs:time(date:iso2dateTime($e/start/@value)))}</start>
+      <end value="{if ($e/type/@value='traditional')
+                       then dateTime($date, xs:time(date:iso2dateTime($e/end/@value)))
                        else concat($date,'T23:59:59')}"/>
-        , <allDay value="false"/>
-        )
     }
+    </period>
+    <allDay value="{$e/type/@value='official'}"/>
     <editable>false</editable>
     {$attributes/*[not( self::editable or  self::allDay) ]}
-  </event>
+  </CalEvent>
 };

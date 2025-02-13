@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
  * Copyright (C) 2024 Peter Herkenrath
@@ -17,14 +18,14 @@
  */
 --><xs:schema xmlns="http://hl7.org/fhir" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" targetNamespace="http://hl7.org/fhir" elementFormDefault="qualified" version="1.0">
   <xs:include schemaLocation="fhir-base.xsd"/>
-  <xs:element name="CalEvent" type="CalEvent">
+  <xs:element name="ICal" type="ICal">
     <xs:annotation>
-      <xs:documentation xml:lang="en">User-related infos and values, which are used in an frontend </xs:documentation>
+      <xs:documentation xml:lang="en"></xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:complexType name="CalEvent">
+  <xs:complexType name="ICal">
     <xs:annotation>
-      <xs:documentation xml:lang="en">User-related infos and values, which are used in an frontend </xs:documentation>
+      <xs:documentation xml:lang="en"></xs:documentation>
       <xs:documentation xml:lang="en">If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -40,31 +41,54 @@
               <xs:documentation xml:lang="en">Whether this calevent record is in active use. 
            </xs:annotation>
           </xs:element>
-          <xs:element name="actor" minOccurs="0" maxOccurs="1" type="Reference">
+          <xs:element name="owner" minOccurs="1" maxOccurs="1" type="Reference">
           </xs:element>
-          <xs:element name="type" minOccurs="0" maxOccurs="1" type="code">
+          <xs:element name="ownerGroup" minOccurs="1" maxOccurs="1" type="string">
           </xs:element>
-          <xs:element name="title" minOccurs="1" maxOccurs="1" type="string">
+          <xs:element name="cutype" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+          </xs:element>
+          <xs:element name="caltype" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+          </xs:element>
+          <xs:element name="summary" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
           <xs:element name="description" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
-          <xs:element name="period" minOccurs="1" maxOccurs="1" type="Period">
+          <xs:element name="timezone" minOccurs="1" maxOccurs="1" type="code">
           </xs:element>
-          <xs:element name="allDay" minOccurs="0" maxOccurs="1" type="boolean">
+          <xs:element name="location" minOccurs="1" maxOccurs="1" type="Reference">
           </xs:element>
-          <xs:element name="editable" minOccurs="0" maxOccurs="1" type="boolean">
-          </xs:element>
-          <xs:element name="class" minOccurs="0" maxOccurs="1" type="code">
-          </xs:element>
-          <xs:element name="backgroundColor" minOccurs="0" maxOccurs="1" type="code">
-          </xs:element>
-          <xs:element name="textColor" minOccurs="0" maxOccurs="1" type="code">
-          </xs:element>
-          <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="code">
-          </xs:element>
-          <xs:element name="lane" minOccurs="0" maxOccurs="1" type="integer">
+          <xs:element name="schedule" minOccurs="0" maxOccurs="unbound" type="ICal.Schedule">
           </xs:element>
         <attributes>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ICal.Schedule">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">An ICalSchedule.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="BackboneElement">
+        <xs:sequence>
+          <xs:element name="type" minOccurs="1" maxOccurs="1" type="code">
+          </xs:element>
+          <xs:element name="schedule" minOccurs="1" maxOccurs="1" type="Reference">
+          </xs:element>
+          <xs:element name="isSpecial" minOccurs="0" maxOccurs="1" type="boolean">
+          </xs:element>
+          <xs:element name="ff" minOccurs="0" maxOccurs="1" type="boolean">
+          </xs:element>
+          <xs:element name="blocking" minOccurs="0" maxOccurs="1" type="boolean">
+          </xs:element>
+          <xs:element name="period" minOccurs="0" maxOccurs="1" type="Period">
+          </xs:element>
+          <xs:element name="note" minOccurs="0" maxOccurs="1" type="string">
+          </xs:element>
+          <xs:element name="agenda" minOccurs="0" maxOccurs="unbound" type="ICal.Schedule">
+          </xs:element>
+          <xs:element name="event" minOccurs="0" maxOccurs="unbound" type="ICalEvent">
+          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

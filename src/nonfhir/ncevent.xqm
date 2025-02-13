@@ -62,10 +62,14 @@ declare function ncevent:search-icalevents($request as map(*))
  
     let $lll := util:log-app('TRACE', 'apps.eNahar', $schedules/name)
 
+    let $matched := cal2event:cal2xml($services, $s, $e, $hds, $leaves, $schedules,$fillSpecial='true') }
     return
-    <schedules>
-        {  cal2event:cal2xml($services, $s, $e, $hds, $leaves, $schedules,$fillSpecial='true') }
-    </schedules>
+        switch ($accept)
+        case "application/xml" return 
+                mutil:prepareResultBundleXML($matched,1,"*")
+        case "application/json" return
+                mutil:prepareResultBundleJSON($matched,1,"*")
+        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 (:
     let $services:= r-cal:servicesXML($realm, $loguid, $lognam, '1', '*', $actor, $group, $sched, 'false', 'false')/cal
     let $lll := util:log-app('DEBUG', 'eNahar', $services)

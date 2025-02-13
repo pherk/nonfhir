@@ -7,46 +7,49 @@ import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modu
 
 declare namespace fhir   = "http://hl7.org/fhir";
 
-declare variable $nical:data-perms := "rwxrwxr-x";
-declare variable $nical:data-group := "spz";
-declare variable $nical:perms      := "rwxr-xr-x";
-declare variable $nical:cals       := "/db/apps/eNaharData/data/calendars";
-declare variable $nical:history    := "/db/apps/eNaharHistory/data/Cals";
 declare variable $nical:schedule-base := "/db/apps/eNaharData/data/schedules";
 
 
 (:~
- : GET: enahar/icals/{uuid}
- : get cal by id
+ : GET: /ICal/{uuid}
+ : get ICalendar by id
  : 
  : @param $id  uuid
  : 
- : @return <cal/>
+ : @return <ICal/>
  :)
 declare function nical:read-ical($request as map(*)) as item()
 {
+    let $accept := $request?accept
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $uuid   := $request?parameters?id
-    let $cals := collection($nical:cals)/cal[id[@value=$uuid]]
+    let $cals := collection($nical:cals)/ICal[id[@value=$uuid]]
     return
-        if (count($cals)=1)
-        then $cals
-        else  error(404, 'icals: uuid not valid.')
+      if (count($cals)=1) then
+        switch ($accept)
+        case "application/xml" return 
+                <ok/>
+        case "application/json" return 
+                map {"ok": true()}
+        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+      else errors:error($errors:NOT_FOUND, "nical: ", map { "info": "invalid uuuid"})
+};
 };
 
 (:~
- : GET: enahar/ical?query
- : get cal owner
+ : GET: /ICal?query
+ : get ICalendar owner
  :
  : @param $owner   string
  : @param $group   string
  : @param $active  boolean
- : @return bundle of <cal/>
+ : @return bundle of <ICal/>
  :)
 declare function nical:search-ical($request as map(*)){
     let $user   := sm:id()//sm:real/sm:username/string()
+    let $accept := $request?accept
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
@@ -55,25 +58,30 @@ declare function nical:search-ical($request as map(*)){
     let $group  := $request?parameters?group
     let $active := $request?parameters?active
     let $oref := concat('metis/practitioners/', $owner)
-    let $coll := collection($nical:cals)
+    let $coll := collection($config:cal-data)
     let $hits0 := if ($owner != '')
-        then $coll/cal[owner/reference[@value=$oref]][active[@value=$active]]
-        else $coll/cal[owner/group[@value=$group]][active[@value=$active]]
+        then $coll/ICal[owner/reference[@value=$oref]][active[@value=$active]]
+        else $coll/ICal[owner/group[@value=$group]][active[@value=$active]]
 
-    let $sorted-hits :=
+    let $matched :=
         for $c in $hits0
         order by lower-case($c/owner/display/@value/string())
         return
 (: TODO analyze elements id, owner, schedule :)
             if (string-length($elems)>0)
             then
-                <cal>
+                <ICal>
                     {$c/id}
                     {$c/owner}
-                </cal>
+                </ICal>
             else $c
     return
-        mutil:prepareResourceBundleXML($sorted-hits, 1, "*")
+        switch ($accept)
+        case "application/xml" return 
+                mutil:prepareResultBundleXML($matched,1,"*")
+        case "application/json" return
+                mutil:prepareResultBundleJSON($matched,1,"*")
+        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
 
 (:~
@@ -84,27 +92,26 @@ declare function nical:search-ical($request as map(*)){
  :)
 declare function nical:update-ical($request as map(*)){
     let $user := sm:id()//sm:real/sm:username/string()
+    let $accept := $request?accept
     let $realm := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $content := $request?body/node()
 
-    let $isNew   := not($content/cal/@xml:id)
+    let $isNew   := not($content/ICal/@xml:id)
     let $cid   := if ($isNew)
-        then "cal-" || substring-after($content/cal/owner/reference/@value,'metis/practitioners/')
+        then "cal-" || substring-after($content/ICal/owner/reference/@value,'metis/practitioners/')
         else             
-            let $id := $content/cal/id/@value/string()
-            let $cals := collection($nical:cals)/cal[id[@value = $id]]
-(: 
-            let $move := r-cal:moveToHistory($cals)
-:)
+            let $id := $content/ICal/id/@value/string()
+            let $cals := collection($nical:cals)/ICal[id[@value = $id]]
+            let $move := mutil:moveToHistory($cals, $config:icalHistory)
             return
                 $id
 
     let $version := if ($isNew) 
         then "0"
-        else xs:integer($content/cal/meta/versionID/@value/string()) + 1
-    let $elems := $content/cal/*[not(self::meta or self::version or self::id)]
+        else xs:integer($content/ICal/meta/versionId/@value/string()) + 1
+    let $elems := $content/ICal/*[not(self::meta or self::version or self::id)]
     let $uuid := if ($isNew)
         then $cid
         else "cal-" || util:uuid()
@@ -114,10 +121,10 @@ declare function nical:update-ical($request as map(*)){
         case 'role'   return 'roles'
         default return error('invalid cutype')
     let $data :=
-        <cal xml:id="{$uuid}">
+        <ICal xml:id="{$uuid}">
             <id value="{$cid}"/>
             <meta>
-                <versionID value="{$version}"/>
+                <versionId value="{$version}"/>
                 <extension url="https://eNahar.org/ical/extension/lastModifiedBy">
                     <valueReference>
                         <reference value="metis/practitioners/{$loguid}"/>
@@ -127,26 +134,26 @@ declare function nical:update-ical($request as map(*)){
                 <lastUpdated value="{adjust-dateTime-to-timezone(current-dateTime())}"/>
             </meta>
             {$elems}
-        </cal>
+        </ICal>
         
 
-    let $lll := util:log-app('ERROR','exist-core',$data)
+    let $lll := util:log-app('TRACE','apps.nabu',$data)
 
-(: 
     let $file := $uuid || ".xml"
     return
     try {
         let $store := system:as-user('vdba', 'kikl823!', (
-            xmldb:store($nical:cals || '/' || $cudir  , $file, $data)
-            , sm:chmod(xs:anyURI($nical:cals || '/' || $cudir || '/' || $file), $nical:data-perms)
-            , sm:chgrp(xs:anyURI($nical:cals || '/' || $cudir || '/' || $file), $nical:data-group)))
+            xmldb:store($config:ical-data || '/' || $cudir  , $file, $data)
+            , sm:chmod(xs:anyURI($config:ical-data || '/' || $cudir || '/' || $file), $config:data-perms)
+            , sm:chgrp(xs:anyURI($config:ical-data || '/' || $cudir || '/' || $file), $config:data-group)))
         return
-            $data
+          switch ($accept)
+          case "application/xml" return $data
+          case "application/json" return serialize:resource2json($data, false(), "4.3")
+          default return $data
     } catch * {
-        error(401, 'permission denied. Ask the admin.') 
+        errors:error($ERROR:UNAUTHORIZED, 'permission denied. Ask the admin.') 
     }
-:)
-    return $data
 };
 
 
@@ -172,7 +179,7 @@ function r-cal:validateCalXML(
         , $mode as xs:string*
         ) as item()+
 {
-    let $cals := $r-cal:cals/cal[id[@value=$uuid]]
+    let $cals := $r-cal:cals/ICal[id[@value=$uuid]]
     return
         if (count($cals)=1)
         then 
@@ -245,7 +252,7 @@ function r-cal:updateScheduleXML(
     let $today := current-dateTime()
     let $oref := concat('metis/practitioners/',$owner)
     let $sref := concat('enahar/schedules/', $sid)
-    let $cals := $r-cal:cals/cal[owner/reference/@value=$oref]
+    let $cals := $r-cal:cals/ICal[owner/reference/@value=$oref]
     return
         if (count($cals)=1)
         then 

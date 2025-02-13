@@ -11,12 +11,6 @@ import module namespace date  ="http://eNahar.org/ns/lib/date";
 
 declare namespace fhir   = "http://hl7.org/fhir";
 
-declare variable $nleave:data-perms := "rwxrwxr-x";
-declare variable $nleave:data-group := "spz";
-declare variable $nleave:perms      := "rwxr-xr-x";
-declare variable $nleave:leaves     := "/db/apps/metisData/data/FHIR/Leaves";
-declare variable $nleave:history    := "/db/apps/metisHistory/data/Leave";
-
 
 (:~
  : GET: nonfhir/Leave/{uuid}
@@ -28,17 +22,24 @@ declare variable $nleave:history    := "/db/apps/metisHistory/data/Leave";
  :)
 declare function nleave:read-leave($request as map(*)) as item()
 {
+    let $accept := $request?accept
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $format := $request?parameters?_format
     let $elems  := $request?parameters?_elements
     let $uuid   := $request?parameters?id
-    let $leaves := collection($nleave:leaves)/leave[id[@value=$uuid]]
+    let $leaves := collection($nleave:leaves)/CalEvent[id[@value=$uuid]]
     return
-        if (count($leaves)=1)
-        then $leaves
-        else  error(404, 'icals: uuid not valid.')
+      if (count($leaves)=1) then 
+          switch ($accept)
+          case "application/xml" return 
+                  $leaves
+          case "application/json" return 
+                  serialize:resource2json($leaves, false(), "4.3")
+          default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+      else errors:error($errors:NOT_FOUND, "nholiday: ", map { "info": "invalid uuuid"})
+};
 };
 
 (:~
@@ -70,10 +71,10 @@ declare function nleave:search-leave($request as map(*)){
 	      then $period[prefix/@value="gt"]/value/@value
 	      else $now
     let $hits0 := if (count($owner)=0)
-        then $coll/leave[period[start[@value lt $tmax]][end[@value gt $tmin]]][status[coding/code/@value=$status]]
+        then $coll/CalEvent[period[start[@value lt $tmax]][end[@value gt $tmin]]][status[coding/code/@value=$status]]
         else let $oref := concat('metis/practitioners/', $owner)
             return 
-                $coll/leave[actor/reference[@value=$oref]][period[start[@value lt $tmax]][end[@value gt $tmin]]][status[coding/code/@value=$status]]
+                $coll/CalEvent[actor/reference[@value=$oref]][period[start[@value lt $tmax]][end[@value gt $tmin]]][status[coding/code/@value=$status]]
 
     let $sorted-hits :=
         for $c in $hits0
@@ -82,10 +83,10 @@ declare function nleave:search-leave($request as map(*)){
 (: TODO analyze elements id, owner, schedule :)
             if (count($elems)>0)
             then
-                <leave>
+                <CalEvent>
                     {$c/id}
                     {$c/actor}
-                </leave>
+                </CalEvent>
             else $c
     return
       switch ($format)
@@ -94,11 +95,9 @@ declare function nleave:search-leave($request as map(*)){
       case "json" return
         mutil:prepareResultBundleJSON($sorted-hits, 1, "*")
       case "d3" return
-    <json:value xmlns:json="http://www.json.org">
-        <items>
-        {
+        map {
+          "items" : array {
  (: TODO line 424 too much computing, ranks can be precomputed :)
-(:
          for $item at $i in $matched
             let $rank := index-of($actors//*:reference/@value/string(), $item/actor/reference/@value/string()) - 1
             let $start := if ($item/allDay/@value='true')
@@ -115,28 +114,23 @@ declare function nleave:search-leave($request as map(*)){
                 else 'past'
             order by $item/period/start/@value/string()
             return
-            <json:value  json:array="true">
-                <id>{$i}</id>
-                <desc>{$item/summary/@value/string()}</desc>
-                <start>{$start}</start>
-                <end>{$end}</end>
-                <lane>{$rank}</lane>
-                <class>{$class}</class>
-            </json:value>
-:)
-        }
-        </items>
-        {
-(:
+               map {
+                     "resourceType" : "CalEvent"
+                   , "id" : $i
+                   , "title" : $item/summary/@value/string()
+                   , "period" : {"start" : $start, "end" : $end}
+                   , "class" : $class
+                   }
+            },
+            "lanes" : array {
             for $a at $i in $actors/*:user
             return
-                <lanes  json:array="true">
-                    <id>{xs:integer($i) - 1}</id>
-                    <label>{$a//*:display/@value/string()}</label>
-                </lanes>
-:)
+                map {
+                      "id" : xs:integer($i) - 1
+                    , "label" : $a//*:display/@value/string()
+                }
+            }
         }
-    </json:value>
       default return
         mutil:prepareResultBundleJSON($sorted-hits, 1, "*")
 };
@@ -160,7 +154,7 @@ declare function nleave:update-leave($request as map(*)){
         else
             let $id := $content/leave/id/@value/string()
             let $leaves := collection($nleave:leaves)/leave[id[@value = $id]]
-            let $move := mutil:moveToHistory($leaves, $nleave:history)
+            let $move := mutil:moveToHistory($leaves, $config:leavehistory)
             return
                 $id
 
@@ -182,21 +176,21 @@ declare function nleave:update-leave($request as map(*)){
         then $cid
         else "l-" || util:uuid()
     let $data :=
-        <leave xml:id="{$uuid}">
-            <id value="{$cid}"/>
-            <meta>
-                <versionId value="{$version}"/>
-                <extension url="https://eNahar.org/nabu/extension/lastModifiedBy">
-                    <valueReference>
-                        <reference value="Practitioner/{$loguid}"/>
-                        <display value="{$lognam}"/>
-                    </valueReference>
-                </extension>
-                <lastUpdated value="{date:now()}"/>
-            </meta>
+           <Leave xml:id="{$uuid}">
+               <id value="{$cid}"/>
+               <meta>
+                   <versionId value="{$version}"/>
+                   <extension url="https://eNahar.org/nabu/extension/lastModifiedBy">
+                       <valueReference>
+                           <reference value="Practitioner/{$loguid}"/>
+                           <display value="{$lognam}"/>
+                       </valueReference>
+                   </extension>
+                   <lastUpdated value="{date:now()}"/>
+               </meta>
             { $elems }
             { $period }
-        </leave>
+           </Leave>
 
     let $lll := util:log-app('DEBUG','apps.nabu',$data)
 
@@ -204,9 +198,9 @@ declare function nleave:update-leave($request as map(*)){
     return
     try {
         let $store := system:as-user('vdba', 'kikl823!', (
-            xmldb:store($nleave:leaves || '/' || $cudir  , $file, $data)
-            , sm:chmod(xs:anyURI($nleave:leaves || '/' || $cudir || '/' || $file), $nleave:data-perms)
-            , sm:chgrp(xs:anyURI($nleave:leaves || '/' || $cudir || '/' || $file), $nleave:data-group)))
+            xmldb:store($config:leave-data || '/' || $cudir  , $file, $data)
+            , sm:chmod(xs:anyURI($config:leave-data || '/' || $cudir || '/' || $file), $config:data-perms)
+            , sm:chgrp(xs:anyURI($config:leave-data || '/' || $cudir || '/' || $file), $config:data-group)))
         return
             $data
     } catch * {
