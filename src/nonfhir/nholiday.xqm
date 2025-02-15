@@ -35,7 +35,7 @@ declare function nholiday:read-holiday($request as map(*))
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $uuid := $request?parameters?uuid
-    let $hdes := doc($config:holiday-data || "holidays.xml")//CalEvent[name/@value=$uuid]
+    let $hdes := collection($config:holiday-data)/ICal[id/@value="ical-holidays"]
     return
       if (count($hdes)=1) then
         switch ($accept)
@@ -61,7 +61,7 @@ declare function nholiday:search-holiday($request as map(*))
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $period := mutil:analyzeQuery($request?parameters?period, "date")
-    let $hdes := doc($config:holiday-data || "holidays.xml")//event[name/@value=$uuid]
+    let $hdes := colletion($config:holiday-data)//event[name/@value=$uuid]
     let $now := date:now()
     let $tmax := if ($period)
 	        then $period[prefix/@value="lt"]/value/@value
@@ -85,8 +85,8 @@ declare function nholiday:search-holiday($request as map(*))
                 let $attributes := 
                  ( 
                    <class>{$hds/className/@value/string()}</class>
-                 , <backgroundColor>{$hds/backgroundColor/@value/string()}</backgroundColor>
-                 , <textColor>{$hds/textColor/@value/string()}</textColor>
+                 , <backgroundColor>#006400</backgroundColor>
+                 , <textColor>xffffff</textColor>
                  , <editable>{$hds/editable/@value/string()}</editable>
                  )
                 for $d in (0 to $nofd)
