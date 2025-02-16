@@ -3,7 +3,6 @@ xquery version "3.1";
 module namespace nbase ="http://eNahar.org/ns/nonfhir/nbase";
 
 import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
-
 import module namespace config="http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
 import module namespace roaster="http://e-editiones.org/roaster";
 import module namespace errors="http://e-editiones.org/roaster/errors";
@@ -31,8 +30,8 @@ declare function nbase:metadata($request as map(*)) as item()
     return
         switch ($accept)
         case "application/xml" return $c
-        case "application/json" return serialize:resource2json($c, false(), "4.3")
-        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+        case "application/json" return mutil:resource2json($c)
+        default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
 
 (:~
@@ -54,6 +53,6 @@ declare function nbase:health($request as map(*)) as item()
                 <ok/>
         case "application/json" return 
                 map {"ok": true()}
-        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+        default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
 

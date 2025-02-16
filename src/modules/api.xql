@@ -17,8 +17,9 @@ import module namespace router="http://e-editiones.org/roaster/router";
  : no authorization
 import module namespace nauth = "https://eNahar.org/ns/nonfhir/nauth" at "nauth.xqm";
 :)
-import module namespace nbase  = "http://eNahar.org/ns/nonfhir/nbase"  at "../nonfhir/nbase.xqm";
-import module namespace nleave = "http://eNahar.org/ns/nonfhir/nleave" at "../nonfhir/nleave.xqm";
+import module namespace nbase    = "http://eNahar.org/ns/nonfhir/nbase"  at "../nonfhir/nbase.xqm";
+import module namespace nholiday = "http://eNahar.org/ns/nonfhir/nholiday" at "../nonfhir/nholiday.xqm";
+import module namespace nleave   = "http://eNahar.org/ns/nonfhir/nleave" at "../nonfhir/nleave.xqm";
 
 
 (:~

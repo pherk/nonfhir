@@ -3,7 +3,10 @@ xquery version "3.1";
 module namespace nschedule="http://eNahar.org/ns/nonfhir/nschedule";
 
 import module namespace roaster="http://e-editiones.org/roaster";
+import module namespace errors ="http://e-editiones.org/roaster/errors";
+import module namespace date   ="http://eNahar.org/ns/lib/date";
 import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
+import module namespace config = "http://eNahar.org/ns/nonfhir/config" at "../modules/config.xqm";
 
 declare namespace fhir   = "http://hl7.org/fhir";
 
@@ -38,14 +41,14 @@ declare function nschedule:read-schedule($request as map(*)) as item()
     let $lognam := $request?parameters?lognam
     let $format := $request?parameters?_format
     let $uuid   := $request?parameters?id
-    let $schedules := collection($nschedule:schedule-base)/cal[id[@value=$uuid]]
+    let $schedules := collection($nschedule:schedule-data)/cal[id[@value=$uuid]]
     return
         if (count($schedules)=1) then
         switch ($accept)
         case "application/xml" return $schedules
-        case "application/json" return serialize:resource2json($schedules, false(), "4.3")
-        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
-      else errors:error($errors:NOT_FOUND, "nschedule: ", map { "info": "invalid uuid"})
+        case "application/json" return mutil:resource2json($schedules)
+        default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+      else error($errors:NOT_FOUND, "nschedule: ", map { "info": "invalid uuid"})
 };
 
 (:~
@@ -71,8 +74,8 @@ declare function nschedule:search-schedule($request as map(*)){
     let $active := $request?parameters?active
     let $lll := util:log-app('TRACE','app.nabu', $request?parameters)
     let $hits0 := if ($type and $type!='')
-        then collection($nschedule:schedule-base)/schedule[type[@value=$type]][active[@value=$active]]
-        else collection($nschedule:schedule-base)/schedule[active[@value="true"]]
+        then collection($nschedule:schedule-data)/schedule[type[@value=$type]][active[@value=$active]]
+        else collection($nschedule:schedule-data)/schedule[active[@value="true"]]
     let $valid := if ($name)
         then $hits0
         else $hits0/schedule[matches(name/@value,$name)]
@@ -104,7 +107,7 @@ declare function nschedule:search-schedule($request as map(*)){
                         , "text" : $service/name/@value/string()
                         }
                       }
-        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+        default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
  
 (:~
@@ -128,8 +131,8 @@ declare function nschedule:update-schedule($request as map(*))
              default return 'sched-' || $content/schedule/name/@value/string()
         else 
             let $id := $content/schedule/id/@value/string()
-            let $scheds := collection($r-sched:schedule-base)/schedule[id[@value = $id]]
-            let $move := mutil:moveToHistory($scheds, $r-sched:scheduleHistory)
+            let $scheds := collection($nschedule:schedule-data)/schedule[id[@value = $id]]
+            let $move := mutil:moveToHistory($scheds, $nschedule:scheduleHistory)
             return
                 $id
     let $version := if ($isNew) 
@@ -179,9 +182,9 @@ declare function nschedule:update-schedule($request as map(*))
     return
     try {
         system:as-user('vdba', 'kikl823!', (
-            xmldb:store($r-sched:schedule-data, $file, $data)
-            , sm:chmod(xs:anyURI($r-sched:schedule-data || '/' || $file), $r-sched:data-perms)
-            , sm:chgrp(xs:anyURI($r-sched:schedule-data || '/' || $file), $r-sched:data-group)))
+            xmldb:store($nschedule:schedule-data, $file, $data)
+            , sm:chmod(xs:anyURI($nschedule:schedule-data || '/' || $file), $config:data-perms)
+            , sm:chgrp(xs:anyURI($nschedule:schedule-data || '/' || $file), $config:data-group)))
     } catch * {
         errors:error($errors:UNAUTHORIZED, "Permission denied", map { "info": "ask the admin"})
     }

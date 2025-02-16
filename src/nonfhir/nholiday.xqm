@@ -40,9 +40,9 @@ declare function nholiday:read-holiday($request as map(*))
       if (count($hdes)=1) then
         switch ($accept)
         case "application/xml" return $hdes
-        case "application/json" return serialize:resource2json($hdes, false(), "4.3")
+        case "application/json" return mutil:resource2json($hdes)
         default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
-      else errors:error($errors:NOT_FOUND, "nholiday: ", map { "info": "invalid uuuid"})
+      else error($errors:NOT_FOUND, "nholiday: ", map { "info": "invalid uuuid"})
 };
 
 (:~
@@ -60,8 +60,13 @@ declare function nholiday:search-holiday($request as map(*))
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
+    let $name   := mutil:analyzeQuery($request?parameters?name, "string")
     let $period := mutil:analyzeQuery($request?parameters?period, "date")
-    let $hdes := colletion($config:holiday-data)//event[name/@value=$uuid]
+    let $type   := mutil:analyzeQuery($request?parameters?type, "string")
+    let $hds    := collection($config:holiday-data)/ICal
+    let $events := if (count($name)>0)
+        then $hds//event[name/@value=$name]
+        then $hds//event
     let $now := date:now()
     let $tmax := if ($period)
 	        then $period[prefix/@value="lt"]/value/@value
@@ -72,7 +77,6 @@ declare function nholiday:search-holiday($request as map(*))
     let $s  := date:iso2date($tmin)
     let $e  := date:iso2date($tmax)
     let $nofd  := xs:integer(floor(($e - $s) div xs:dayTimeDuration('P1D')))
-    let $events  := doc($config:holiday-data || "holidays.xml")//event
     let $matched :=
         for $d in (0 to $nofd)
         let $date  := $s + xs:dayTimeDuration('P1D')*$d
@@ -84,14 +88,11 @@ declare function nholiday:search-holiday($request as map(*))
               else
                 let $attributes := 
                  ( 
-                   <class>{$hds/className/@value/string()}</class>
+                   <class>{$hds//className/@value/string()}</class>
                  , <backgroundColor>#006400</backgroundColor>
-                 , <textColor>xffffff</textColor>
+                 , <textColor>#ffffff</textColor>
                  , <editable>{$hds/editable/@value/string()}</editable>
                  )
-                for $d in (0 to $nofd)
-                let $date  := $s + xs:dayTimeDuration('P1D')*$d
-                let $hde := ice:match-rrules($date, $events)
                 return
                   nholiday:fc-event($hde, $date, $attributes)
           else ()
@@ -101,7 +102,7 @@ declare function nholiday:search-holiday($request as map(*))
                 mutil:prepareResultBundleXML($matched,1,"*")
         case "application/json" return
                 mutil:prepareResultBundleJSON($matched,1,"*")
-        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+        default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
 
 declare %private function nholiday:fc-event($e as element(CalEvent), $date as xs:date, $attributes as item()*) as element(CalEvent)?
@@ -111,11 +112,12 @@ declare %private function nholiday:fc-event($e as element(CalEvent), $date as xs
     <title value="{$e/description/@value/string()}"/>
     <type value="{$e/type/@value/string()}"/>
     <period>
-      <start>{dateTime($date, xs:time(date:iso2dateTime($e/start/@value)))}</start>
-      <end value="{if ($e/type/@value='traditional')
-                       then dateTime($date, xs:time(date:iso2dateTime($e/end/@value)))
-                       else concat($date,'T23:59:59')}"/>
-    }
+      <start value="{if ($e/start)
+                     then concat(xs:string($date), xs:string(xs:time(date:iso2dateTime($e/start/@value))))
+                     else concat(xs:string($date),'T00:00:00')}"/>
+      <end value="{if ($e/end)
+                     then concat(xs:string($date), xs:string(xs:time(date:iso2dateTime($e/end/@value))))
+                     else concat(xs:string($date),'T23:59:59')}"/>
     </period>
     <allDay value="{$e/type/@value='official'}"/>
     <editable>false</editable>

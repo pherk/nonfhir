@@ -126,6 +126,11 @@ declare function mutil:prepareResultBundleXML(
         </Bundle>
 };
 
+declare function mutil:resource2json($r as item())
+{
+  serialize:resource2json($r, false(), "4.3")
+};
+
 declare function mutil:prepareResultBundleJSON(
       $hits as item()*
     , $start as xs:integer
@@ -236,7 +241,7 @@ declare function mutil:analyzeQuery(
      case "number"   return let $ds := tokenize($s, ",")
                            for $d in $ds
                            return mutil:prefix($d)
-     default return return tokenize($s,",")
+     default return tokenize($s,",")
 };
 
 declare function mutil:analyzeDate($d as xs:string) as item()
@@ -255,7 +260,7 @@ declare function mutil:analyzeDate($d as xs:string) as item()
     </queryparam>
 };
 
-declare function mutil:prefix($s as xs:string) as item()
+declare function mutil:prefix($s as xs:string) as item()*
 {
   let $two := substring($s,1,2)
   return

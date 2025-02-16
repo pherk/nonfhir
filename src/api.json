@@ -330,6 +330,14 @@
             }
           },
           {
+            "name": "name",
+            "in": "query",
+            "description": "name of holiday",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "period",
             "in": "query",
             "description": "epoch of holidays",

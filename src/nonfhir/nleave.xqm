@@ -3,7 +3,6 @@ xquery version "3.1";
 module namespace nleave = "http://eNahar.org/ns/nonfhir/nleave";
 
 import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
-
 import module namespace config="http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
 import module namespace roaster="http://e-editiones.org/roaster";
 import module namespace errors="http://e-editiones.org/roaster/errors";
@@ -36,10 +35,9 @@ declare function nleave:read-leave($request as map(*)) as item()
           case "application/xml" return 
                   $leaves
           case "application/json" return 
-                  serialize:resource2json($leaves, false(), "4.3")
-          default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
-      else errors:error($errors:NOT_FOUND, "nholiday: ", map { "info": "invalid uuuid"})
-};
+                  mutil:resource2json($leaves)
+          default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+      else error($errors:NOT_FOUND, "nholiday: ", map { "info": "invalid uuuid"})
 };
 
 (:~

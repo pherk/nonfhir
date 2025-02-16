@@ -69,7 +69,7 @@ declare function ncevent:search-icalevents($request as map(*))
                 mutil:prepareResultBundleXML($matched,1,"*")
         case "application/json" return
                 mutil:prepareResultBundleJSON($matched,1,"*")
-        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+        default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 (:
     let $services:= r-cal:servicesXML($realm, $loguid, $lognam, '1', '*', $actor, $group, $sched, 'false', 'false')/cal
     let $lll := util:log-app('DEBUG', 'eNahar', $services)

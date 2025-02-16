@@ -87,21 +87,81 @@
           </xs:element>
           <xs:element name="ff" minOccurs="0" maxOccurs="1" type="boolean">
           </xs:element>
+          <xs:element name="period" minOccurs="0" maxOccurs="1" type="Period">
+          </xs:element>
+          <xs:element name="location" minOccurs="0" maxOccurs="1" type="Reference">
+          </xs:element>
+          <xs:element name="note" minOccurs="0" maxOccurs="1" type="string">
+          </xs:element>
+          <xs:element name="css" minOccurs="0" maxOccurs="1" type="ICal.CSS">
+          </xs:element>
+          <xs:element name="appLetter" minOccurs="0" maxOccurs="1" type="ICal.AppLetter">
+          </xs:element>
+          <xs:element name="timing" minOccurs="0" maxOccurs="1" type="ICal.Timing">
+          </xs:element>
+          <xs:element name="agenda" minOccurs="0" maxOccurs="unbound" type="ICal.Schedule">
+          </xs:element>
+          <xs:element name="event" minOccurs="0" maxOccurs="unbound" type="ICal.Event">
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ICal.AppLetter">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">A link to a letter template.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="BackboneElement">
+        <xs:sequence>
+          <xs:element name="altName" minOccurs="0" maxOccurs="1" type="string">
+          </xs:element>
+          <xs:element name="template" minOccurs="0" maxOccurs="1" type="Reference">
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ICal.CSS">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">CSS definitions.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="BackboneElement">
+        <xs:sequence>
+          <xs:element name="className" minOccurs="0" maxOccurs="1" type="string">
+          </xs:element>
+          <xs:element name="backgroundColor" minOccurs="0" maxOccurs="1" type="string">
+          </xs:element>
+          <xs:element name="textColor" minOccurs="0" maxOccurs="1" type="string">
+          </xs:element>
+          <xs:element name="editable" minOccurs="0" maxOccurs="1" type="boolean">
+          </xs:element>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ICal.Timing">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">timing defaults for dating.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="BackboneElement">
+        <xs:sequence>
+          <xs:element name="pre" minOccurs="0" maxOccurs="1" type="integer">
+          </xs:element>
+          <xs:element name="exam" minOccurs="0" maxOccurs="1" type="integer">
+          </xs:element>
+          <xs:element name="post" minOccurs="0" maxOccurs="1" type="integer">
+          </xs:element>
           <xs:element name="overBookable" minOccurs="0" maxOccurs="1" type="boolean">
           </xs:element>
           <xs:element name="blocking" minOccurs="0" maxOccurs="1" type="boolean">
           </xs:element>
           <xs:element name="parallelPerHour" minOccurs="0" maxOccurs="1" type="integer">
           </xs:element>
-          <xs:element name="period" minOccurs="0" maxOccurs="1" type="Period">
-          </xs:element>
-          <xs:element name="note" minOccurs="0" maxOccurs="1" type="string">
-          </xs:element>
-          <xs:element name="className" minOccurs="0" maxOccurs="1" type="string">
-          </xs:element>
-          <xs:element name="agenda" minOccurs="0" maxOccurs="unbound" type="ICal.Schedule">
-          </xs:element>
-          <xs:element name="event" minOccurs="0" maxOccurs="unbound" type="ICal.Event">
+          <xs:element name="query" minOccurs="0" maxOccurs="1" type="code">
           </xs:element>
         </xs:sequence>
       </xs:extension>
@@ -163,9 +223,13 @@
         <xs:sequence>
           <xs:element name="freq" minOccurs="1" maxOccurs="1" type="code">
           </xs:element>
-          <xs:element name="byWeekNo" minOccurs="1" maxOccurs="1" type="string">
+          <xs:element name="byYear" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
-          <xs:element name="byDay" minOccurs="1" maxOccurs="1" type="string">
+          <xs:element name="byMonth" minOccurs="0" maxOccurs="1" type="string">
+          </xs:element>
+          <xs:element name="byWeek" minOccurs="0" maxOccurs="1" type="string">
+          </xs:element>
+          <xs:element name="byDay" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
         </xs:sequence>
       </xs:extension>

@@ -41,32 +41,28 @@
         <name value="neujahr"/>
         <description value="Neujahr"/>
         <type value="official"/>
-        <period>
-          <start value="1900-01-01T00:00:00"/>
-        </period>
         <rrule>
-            <freq value="yearly"/>
+          <freq value="yearly"/>
+          <byMonth value="1"/>
+          <byDay   value="1"/>
         </rrule>
     </event>
     <event>
         <name value="h3k"/>
         <description value="Heilige 3 Könige"/>
         <type value="rk"/>
-        <period>
-          <start value="1900-01-06T00:00:00"/>
-        </period>
         <rrule>
-            <freq value="yearly"/>
+          <freq value="yearly"/>
+          <byMonth value="1"/>
+          <byDay   value="6"/>
         </rrule>
     </event>
     <event>
         <name value="weiberfastnacht"/>
         <description value="Weiberfastnacht"/>
         <type value="traditional"/>
-        <period>
-          <start value="1900-01-01T11:00:00"/>
-          <end value="1900-01-01T23:59:59"/>
-        </period>
+        <start value="11:00:00"/>
+        <end value="23:59:59"/>
         <rrule>
             <freq value="yearly"/>
             <byEaster value="-52"/>
@@ -76,9 +72,6 @@
         <name value="rosenmontag"/>
         <description value="Rosenmontag"/>
         <type value="official"/>
-        <period>
-          <start value="1900-01-01T00:00:00"/>
-        </period>
         <rrule>
             <freq value="yearly"/>
             <byEaster value="-48"/>
@@ -88,9 +81,6 @@
         <name value="karfreitag"/>
         <description value="Karfreitag"/>
         <type value="official"/>
-        <period>
-          <start value="1900-01-01T00:00:00"/>
-        </period>
         <rrule>
             <freq value="yearly"/>
             <byEaster value="-2"/>
@@ -100,9 +90,6 @@
         <name value="ostern"/>
         <description value="Ostersonntag"/>
         <type value="official"/>
-        <period>
-          <start value="1900-01-01T00:00:00"/>
-        </period>
         <rrule>
             <freq value="yearly"/>
             <byEaster value="0"/>
@@ -112,9 +99,6 @@
         <name value="ostermontag"/>
         <description value="Ostermontag"/>
         <type value="official"/>
-        <period>
-          <start value="1900-01-01T00:00:00"/>
-        </period>
         <rrule>
             <freq value="yearly"/>
             <byEaster value="1"/>
@@ -124,20 +108,16 @@
         <name value="1mai"/>
         <description value="1. Mai"/>
         <type value="official"/>
-        <period>
-          <start value="1900-05-01T00:00:00"/>
-        </period>
         <rrule>
-            <freq value="yearly"/>
+          <freq value="yearly"/>
+          <byMonth value="5"/>
+          <byDay value="1"/>
         </rrule>
     </event>
     <event>
         <name value="christihimmelfahrt"/>
         <description value="Christi Himmelfahrt"/>
         <type value="official"/>
-        <period>
-          <start value="1900-01-01T00:00:00"/>
-        </period>
         <rrule>
             <freq value="yearly"/>
             <byEaster value="39"/>
@@ -147,9 +127,6 @@
         <name value="pfingsten"/>
         <description value="Pfingsten"/>
         <type value="official"/>
-        <period>
-          <start value="1900-01-01T00:00:00"/>
-        </period>
         <rrule>
             <freq value="yearly"/>
             <byEaster value="49"/>
@@ -159,9 +136,6 @@
         <name value="pfingstmontag"/>
         <description value="Pfingstmontag"/>
         <type value="official"/>
-        <period>
-          <start value="1900-01-01T00:00:00"/>
-        </period>
         <rrule>
             <freq value="yearly"/>
             <byEaster value="50"/>
@@ -171,9 +145,6 @@
         <name value="fronleichnam"/>
         <description value="Fronleichnam"/>
         <type value="official"/>
-        <period>
-          <start value="1900-01-01T00:00:00"/>
-        </period>
         <rrule>
             <freq value="yearly"/>
             <byEaster value="60"/>
@@ -183,20 +154,26 @@
         <name value="3okt"/>
         <description value="Tag der deutschen Einheit"/>
         <type value="official"/>
-        <period>
-          <start value="1990-10-03T00:00:00"/>
-        </period>
         <rrule>
-            <freq value="yearly"/>
+          <freq value="yearly"/>
+          <byMonth value="10"/>
+          <byDay value="3"/>
+        </rrule>
+    </event>
+    <event>
+        <name value="reformationstag"/>
+        <description value="Reformationstag"/>
+        <type value="ev"/>
+        <rrule>
+          <freq value="yearly"/>
+          <byMonth value="10"/>
+          <byDay value="31"/>
         </rrule>
     </event>
     <event>
         <name value="luthertag"/>
         <description value="Luther-Tag"/>
         <type value="official"/>
-        <period>
-          <start value="2017-10-31T00:00:00"/>
-        </period>
         <rdate>
             <date value="2017-10-31"/>
         </rdate>
@@ -205,79 +182,75 @@
         <name value="allerheiligen"/>
         <description value="Allerheiligen"/>
         <type value="official"/>
-        <period>
-          <start value="1900-11-01T00:00:00"/>
-        </period>
         <rrule>
-            <freq value="yearly"/>
+          <freq value="yearly"/>
+          <byMonth value="11"/>
+          <byDay value="1"/>
         </rrule>
     </event>
     <event>
         <name value="stmartin"/>
         <description value="Sankt Martin"/>
         <type value="rk"/>
-        <period>
-          <start value="1900-11-11T00:00:00"/>
-        </period>
         <rrule>
-            <freq value="yearly"/>
+          <freq value="yearly"/>
+          <byMonth value="11"/>
+          <byDay value="11"/>
         </rrule>
     </event>
     <event>
         <name value="nikolaus"/>
         <description value="Nikolaus"/>
         <type value="rk"/>
-        <period>
-          <start value="1900-12-06T00:00:00"/>
-        </period>
         <rrule>
-            <freq value="yearly"/>
+          <freq value="yearly"/>
+          <byMonth value="12"/>
+          <byDay value="6"/>
         </rrule>
     </event>
     <event>
         <name value="heiligabend"/>
         <description value="Heilig Abend"/>
         <type value="traditional"/>
-        <period>
-          <start value="1900-12-24T00:00:00"/>
-          <end value="1900-12-24T23:59:59"/>
+        <start value="00:00:00"/>
+        <end value="23:59:59"/>
         </period>
         <rrule>
-            <freq value="yearly"/>
+          <freq value="yearly"/>
+          <byMonth value="12"/>
+          <byDay value="24"/>
         </rrule>
     </event>
     <event>
         <name value="weihnachten"/>
         <description value="Weihnachten"/>
         <type value="official"/>
-        <period>
-          <start value="1900-12-25T00:00:00"/>
-        </period>
         <rrule>
-            <freq value="yearly"/>
+          <freq value="yearly"/>
+          <byMonth value="12"/>
+          <byDay value="25"/>
         </rrule>
     </event>
     <event>
-        <name value="2weihnachtstag"/>
+        <name value="2.weihnachtstag"/>
         <description value="2. Weihnachtstag"/>
         <type value="official"/>
-        <period>
-          <start value="1900-12-26T00:00:00"/>
-        </period>
         <rrule>
-            <freq value="yearly"/>
+          <freq value="yearly"/>
+          <byMonth value="12"/>
+          <byDay value="25"/>
         </rrule>
     </event>
     <event>
         <name value="silvester"/>
         <description value="Silvester"/>
         <type value="traditional"/>
-        <period>
-          <start value="1900-12-31T00:00:00"/>
-          <end value="1900-12-31T23:59:59"/>
-        </period>
+        <start value="00:00:00"/>
+        <end value="23:59:59"/>
         <rrule>
-            <freq value="yearly"/>
+          <freq value="yearly"/>
+          <byMonth value="12"/>
+          <byDay value="31"/>
         </rrule>
     </event>
   </schedule>

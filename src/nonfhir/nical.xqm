@@ -3,7 +3,10 @@ xquery version "3.1";
 module namespace nical="http://eNahar.org/ns/nonfhir/nical";
 
 import module namespace roaster="http://e-editiones.org/roaster";
+import module namespace errors ="http://e-editiones.org/roaster/errors";
+import module namespace date   = "http://eNahar.org/ns/lib/date";
 import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
+import module namespace config = "http://eNahar.org/ns/nonfhir/config" at "../modules/config.xqm";
 
 declare namespace fhir   = "http://hl7.org/fhir";
 
@@ -30,12 +33,11 @@ declare function nical:read-ical($request as map(*)) as item()
       if (count($cals)=1) then
         switch ($accept)
         case "application/xml" return 
-                <ok/>
+                $cals
         case "application/json" return 
-                map {"ok": true()}
-        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
-      else errors:error($errors:NOT_FOUND, "nical: ", map { "info": "invalid uuuid"})
-};
+                mutil:resource2json($cals)
+        default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+      else error($errors:NOT_FOUND, "nical: ", map { "info": "invalid uuuid"})
 };
 
 (:~
@@ -81,7 +83,7 @@ declare function nical:search-ical($request as map(*)){
                 mutil:prepareResultBundleXML($matched,1,"*")
         case "application/json" return
                 mutil:prepareResultBundleJSON($matched,1,"*")
-        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+        default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
 
 (:~
