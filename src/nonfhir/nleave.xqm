@@ -63,17 +63,17 @@ declare function nleave:search-leave($request as map(*)){
     let $status := query:analyze($request?parameters?status, "token")
     let $coll := collection($nleave:leaves)
     let $now := date:now()
-    let $tmax := if (count($period)>0)
-      	then $period[prefix/@value=("eq","lt")]/value/@value
-	      else $now
-    let $tmin := if (count($period)>0)
-	      then $period[prefix/@value=("eq","gt")]/value/@value
-	      else $now
+    let $tmax := if (count($period[prefix/@value="le"])=1)
+	        then $period[prefix/@value="le"]/value/@value
+	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
+    let $tmin := if (count($period[prefix/@value="ge"])=1)
+	        then $period[prefix/@value="ge"]/value/@value
+	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
     let $hits0 := if (count($owner)=0)
-        then $coll/CalEvent[period[start[@value lt $tmax]][end[@value gt $tmin]]][status[coding/code/@value=$status]]
+        then $coll/CalEvent[period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
         else let $oref := concat('metis/practitioners/', $owner)
             return 
-                $coll/CalEvent[actor/reference[@value=$oref]][period[start[@value lt $tmax]][end[@value gt $tmin]]][status[coding/code/@value=$status]]
+                $coll/CalEvent[actor/reference[@value=$oref]][period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
 
     let $sorted-hits :=
         for $c in $hits0

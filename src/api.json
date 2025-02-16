@@ -762,7 +762,47 @@
             }
           },
           {
-            "name": "status",
+            "name": "actor",
+            "in": "query",
+            "description": "uuid of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "description": "uuid of user group",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "schedule",
+            "in": "query",
+            "description": "uuid of user cal schedule",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "epoch for ical schedules",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fillSpecial",
+            "in": "query",
+            "description": "flag if special services should be included",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "active",
             "in": "query",
             "description": "ical status",
             "schema": {
@@ -1170,7 +1210,7 @@
             }
           },
           {
-            "name": "owner",
+            "name": "actor",
             "in": "query",
             "description": "uuid of user",
             "schema": {

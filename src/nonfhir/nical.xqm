@@ -42,9 +42,9 @@ declare function nical:read-ical($request as map(*)) as item()
 
 (:~
  : GET: /ICal?query
- : get ICalendar owner
+ : get ICalendar actor
  :
- : @param $owner   string
+ : @param $actor   string
  : @param $group   string
  : @param $active  boolean
  : @return bundle of <ICal/>
@@ -56,25 +56,29 @@ declare function nical:search-ical($request as map(*)){
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $elems  := $request?parameters?_elements
-    let $owner  := $request?parameters?owner
+    let $actor  := $request?parameters?actor
     let $group  := $request?parameters?group
+    let $schedule := $request?parameters?schedule
+    let $period := $request?parameters?period
+    let $fillSpecial := $request?parameters?fillSpecial
     let $active := $request?parameters?active
-    let $oref := concat('metis/practitioners/', $owner)
+    let $oref := concat('metis/practitioners/', $actor)
     let $coll := collection($config:cal-data)
-    let $hits0 := if ($owner != '')
-        then $coll/ICal[owner/reference[@value=$oref]][active[@value=$active]]
-        else $coll/ICal[owner/group[@value=$group]][active[@value=$active]]
+    let $hits0 := if ($actor != '')
+        then $coll/ICal[actor/reference[@value=$oref]][active[@value=$active]]
+        (: mapping? :)
+        else $coll/ICal[group[@value=$group]][active[@value=$active]]
 
     let $matched :=
         for $c in $hits0
-        order by lower-case($c/owner/display/@value/string())
+        order by lower-case($c/actor/display/@value/string())
         return
-(: TODO analyze elements id, owner, schedule :)
+(: TODO analyze elements id, actor, schedule :)
             if (string-length($elems)>0)
             then
                 <ICal>
                     {$c/id}
-                    {$c/owner}
+                    {$c/actor}
                 </ICal>
             else $c
     return
@@ -102,7 +106,7 @@ declare function nical:update-ical($request as map(*)){
 
     let $isNew   := not($content/ICal/@xml:id)
     let $cid   := if ($isNew)
-        then "cal-" || substring-after($content/ICal/owner/reference/@value,'metis/practitioners/')
+        then "cal-" || substring-after($content/ICal/actor/reference/@value,'metis/practitioners/')
         else             
             let $id := $content/ICal/id/@value/string()
             let $cals := collection($nical:cals)/ICal[id[@value = $id]]
@@ -217,7 +221,7 @@ return
 
 
 (:~
- : PATCH: enahar/{$owner}/schedules
+ : PATCH: enahar/{$actor}/schedules
  : add schedule, no duplicates
  : delete schedule
  : 
@@ -229,7 +233,7 @@ return
 (: 
 declare
     %rest:POST
-    %rest:path("enahar/icals/{$owner}/schedules")
+    %rest:path("enahar/icals/{$actor}/schedules")
     %rest:query-param("realm",  "{$realm}") 
     %rest:query-param("loguid", "{$loguid}","")
     %rest:query-param("lognam", "{$lognam}","")
@@ -240,7 +244,7 @@ declare
     %rest:consumes("application/xml")
     %rest:produces("application/xml", "text/xml")
 function r-cal:updateScheduleXML(
-          $owner  as xs:string*
+          $actor  as xs:string*
         , $realm as xs:string*
         , $loguid as xs:string*
         , $lognam as xs:string*
@@ -250,11 +254,11 @@ function r-cal:updateScheduleXML(
         , $action as xs:string*
         ) as item()
 {
-    let $log := util:log-app("TRACE", 'apps.eNahar', $owner)
+    let $log := util:log-app("TRACE", 'apps.eNahar', $actor)
     let $today := current-dateTime()
-    let $oref := concat('metis/practitioners/',$owner)
+    let $oref := concat('metis/practitioners/',$actor)
     let $sref := concat('enahar/schedules/', $sid)
-    let $cals := $r-cal:cals/ICal[owner/reference/@value=$oref]
+    let $cals := $r-cal:cals/ICal[actor/reference/@value=$oref]
     return
         if (count($cals)=1)
         then 
@@ -314,10 +318,97 @@ function r-cal:updateScheduleXML(
                 r-cal:rest-response(200, 'icals: schedule updated.')
         else if (count($cals>1))
         then
-            let $log := util:log-app("TRACE", 'apps.eNahar', $owner)
+            let $log := util:log-app("TRACE", 'apps.eNahar', $actor)
             return
                 r-cal:rest-response(404, 'icals: only one cal is allowed.')
         else
             r-cal:rest-response(404, 'icals: uuid not valid.')
 };
 :)
+
+(:~
+ : GET: enahar/services
+ : get services
+ : 
+ : @param $actor   owner display value
+ : @param $group   group
+ : @param $sched   schedule
+ : 
+ : @return bundle of <services/>
+ :)
+declare
+    %rest:GET
+    %rest:path("enahar/services")
+    %rest:query-param("realm", "{$realm}") 
+    %rest:query-param("loguid", "{$loguid}","")
+    %rest:query-param("lognam", "{$lognam}","")
+    %rest:query-param("start",  "{$start}",   "1")      
+    %rest:query-param("length", "{$length}",  "*")
+    %rest:query-param("actor",  "{$owner}",   "")
+    %rest:query-param("group",  "{$group}",   "")
+    %rest:query-param("sched",  "{$schedule}","")
+    %rest:query-param("passed",  "{$passed}", "true")
+    %rest:query-param("fillSpecial",  "{$fillSpecial}","false")
+    %rest:consumes("application/xml")
+    %rest:produces("application/xml", "text/xml")
+function r-cal:servicesXML(
+          $realm as xs:string*
+        , $loguid as xs:string*
+        , $lognam as xs:string*
+        , $start as xs:string*
+        , $length   as xs:string*
+        , $actor as xs:string*
+        , $group as xs:string*
+        , $schedule as xs:string*
+        , $passed as xs:string*
+        , $fillSpecial as xs:string*
+        ) as item()
+{
+    let $lll := util:log-app('DEBUG', 'apps.eNahar', $actor)
+    let $lll := util:log-app('DEBUG', 'apps.eNahar', $schedule)
+    let $oref := concat('metis/practitioners/', $actor)
+    let $sref := concat('enahar/schedules/', $schedule)
+    let $gcals := if ($group='' and $actor='')
+        then $r-cal:cals/cal[active[@value="true"]]
+        else if ($actor!='')
+        then $r-cal:cals/cal[actor/reference[@value=$oref]][active[@value="true"]]
+        else r-cal:calsByGroup($group)
+    let $valid := if ($schedule='')
+        then $gcals
+        else $gcals/schedule[global/reference[@value=$sref]]/.. (: tricky: match any cal with a certain schedule :)
+
+    let $sorted-hits :=
+        for $qcal in $valid
+        order by lower-case($qcal/actor/display/@value/string())
+        return
+            <cal>
+            { $qcal/*[not(self::schedule)] }
+            {   (: filter schedule :)
+                if ($schedule='')
+                then $qcal/schedule[global/reference/@value ne 'enahar/schedules/worktime']
+                else 
+                    (
+                        $qcal/schedule[global/reference/@value=$sref]
+                    ,   $qcal/schedule[global/type/@value='meeting']
+                    ,   if ($fillSpecial='true')
+                        then $qcal/schedule[global/isSpecial/@value='true'][global/ff/@value='true'][global/reference/@value!=$sref]
+                        else ()
+                    )
+            }
+            </cal>
+    let $lll := util:log-app('DEBUG', 'apps.eNahar', $sorted-hits/actor/display/@value/string())
+    let $count := count($sorted-hits)
+    let $len0  := if ($length="*")
+        then $count
+        else xs:integer($length)
+    let $len1  := if ($count> $len0)
+        then $len0
+        else $count
+    return
+        <services>
+            <count>{$count}</count>
+            <start>{$start}</start>
+            <length>{$len1}</length>
+            { subsequence($sorted-hits, $start, $len1) }
+        </services>
+};

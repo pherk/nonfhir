@@ -71,12 +71,12 @@ declare function nholiday:search-holiday($request as map(*))
         then $hds//event[name/@value=$name]
         then $hds//event
     let $now := date:now()
-    let $tmax := if (count($period)>0)
-	        then $period[prefix/@value=("eq","lt")]/value/@value
-        	else $now
-    let $tmin := if (count($period)>0)
-	        then $period[prefix/@value=("eq","gt")]/value/@value
-	        else $now
+    let $tmax := if (count($period[prefix/@value="le"])=1)
+	        then $period[prefix/@value="le"]/value/@value
+	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
+    let $tmin := if (count($period[prefix/@value="ge"])=1)
+	        then $period[prefix/@value="ge"]/value/@value
+	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
     let $s  := date:iso2date($tmin)
     let $e  := date:iso2date($tmax)
     let $nofd  := xs:integer(floor(($e - $s) div xs:dayTimeDuration('P1D')))

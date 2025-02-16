@@ -18,8 +18,12 @@ import module namespace router="http://e-editiones.org/roaster/router";
 import module namespace nauth = "https://eNahar.org/ns/nonfhir/nauth" at "nauth.xqm";
 :)
 import module namespace nbase    = "http://eNahar.org/ns/nonfhir/nbase"  at "../nonfhir/nbase.xqm";
+import module namespace ncevent  = "http://eNahar.org/ns/nonfhir/ncevent" at "../nonfhir/nevent.xqm";
 import module namespace nholiday = "http://eNahar.org/ns/nonfhir/nholiday" at "../nonfhir/nholiday.xqm";
+import module namespace nical    = "http://eNahar.org/ns/nonfhir/nical" at "../nonfhir/nical.xqm";
 import module namespace nleave   = "http://eNahar.org/ns/nonfhir/nleave" at "../nonfhir/nleave.xqm";
+import module namespace nschedule= "http://eNahar.org/ns/nonfhir/nschedule" at "../nonfhir/nschedule.xqm";
+import module namespace nuserconfig = "http://eNahar.org/ns/nonfhir/nuserconfig" at "../nonfhir/nuserconfig.xqm";
 
 
 (:~

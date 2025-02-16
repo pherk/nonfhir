@@ -38,24 +38,19 @@ declare function ncevent:search-icalevents($request as map(*))
     let $period := query:analyze($request?parameters?period, "date")
     let $fillSpecial := query:analyze($request?parameters?fillSpecial, "boolean")
     let $now := date:now()
-    let $e    := if (count($period)>0)
-      	then $period[prefix/@value="lt"]/value/@value
-	      else $now
-    let $s    := if (count($period)>0)
-	      then $period[prefix/@value="gt"]/value/@value
-	      else $now
+    let $e := if (count($period[prefix/@value="le"])=1)
+	        then $period[prefix/@value="le"]/value/@value
+	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
+    let $s := if (count($period[prefix/@value="ge"])=1)
+	        then $period[prefix/@value="ge"]/value/@value
+	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
     (: get all user cals with selected schedules :)
-    let $services:= r-cal:servicesXML($realm, $loguid, $lognam, '1', '*', $actor, $group, $sched, 'false', $fillSpecial)/cal
+    let $services:= nical:servicesXML($realm, $loguid, $lognam, '1', '*', $actor, $group, $sched, 'false', $fillSpecial)//ICal
  
     let $lll := util:log-app('TRACE', 'apps.eNahar', $services)
 
-    let $hds       := r-hd:holidaysXML($rangeStart,$rangeEnd)/event
-    let $leaves    := r-leave:leavesXML(
-                  $realm, $loguid,$lognam
-                , '1', '*'
-                , $actor, ''
-                , $rangeStart, $rangeEnd
-                , ('confirmed','tentative'), '*')//leave
+    let $hds       := nholiday:search-holiday($request)//CalEvent
+    let $leaves    := nleave:search-leave(map:put($request, "status", ('confirmed','tentative'))//CalEvent
 (: 
     let $lll := util:log-app('TRACE', 'apps.eNahar', $leaves)
 :)
