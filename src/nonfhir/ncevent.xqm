@@ -2,8 +2,9 @@ xquery version "3.1";
 
 module namespace ncevent ="http://eNahar.org/ns/nonfhir/ncevent";
 
+import module namespace config = "http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
 import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
-import module namespace config="http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
+import module namespace query  = "http://eNahar.org/ns/nonfhir/query" at "../modules/query.xqm";
 
 import module namespace roaster="http://e-editiones.org/roaster";
 import module namespace errors="http://e-editiones.org/roaster/errors";
@@ -29,16 +30,18 @@ declare function ncevent:search-icalevents($request as map(*))
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
-    let $actor  := $request?actor
-    let $group  := $request?parameters?group
-    let $schedule := $request?parameters?schedule
-    let $period := mutil:analyzeQuery($request?parameters?period, "date")
-    let $fillSpecial := $request?parameters?fillSpecial
+    let $format := $request?parameters?_format
+    let $elements:= query:analyze($request?parameters?_elements, "string")
+    let $actor  := query:analyze($request?actor, "string")
+    let $group  := query:analyze($request?parameters?group, "string")
+    let $schedule := query:analyze($request?parameters?schedule, "string")
+    let $period := query:analyze($request?parameters?period, "date")
+    let $fillSpecial := query:analyze($request?parameters?fillSpecial, "boolean")
     let $now := date:now()
-    let $e    := if ($period)
+    let $e    := if (count($period)>0)
       	then $period[prefix/@value="lt"]/value/@value
 	      else $now
-    let $s    := if ($period)
+    let $s    := if (count($period)>0)
 	      then $period[prefix/@value="gt"]/value/@value
 	      else $now
     (: get all user cals with selected schedules :)

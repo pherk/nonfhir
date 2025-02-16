@@ -8,8 +8,9 @@ xquery version "3.1";
  :)
 module namespace nholiday ="http://eNahar.org/ns/nonfhir/nholiday";
 
-import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
 import module namespace config="http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
+import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
+import module namespace query  = "http://eNahar.org/ns/nonfhir/query" at "../modules/query.xqm";
 
 import module namespace roaster="http://e-editiones.org/roaster";
 import module namespace errors="http://e-editiones.org/roaster/errors";
@@ -60,19 +61,21 @@ declare function nholiday:search-holiday($request as map(*))
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
-    let $name   := mutil:analyzeQuery($request?parameters?name, "string")
-    let $period := mutil:analyzeQuery($request?parameters?period, "date")
-    let $type   := mutil:analyzeQuery($request?parameters?type, "string")
+    let $format := $request?parameters?_format
+    let $elements:= query:analyze($request?parameters?_elements, "string")
+    let $name   := query:analyze($request?parameters?name, "string")
+    let $period := query:analyze($request?parameters?period, "date")
+    let $type   := query:analyze($request?parameters?type, "string")
     let $hds    := collection($config:holiday-data)/ICal
     let $events := if (count($name)>0)
         then $hds//event[name/@value=$name]
         then $hds//event
     let $now := date:now()
-    let $tmax := if ($period)
-	        then $period[prefix/@value="lt"]/value/@value
+    let $tmax := if (count($period)>0)
+	        then $period[prefix/@value=("eq","lt")]/value/@value
         	else $now
-    let $tmin := if ($period)
-	        then $period[prefix/@value="gt"]/value/@value
+    let $tmin := if (count($period)>0)
+	        then $period[prefix/@value=("eq","gt")]/value/@value
 	        else $now
     let $s  := date:iso2date($tmin)
     let $e  := date:iso2date($tmax)

@@ -2,8 +2,9 @@ xquery version "3.1";
 
 module namespace nleave = "http://eNahar.org/ns/nonfhir/nleave";
 
-import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
 import module namespace config="http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
+import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
+import module namespace query  = "http://eNahar.org/ns/nonfhir/query" at "../modules/query.xqm";
 import module namespace roaster="http://e-editiones.org/roaster";
 import module namespace errors="http://e-editiones.org/roaster/errors";
 import module namespace date  ="http://eNahar.org/ns/lib/date";
@@ -55,18 +56,18 @@ declare function nleave:search-leave($request as map(*)){
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $format := $request?parameters?_format
-    let $elems  := mutil:analyzeQuery($request?parameters?_elements,"string")
-    let $owner  := mutil:analyzeQuery($request?parameters?owner,"reference")
-    let $group  := $request?parameters?group
-    let $period := mutil:analyzeQuery($request?parameters?period, "date")
-    let $status := mutil:analyzeQuery($request?parameters?status, "token")
+    let $elems  := query:analyze($request?parameters?_elements,"string")
+    let $owner  := query:analyze($request?parameters?owner,"reference")
+    let $group  := query:analyze($request?parameters?group, "string")
+    let $period := query:analyze($request?parameters?period, "date")
+    let $status := query:analyze($request?parameters?status, "token")
     let $coll := collection($nleave:leaves)
     let $now := date:now()
-    let $tmax := if ($period)
-      	then $period[prefix/@value="lt"]/value/@value
+    let $tmax := if (count($period)>0)
+      	then $period[prefix/@value=("eq","lt")]/value/@value
 	      else $now
-    let $tmin := if ($period)
-	      then $period[prefix/@value="gt"]/value/@value
+    let $tmin := if (count($period)>0)
+	      then $period[prefix/@value=("eq","gt")]/value/@value
 	      else $now
     let $hits0 := if (count($owner)=0)
         then $coll/CalEvent[period[start[@value lt $tmax]][end[@value gt $tmin]]][status[coding/code/@value=$status]]
