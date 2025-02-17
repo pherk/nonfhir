@@ -1,6 +1,6 @@
 {
   "name": "nonfhir",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Nabu NonFHIR server on eXist-db",
   "scripts": {
     "test": "gulp install:all && mocha --exit",

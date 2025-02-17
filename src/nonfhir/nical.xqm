@@ -156,7 +156,7 @@ declare function nical:update-ical($request as map(*)){
         return
           switch ($accept)
           case "application/xml" return $data
-          case "application/json" return serialize:resource2json($data, false(), "4.3")
+          case "application/json" return mutil:resource2json($data)
           default return $data
     } catch * {
         error($errors:UNAUTHORIZED, 'permission denied. Ask the admin.') 
@@ -337,8 +337,7 @@ function nical:updateScheduleXML(
  : 
  : @return bundle of <services/>
  :)
-declare function nical:search-services($request as map(*))
-        , $passed as xs:string*
+declare function nical:search-service($request as map(*))
 {
     let $user   := sm:id()//sm:real/sm:username/string()
     let $accept := $request?accept
