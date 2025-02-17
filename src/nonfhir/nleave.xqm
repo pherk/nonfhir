@@ -117,7 +117,7 @@ declare function nleave:search-leave($request as map(*)){
                      "resourceType" : "CalEvent"
                    , "id" : $i
                    , "title" : $item/summary/@value/string()
-                   , "period" : {"start" : $start, "end" : $end}
+                   , "period" : map {"start" : $start, "end" : $end}
                    , "class" : $class
                    }
             },

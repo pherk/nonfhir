@@ -158,7 +158,7 @@ declare function nschedule:update-schedule($request as map(*))
             <id value="{$cid}"/>
             <meta>
                 <versionId value="{$version}"/>
-                <extension url="#lastUpdatedBy">
+                <extension url="http://eNahar.org/ns/extension/lastUpdatedBy">
                     <valueReference>
                         <reference value="metis/practitioners/{$loguid}"/>
                         <display value="{$lognam}"/>
@@ -168,8 +168,8 @@ declare function nschedule:update-schedule($request as map(*))
             </meta>
             <identifier>
                 <use value="official"/>
-                <system value="#enahar-id"/>
-                <value value="{concat('enahar/schedules/',$cid)}"/>
+                <system value="http://eNahar.org/ns/extension/enahar-id"/>
+                <value value="{$cid}"/>
             </identifier>
             {$elems}
         </schedule>
@@ -186,7 +186,7 @@ declare function nschedule:update-schedule($request as map(*))
             , sm:chmod(xs:anyURI($nschedule:schedule-data || '/' || $file), $config:data-perms)
             , sm:chgrp(xs:anyURI($nschedule:schedule-data || '/' || $file), $config:data-group)))
     } catch * {
-        errors:error($errors:UNAUTHORIZED, "Permission denied", map { "info": "ask the admin"})
+        error($errors:UNAUTHORIZED, "Permission denied", map { "info": "ask the admin"})
     }
 };
 

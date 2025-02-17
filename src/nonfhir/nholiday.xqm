@@ -42,7 +42,7 @@ declare function nholiday:read-holiday($request as map(*))
         switch ($accept)
         case "application/xml" return $hdes
         case "application/json" return mutil:resource2json($hdes)
-        default return errors:error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+        default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
       else error($errors:NOT_FOUND, "nholiday: ", map { "info": "invalid uuuid"})
 };
 
@@ -69,7 +69,7 @@ declare function nholiday:search-holiday($request as map(*))
     let $hds    := collection($config:holiday-data)/ICal
     let $events := if (count($name)>0)
         then $hds//event[name/@value=$name]
-        then $hds//event
+        else $hds//event
     let $now := date:now()
     let $tmax := if (count($period[prefix/@value="le"])=1)
 	        then $period[prefix/@value="le"]/value/@value

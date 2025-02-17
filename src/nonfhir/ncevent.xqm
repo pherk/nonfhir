@@ -50,17 +50,17 @@ declare function ncevent:search-icalevents($request as map(*))
     let $lll := util:log-app('TRACE', 'apps.eNahar', $services)
 
     let $hds       := nholiday:search-holiday($request)//CalEvent
-    let $leaves    := nleave:search-leave(map:put($request, "status", ('confirmed','tentative'))//CalEvent
+    let $leaves    := nleave:search-leave(map:put($request, "status", ('confirmed','tentative')))//CalEvent
 (: 
     let $lll := util:log-app('TRACE', 'apps.eNahar', $leaves)
 :)
     (: get all relevant schedules :)
     let $refdss    := distinct-values($services/schedule/global/reference/@value)
-    let $schedules := collection($r-sched:schedule-base)/schedule[identifier/value[@value=$refdss]][active[@value="true"]]
+    let $schedules := collection($config:schedule-base)/schedule[identifier/value[@value=$refdss]][active[@value="true"]]
  
     let $lll := util:log-app('TRACE', 'apps.eNahar', $schedules/name)
 
-    let $matched := cal2event:cal2xml($services, $s, $e, $hds, $leaves, $schedules,$fillSpecial='true') }
+    let $matched := cal2event:cal2xml($services, $s, $e, $hds, $leaves, $schedules,$fillSpecial='true')
     return
         switch ($accept)
         case "application/xml" return 
@@ -69,7 +69,7 @@ declare function ncevent:search-icalevents($request as map(*))
                 mutil:prepareResultBundleJSON($matched,1,"*")
         default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 (:
-    let $services:= r-cal:servicesXML($realm, $loguid, $lognam, '1', '*', $actor, $group, $sched, 'false', 'false')/cal
+    let $services:= nical:servicesXML($realm, $loguid, $lognam, '1', '*', $actor, $group, $sched, 'false', 'false')/cal
     let $lll := util:log-app('DEBUG', 'eNahar', $services)
     let $hds    := r-hd:holidaysXML($rangeStart,$rangeEnd)/event
     let $leaves := r-leave:leavesXML(

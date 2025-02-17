@@ -42,6 +42,8 @@
           </xs:element>
           <xs:element name="actor" minOccurs="0" maxOccurs="1" type="Reference">
           </xs:element>
+          <xs:element name="code" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+          </xs:element>
           <xs:element name="type" minOccurs="0" maxOccurs="1" type="code">
           </xs:element>
           <xs:element name="title" minOccurs="1" maxOccurs="1" type="string">
@@ -50,21 +52,32 @@
           </xs:element>
           <xs:element name="period" minOccurs="1" maxOccurs="1" type="Period">
           </xs:element>
-          <xs:element name="allDay" minOccurs="0" maxOccurs="1" type="boolean">
+          <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="CalEvent.Rendering">
+          </xs:element>
+        <attributes>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CalEvent.Rendering">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">CSS definitions.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="BackboneElement">
+        <xs:sequence>
+          <xs:element name="className" minOccurs="0" maxOccurs="1" type="string">
+          </xs:element>
+          <xs:element name="backgroundColor" minOccurs="0" maxOccurs="1" type="string">
+          </xs:element>
+          <xs:element name="textColor" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
           <xs:element name="editable" minOccurs="0" maxOccurs="1" type="boolean">
-          </xs:element>
-          <xs:element name="class" minOccurs="0" maxOccurs="1" type="code">
-          </xs:element>
-          <xs:element name="backgroundColor" minOccurs="0" maxOccurs="1" type="code">
-          </xs:element>
-          <xs:element name="textColor" minOccurs="0" maxOccurs="1" type="code">
           </xs:element>
           <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="code">
           </xs:element>
           <xs:element name="lane" minOccurs="0" maxOccurs="1" type="integer">
           </xs:element>
-        <attributes>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

@@ -214,7 +214,6 @@
         <type value="traditional"/>
         <start value="00:00:00"/>
         <end value="23:59:59"/>
-        </period>
         <rrule>
           <freq value="yearly"/>
           <byMonth value="12"/>

@@ -67,8 +67,8 @@ declare function nical:search-ical($request as map(*)){
     let $coll := collection($config:cal-data)
     let $hits0 := if ($actor != '')
         then $coll/ICal[actor/reference[@value=$oref]][active[@value=$active]]
-        (: mapping? :)
-        else $coll/ICal[group[@value=$group]][active[@value=$active]]
+        (: from PractitionerRole/code mapping? group :)
+        else $coll/ICal[speciality//code[@value=$group]][active[@value=$active]]
 
     let $matched :=
         for $c in $hits0
@@ -132,13 +132,13 @@ declare function nical:update-ical($request as map(*)){
             <id value="{$cid}"/>
             <meta>
                 <versionId value="{$version}"/>
-                <extension url="https://eNahar.org/ical/extension/lastModifiedBy">
+                <extension url="https://eNahar.org/ns/extension/lastModifiedBy">
                     <valueReference>
                         <reference value="metis/practitioners/{$loguid}"/>
                         <display value="{$lognam}"/>
                     </valueReference>
                 </extension>
-                <lastUpdated value="{adjust-dateTime-to-timezone(current-dateTime())}"/>
+                <lastUpdated value="{date:now()}"/>
             </meta>
             {$elems}
         </ICal>
@@ -159,7 +159,7 @@ declare function nical:update-ical($request as map(*)){
           case "application/json" return serialize:resource2json($data, false(), "4.3")
           default return $data
     } catch * {
-        errors:error($ERROR:UNAUTHORIZED, 'permission denied. Ask the admin.') 
+        error($errors:UNAUTHORIZED, 'permission denied. Ask the admin.') 
     }
 };
 
@@ -178,7 +178,7 @@ declare
     %rest:query-param("mode",   "{$mode}", "full") 
     %rest:consumes("application/xml")
     %rest:produces("application/xml", "text/xml")
-function r-cal:validateCalXML(
+function nical:validateCalXML(
           $uuid as xs:string*
         , $realm as xs:string* 
         , $loguid as xs:string*
@@ -186,7 +186,7 @@ function r-cal:validateCalXML(
         , $mode as xs:string*
         ) as item()+
 {
-    let $cals := $r-cal:cals/ICal[id[@value=$uuid]]
+    let $cals := $nical:cals/ICal[id[@value=$uuid]]
     return
         if (count($cals)=1)
         then 
@@ -194,13 +194,13 @@ function r-cal:validateCalXML(
             let $result := icalv:validateCalendar($cals)
             return
             (
-                r-cal:rest-response(200, 'schedule valid.')
+                mutil:rest-response(200, 'schedule valid.')
             ,
                 $result
             )
         else  
             (
-                r-cal:rest-response(404, 'icals: uuid not valid.')
+                mutil:rest-response(404, 'icals: uuid not valid.')
             ,
                 <result>
                     <error/>
@@ -244,7 +244,7 @@ declare
     %rest:query-param("action", "{$action}","add")
     %rest:consumes("application/xml")
     %rest:produces("application/xml", "text/xml")
-function r-cal:updateScheduleXML(
+function nical:updateScheduleXML(
           $actor  as xs:string*
         , $realm as xs:string*
         , $loguid as xs:string*
@@ -259,7 +259,7 @@ function r-cal:updateScheduleXML(
     let $today := current-dateTime()
     let $oref := concat('metis/practitioners/',$actor)
     let $sref := concat('enahar/schedules/', $sid)
-    let $cals := $r-cal:cals/ICal[actor/reference/@value=$oref]
+    let $cals := $nical:cals/ICal[actor/reference/@value=$oref]
     return
         if (count($cals)=1)
         then 
@@ -268,7 +268,7 @@ function r-cal:updateScheduleXML(
             :)
             let $schedule := $cals/schedule[global/reference/@value=$sref]
             let $log := util:log-app("TRACE", 'apps.eNahar', $schedule)
-            let $agenda := $schedule/agenda[r-cal:isActiveAt(.,$today)]
+            let $agenda := $schedule/agenda[nical:isActiveAt(.,$today)]
             let $log := util:log-app("TRACE", 'apps.eNahar', $action)
             let $doit := switch($action)
                 case 'add' return
@@ -316,14 +316,14 @@ function r-cal:updateScheduleXML(
                     else () (: agenda will be closed :)
                 default return ()
             return
-                r-cal:rest-response(200, 'icals: schedule updated.')
+                mutil:rest-response(200, 'icals: schedule updated.')
         else if (count($cals>1))
         then
             let $log := util:log-app("TRACE", 'apps.eNahar', $actor)
             return
-                r-cal:rest-response(404, 'icals: only one cal is allowed.')
+                mutil:rest-response(404, 'icals: only one cal is allowed.')
         else
-            r-cal:rest-response(404, 'icals: uuid not valid.')
+            mutil:rest-response(404, 'icals: uuid not valid.')
 };
 :)
 
@@ -359,10 +359,10 @@ declare function nical:search-services($request as map(*))
     let $oref := concat('metis/practitioners/', $actor)
     let $sref := concat('enahar/schedules/', $schedule)
     let $gcals := if ($group='' and $actor='')
-        then $r-cal:cals/cal[active[@value="true"]]
+        then $nical:cals/cal[active[@value="true"]]
         else if ($actor!='')
-        then $r-cal:cals/cal[actor/reference[@value=$oref]][active[@value="true"]]
-        else nical:calsByGroup($group)
+        then $nical:cals/cal[actor/reference[@value=$oref]][active[@value="true"]]
+        else $nical:cals/cal[speciality//code[@value=$group]][active[@value="true"]]
     let $valid := if ($schedule='')
         then $gcals
         else $gcals/schedule[global/reference[@value=$sref]]/.. (: tricky: match any cal with a certain schedule :)
