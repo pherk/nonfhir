@@ -1,13 +1,13 @@
-<cal xml:id="cal-460ea732-5f7a-42c7-8ea7-325f7a62c70c">
+<ICal xml:id="cal-460ea732-5f7a-42c7-8ea7-325f7a62c70c">
     <id value="cal-c-04ae7eea-6305-40a2-ae7e-ea6305e0a25c"/>
     <meta>
-        <versionID value="2"/>
-    </meta>
-    <lastModifiedBy>
+        <versionId value="2"/>
+    <extension url="http://eNahar.org/ns/extension/lastModifiedBy">
         <reference value="metis/practitioners/u-pmh"/>
         <display value="Herkenrath,Peter"/>
-    </lastModifiedBy>
-    <lastModified value="2024-08-22T16:35:17.646"/>
+    </extension>
+      <lastUpdated value="2024-08-22T16:35:17.646"/>
+    </meta>
     <schedule>
         <global>
             <reference value="enahar/schedules/me-spz-arztpsych"/>
@@ -127,11 +127,14 @@
             <note value=""/>
         </schedule>
     <active value="true"/>
-    <owner>
-                <group value="arzt"/>
+    <specialty>
+      <coding>
+                <code value="arzt"/>
+      </coding>
+    <actor>
                 <reference value="metis/practitioners/c-04ae7eea-6305-40a2-ae7e-ea6305e0a25c"/>
                 <display value="Lentzen, Bruno"/>
-            </owner>
+    </actor>
     <cutype>
                 <coding>
                     <system value="#ical-type"/>

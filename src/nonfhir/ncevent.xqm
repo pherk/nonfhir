@@ -5,6 +5,10 @@ module namespace ncevent ="http://eNahar.org/ns/nonfhir/ncevent";
 import module namespace config = "http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
 import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
 import module namespace query  = "http://eNahar.org/ns/nonfhir/query" at "../modules/query.xqm";
+import module namespace nical  = "http://eNahar.org/ns/nonfhir/nical" at "../nonfhir/nical.xqm";
+import module namespace nholiday = "http://eNahar.org/ns/nonfhir/nholiday" at "../nonfhir/nholiday.xqm";
+import module namespace nleave = "http://eNahar.org/ns/nonfhir/nleave" at "../nonfhir/nical.xqm";
+import module namespace cal2event = "http://eNahar.org/ns/nonfhir/cal2event" at "../nonfhir/cal2event.xqm";
 
 import module namespace roaster="http://e-editiones.org/roaster";
 import module namespace errors="http://e-editiones.org/roaster/errors";
@@ -45,7 +49,7 @@ declare function ncevent:search-icalevents($request as map(*))
 	        then $period[prefix/@value="ge"]/value/@value
 	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
     (: get all user cals with selected schedules :)
-    let $services:= nical:servicesXML($realm, $loguid, $lognam, '1', '*', $actor, $group, $sched, 'false', $fillSpecial)//ICal
+    let $services:= nical:search-service($request)//ICal
  
     let $lll := util:log-app('TRACE', 'apps.eNahar', $services)
 

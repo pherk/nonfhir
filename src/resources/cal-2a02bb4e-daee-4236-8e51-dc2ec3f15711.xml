@@ -1,19 +1,24 @@
-<cal xml:id="cal-2a02bb4e-daee-4236-8e51-dc2ec3f15711">
+<ICal xml:id="cal-2a02bb4e-daee-4236-8e51-dc2ec3f15711">
     <id value="cal-spz-eeg"/>
     <meta>
-        <versionID value="8"/>
-    </meta>
-    <lastModifiedBy>
+      <versionId value="8"/>
+      <extension url="http://eNahar.org/ns/extension/lastModifiedBy">
         <reference value="metis/practitioners/u-pmh"/>
         <display value="Herkenrath,Peter"/>
-    </lastModifiedBy>
-    <lastModified value="2023-04-06T17:42:34.82"/>
+      </extension>
+      <lastUpdated value="2023-04-06T17:42:34.82"/>
+    </meta>
     <active value="true"/>
-    <owner>
-        <group value="spz-eeg"/>
+    <specialty>
+      <coding>
+        <system value="http://eNahar.org/ns/system/specialty"/>
+        <code value="spz-eeg"/>
+      </coding>
+    </specialty>
+    <actor>
         <reference value="metis/practitioners/u-eeg"/>
         <display value="EEG1"/>
-    </owner>
+    </actor>
     <cutype>
         <coding>
             <code value="role"/>
@@ -344,4 +349,4 @@
         </global>
         <note value=""/>
     </schedule>
-</cal>
+</ICal>

@@ -45,15 +45,15 @@ declare variable $config:redirectURL := concat($config:server,'/',$config:app-pa
 (:
     Returns the configuration document for the app.
 :)
-declare variable $config:nonfhir-config :=
+declare variable $config:config :=
     doc(concat($config:app-root, "/configuration.xml"))
 ;
 
 (:
     The root collection to be scanned for app data.
 :)
-declare variable $config:nonfhir-root := 
-    let $root := $config:nonfhir-config/configuration/root/string()
+declare variable $config:root := 
+    let $root := $config:config/configuration/root/string()
     return
         if (starts-with($root, "/db")) then
             $root
@@ -66,8 +66,10 @@ declare variable $config:nonfhir-data  := "/db/apps/metisData/data/NonFHIR";
 declare variable $config:history-data  := "/db/apps/metisHistory/data";
 declare variable $config:holiday-data    := concat($config:nonfhir-data,'/Holiday');
 declare variable $config:holidayHistory  := concat($config:history-data,'/Holiday');
-declare variable $config:leave-data    := concat($config:nonfhir-data,'/Leaves');
+declare variable $config:leave-data    := concat($config:nonfhir-data,'/Leave');
 declare variable $config:leaveHistory  := concat($config:history-data,'/Leave');
+declare variable $config:ical-data    := concat($config:nonfhir-data,'/ICal');
+declare variable $config:icalHistory  := concat($config:history-data,'/ICal');
 
 declare variable $config:resources := concat($config:root,'/resources');
 declare variable $config:templs    := concat($config:root,'/templates');

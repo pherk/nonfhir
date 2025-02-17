@@ -7,10 +7,11 @@ import module namespace errors ="http://e-editiones.org/roaster/errors";
 import module namespace date   = "http://eNahar.org/ns/lib/date";
 import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
 import module namespace config = "http://eNahar.org/ns/nonfhir/config" at "../modules/config.xqm";
+import module namespace query  = "http://eNahar.org/ns/nonfhir/query" at "../modules/query.xqm";
 
 declare namespace fhir   = "http://hl7.org/fhir";
 
-declare variable $nical:schedule-base := "/db/apps/eNaharData/data/schedules";
+declare variable $nical:ical-data := "/db/apps/nonfhir/resources";
 
 
 (:~
@@ -28,7 +29,7 @@ declare function nical:read-ical($request as map(*)) as item()
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $uuid   := $request?parameters?id
-    let $cals := collection($nical:cals)/ICal[id[@value=$uuid]]
+    let $cals := collection($nical:ical-data)/ICal[id[@value=$uuid]]
     return
       if (count($cals)=1) then
         switch ($accept)
@@ -45,7 +46,7 @@ declare function nical:read-ical($request as map(*)) as item()
  : get ICalendar actor
  :
  : @param $actor   string
- : @param $group   string
+ : @param $specialty   string
  : @param $active  boolean
  : @return bundle of <ICal/>
  :)
@@ -56,30 +57,31 @@ declare function nical:search-ical($request as map(*)){
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $format := $request?parameters?_format
-    let $elems  := $request?parameters?_elements
+    let $elems  := query:analyze($request?parameters?_elements, "string")
     let $actor  := $request?parameters?actor
-    let $group  := $request?parameters?group
+    let $specialty  := $request?parameters?specialty
     let $schedule := $request?parameters?schedule
     let $period := $request?parameters?period
     let $fillSpecial := $request?parameters?fillSpecial
     let $active := $request?parameters?active
     let $oref := concat('metis/practitioners/', $actor)
-    let $coll := collection($config:cal-data)
+    let $coll := collection($nical:cal-data)
     let $hits0 := if ($actor != '')
         then $coll/ICal[actor/reference[@value=$oref]][active[@value=$active]]
-        (: from PractitionerRole/code mapping? group :)
-        else $coll/ICal[speciality//code[@value=$group]][active[@value=$active]]
+        (: from PractitionerRole/code mapping? specialty :)
+        else $coll/ICal[specialty//code[@value=$specialty]][active[@value=$active]]
 
     let $matched :=
         for $c in $hits0
         order by lower-case($c/actor/display/@value/string())
         return
-(: TODO analyze elements id, actor, schedule :)
-            if (string-length($elems)>0)
+            if (count($elems)>0)
             then
                 <ICal>
-                    {$c/id}
-                    {$c/actor}
+                { for $p in $c/*
+                  return
+                    if (local-name($p)=$elems) then $p else ()
+                }
                 </ICal>
             else $c
     return
@@ -332,7 +334,7 @@ function nical:updateScheduleXML(
  : get services
  : 
  : @param $actor   owner display value
- : @param $group   group
+ : @param $specialty   specialty
  : @param $sched   schedule
  : 
  : @return bundle of <services/>
@@ -347,7 +349,7 @@ declare function nical:search-service($request as map(*))
     let $format := $request?parameters?_format
     let $elems  := $request?parameters?_elements
     let $actor  := $request?parameters?actor
-    let $group  := $request?parameters?group
+    let $specialty  := $request?parameters?specialty
     let $schedule := $request?parameters?schedule
     let $period := $request?parameters?period
     let $fillSpecial := $request?parameters?fillSpecial
@@ -357,11 +359,11 @@ declare function nical:search-service($request as map(*))
     let $lll := util:log-app('DEBUG', 'apps.eNahar', $schedule)
     let $oref := concat('metis/practitioners/', $actor)
     let $sref := concat('enahar/schedules/', $schedule)
-    let $gcals := if ($group='' and $actor='')
+    let $gcals := if ($specialty='' and $actor='')
         then $nical:cals/cal[active[@value="true"]]
         else if ($actor!='')
         then $nical:cals/cal[actor/reference[@value=$oref]][active[@value="true"]]
-        else $nical:cals/cal[speciality//code[@value=$group]][active[@value="true"]]
+        else $nical:cals/cal[speciality//code[@value=$specialty]][active[@value="true"]]
     let $valid := if ($schedule='')
         then $gcals
         else $gcals/schedule[global/reference[@value=$sref]]/.. (: tricky: match any cal with a certain schedule :)
