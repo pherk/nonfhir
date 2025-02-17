@@ -55,6 +55,7 @@ declare function nical:search-ical($request as map(*)){
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
+    let $format := $request?parameters?_format
     let $elems  := $request?parameters?_elements
     let $actor  := $request?parameters?actor
     let $group  := $request?parameters?group
@@ -327,7 +328,7 @@ function r-cal:updateScheduleXML(
 :)
 
 (:~
- : GET: enahar/services
+ : GET: /Service
  : get services
  : 
  : @param $actor   owner display value
@@ -336,34 +337,23 @@ function r-cal:updateScheduleXML(
  : 
  : @return bundle of <services/>
  :)
-declare
-    %rest:GET
-    %rest:path("enahar/services")
-    %rest:query-param("realm", "{$realm}") 
-    %rest:query-param("loguid", "{$loguid}","")
-    %rest:query-param("lognam", "{$lognam}","")
-    %rest:query-param("start",  "{$start}",   "1")      
-    %rest:query-param("length", "{$length}",  "*")
-    %rest:query-param("actor",  "{$owner}",   "")
-    %rest:query-param("group",  "{$group}",   "")
-    %rest:query-param("sched",  "{$schedule}","")
-    %rest:query-param("passed",  "{$passed}", "true")
-    %rest:query-param("fillSpecial",  "{$fillSpecial}","false")
-    %rest:consumes("application/xml")
-    %rest:produces("application/xml", "text/xml")
-function r-cal:servicesXML(
-          $realm as xs:string*
-        , $loguid as xs:string*
-        , $lognam as xs:string*
-        , $start as xs:string*
-        , $length   as xs:string*
-        , $actor as xs:string*
-        , $group as xs:string*
-        , $schedule as xs:string*
+declare function nical:search-services($request as map(*))
         , $passed as xs:string*
-        , $fillSpecial as xs:string*
-        ) as item()
 {
+    let $user   := sm:id()//sm:real/sm:username/string()
+    let $accept := $request?accept
+    let $realm  := $request?parameters?realm
+    let $loguid := $request?parameters?loguid
+    let $lognam := $request?parameters?lognam
+    let $format := $request?parameters?_format
+    let $elems  := $request?parameters?_elements
+    let $actor  := $request?parameters?actor
+    let $group  := $request?parameters?group
+    let $schedule := $request?parameters?schedule
+    let $period := $request?parameters?period
+    let $fillSpecial := $request?parameters?fillSpecial
+    let $active := $request?parameters?active
+    let $passed := true() (: from period :)
     let $lll := util:log-app('DEBUG', 'apps.eNahar', $actor)
     let $lll := util:log-app('DEBUG', 'apps.eNahar', $schedule)
     let $oref := concat('metis/practitioners/', $actor)
@@ -372,7 +362,7 @@ function r-cal:servicesXML(
         then $r-cal:cals/cal[active[@value="true"]]
         else if ($actor!='')
         then $r-cal:cals/cal[actor/reference[@value=$oref]][active[@value="true"]]
-        else r-cal:calsByGroup($group)
+        else nical:calsByGroup($group)
     let $valid := if ($schedule='')
         then $gcals
         else $gcals/schedule[global/reference[@value=$sref]]/.. (: tricky: match any cal with a certain schedule :)
@@ -381,7 +371,7 @@ function r-cal:servicesXML(
         for $qcal in $valid
         order by lower-case($qcal/actor/display/@value/string())
         return
-            <cal>
+            <ICal>
             { $qcal/*[not(self::schedule)] }
             {   (: filter schedule :)
                 if ($schedule='')
@@ -395,20 +385,13 @@ function r-cal:servicesXML(
                         else ()
                     )
             }
-            </cal>
+            </ICal>
     let $lll := util:log-app('DEBUG', 'apps.eNahar', $sorted-hits/actor/display/@value/string())
-    let $count := count($sorted-hits)
-    let $len0  := if ($length="*")
-        then $count
-        else xs:integer($length)
-    let $len1  := if ($count> $len0)
-        then $len0
-        else $count
     return
-        <services>
-            <count>{$count}</count>
-            <start>{$start}</start>
-            <length>{$len1}</length>
-            { subsequence($sorted-hits, $start, $len1) }
-        </services>
+        switch ($accept)
+        case "application/xml" return 
+                mutil:prepareResultBundleXML($sorted-hits,1,"*")
+        case "application/json" return
+                mutil:prepareResultBundleJSON($sorted-hits,1,"*")
+        default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };

@@ -1,0 +1,347 @@
+<cal xml:id="cal-2a02bb4e-daee-4236-8e51-dc2ec3f15711">
+    <id value="cal-spz-eeg"/>
+    <meta>
+        <versionID value="8"/>
+    </meta>
+    <lastModifiedBy>
+        <reference value="metis/practitioners/u-pmh"/>
+        <display value="Herkenrath,Peter"/>
+    </lastModifiedBy>
+    <lastModified value="2023-04-06T17:42:34.82"/>
+    <active value="true"/>
+    <owner>
+        <group value="spz-eeg"/>
+        <reference value="metis/practitioners/u-eeg"/>
+        <display value="EEG1"/>
+    </owner>
+    <cutype>
+        <coding>
+            <code value="role"/>
+            <display value="Role"/>
+        </coding>
+        <text value="Role"/>
+    </cutype>
+    <caltype value="function"/>
+    <summary value="EEG"/>
+    <description value="EEG-Kalender"/>
+    <location>
+        <reference value="metis/locations/kikl-spz"/>
+        <display value="SPZ Kinderklinik"/>
+    </location>
+    <timezone value="MEZ"/>
+    <schedule>
+        <global>
+            <type value="worktime"/>
+            <reference value="enahar/schedules/worktime"/>
+            <display value="rAZ EEG"/>
+        </global>
+        <agenda>
+            <period>
+                <start value="2016-01-01T00:00:00"/>
+                <end value=""/>
+            </period>
+            <event>
+                <name value="az-Mo-Fr-08:00"/>
+                <start value="08:00:00"/>
+                <end value="09:30:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+            <event>
+                <name value="az-Mo-Fr-09:30"/>
+                <start value="09:30:00"/>
+                <end value="11:00:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+            <event>
+                <name value="az-Mo-Fr-11:00"/>
+                <start value="11:00:00"/>
+                <end value="12:30:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+            <event>
+                <name value="az-Mo-Fr-13:00"/>
+                <start value="13:00:00"/>
+                <end value="14:30:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+            <event>
+                <name value="az-Mo-Fr-14:30"/>
+                <start value="14:30:00"/>
+                <end value="16:00:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+        </agenda>
+    </schedule>
+    <schedule>
+        <global>
+            <type value="service"/>
+            <reference value="enahar/schedules/fun-spz-eeg"/>
+            <display value="EEG"/>
+            <isSpecial value="false"/>
+            <ff value="true"/>
+        </global>
+        <agenda>
+            <period>
+                <start value="2016-01-01T00:00:00"/>
+                <end value="2019-01-31T22:00:00.000Z"/>
+            </period>
+            <event>
+                <name value="amb-Mo-Fr-08:00"/>
+                <start value="08:00:00"/>
+                <end value="09:30:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+            <event>
+                <name value="amb-Mo-Fr-09:30"/>
+                <start value="09:30:00"/>
+                <end value="11:00:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+            <event>
+                <name value="amb-Mo-Fr-13:00"/>
+                <start value="13:00:00"/>
+                <end value="14:30:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+            <event>
+                <name value="amb-Mo-Fr-14:30"/>
+                <start value="14:30:00"/>
+                <end value="16:00:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+        </agenda>
+            <agenda>
+            <period>
+                <start value="2019-02-01T22:00:00.000Z"/>
+                <end value=""/>
+            </period>
+            <event>
+                <name value="amb-Mo-Fr-08:00"/>
+                <start value="08:00:00"/>
+                <end value="09:30:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byWeekNo value=""/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+            <event>
+                <rrule>
+                    <freq value="daily"/>
+                    <byWeekNo value=""/>
+                    <byDay value="Di,Do,Fr"/>
+                </rrule>
+                <name value="amb-DiDoFr-11:00"/>
+                <summary value=""/>
+                <description value=""/>
+                <start value="11:00:00"/>
+                <end value="12:30:00"/>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+            <event>
+                <name value="amb-Mo-Fr-09:30"/>
+                <start value="09:30:00"/>
+                <end value="11:00:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+            <event>
+                <name value="amb-Mo-Fr-13:00"/>
+                <start value="13:00:00"/>
+                <end value="14:30:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byWeekNo value=""/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+            <event>
+                <name value="amb-Mo-Fr-14:00"/>
+                <start value="14:00:00"/>
+                <end value="16:00:00"/>
+                <rrule>
+                    <freq value="daily"/>
+                    <byWeekNo value=""/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+            </event>
+        </agenda>
+    </schedule>
+    <schedule>
+        <agenda>
+            <event>
+                <name value="amb-Mo-Fr-Reserve"/>
+                <summary value=""/>
+                <description value=""/>
+                <start value="11:00:00"/>
+                <end value="12:30:00"/>
+                <note value=""/>
+                <venue>
+                    <location>
+                        <reference value=""/>
+                        <display value=""/>
+                    </location>
+                    <priority value="normal"/>
+                </venue>
+                <rrule>
+                    <freq value="daily"/>
+                    <byWeekNo value=""/>
+                    <byDay value="Mo,Di,Mi,Do,Fr"/>
+                </rrule>
+            </event>
+            <period>
+                <start value="2016-07-01T22:00:00.000Z"/>
+                <end value="2019-03-01T22:00:00.000Z"/>
+            </period>
+            <note value=""/>
+        </agenda>
+        <global>
+            <type value="service"/>
+            <reference value="enahar/schedules/amb-spz-rsv"/>
+            <display value="Reserve"/>
+            <isSpecial value="false"/>
+            <ff value="true"/>
+        </global>
+        <note value=""/>
+    </schedule>
+</cal>

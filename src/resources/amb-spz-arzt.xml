@@ -1,0 +1,39 @@
+<schedule xml:id="amb-spz-arzt">
+    <id value="amb-spz-arzt"/>
+    <meta>
+        <versionId value="0"/>
+    </meta>
+    <identifier>
+        <use value="official"/>
+        <system value="#enahar-id"/>
+        <value value="enahar/schedules/amb-spz-arzt"/>
+    </identifier>
+    <type value="service"/>
+    <name value="Arzt"/>
+    <description value="SPZ Arzt"/>
+    <appletter>
+        <alt-name value="Arzt"/>
+        <template>
+            <reference value=""/>
+        </template>
+    </appletter>
+    <fc>
+        <className value=""/>
+        <backgroundColor value="#ffffff"/>
+        <textColor value="#ffffff"/>
+        <editable value="false"/>
+    </fc>
+    <ff value="true"/>
+    <timing>
+        <pre value="15"/>
+        <exam value="30"/>
+        <post value="15"/>
+        <overbookable value="true"/>
+        <query value="post"/>
+    </timing>
+    <location>
+        <reference value="metis/locations/kikl-spzn"/>
+        <display value="nSPZ Kinderklinik"/>
+    </location>
+    <active value="true"/>
+</schedule>

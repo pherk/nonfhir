@@ -1,0 +1,39 @@
+<schedule xml:id="amb-spz-gbafg">
+    <id value="amb-spz-gbafg"/>
+    <meta>
+        <versionId value="0"/>
+    </meta>
+    <identifier>
+        <use value="official"/>
+        <system value="#enahar-id"/>
+        <value value="enahar/schedules/amb-spz-gbafg"/>
+    </identifier>
+    <type value="service"/>
+    <name value="Neonatologische Nachsorge"/>
+    <description value="SPZ Neonatologische Nachsorge"/>
+    <appletter>
+        <alt-name value="Neonatolog.Nachsorge"/>
+        <template>
+            <reference value=""/>
+        </template>
+    </appletter>
+    <fc>
+        <className value=""/>
+        <backgroundColor value="#ffffff"/>
+        <textColor value="#ffffff"/>
+        <editable value="false"/>
+    </fc>
+    <ff value="true"/>
+    <timing>
+        <pre value="15"/>
+        <exam value="30"/>
+        <post value="15"/>
+        <overbookable value="true"/>
+        <query value="post"/>
+    </timing>
+    <location>
+        <reference value="metis/locations/kikl-spz"/>
+        <display value="SPZ Kinderklinik"/>
+    </location>
+    <active value="true"/>
+</schedule>
