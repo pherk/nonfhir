@@ -125,9 +125,10 @@ declare function nical:update-ical($request as map(*)){
         then $cid
         else "cal-" || util:uuid()
     let $cudir := switch($content//*:cutype//*:code/@value/string())
-        case 'person' return 'individuals'
-        case 'room'   return 'rooms'
-        case 'role'   return 'roles'
+        case 'individual' return 'Individual'
+        case 'room'   return 'Room'
+        case 'role'   return 'Role'
+        case 'schedule' return 'Schedule'
         default return error('invalid cutype')
     let $data :=
         <ICal xml:id="{$uuid}">

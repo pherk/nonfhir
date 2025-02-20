@@ -17,14 +17,14 @@
  */
 --><xs:schema xmlns="http://hl7.org/fhir" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" targetNamespace="http://hl7.org/fhir" elementFormDefault="qualified" version="1.0">
   <xs:include schemaLocation="fhir-base.xsd"/>
-  <xs:element name="CalEvent" type="CalEvent">
+  <xs:element name="Event" type="Event">
     <xs:annotation>
-      <xs:documentation xml:lang="en">User-related infos and values, which are used in an frontend </xs:documentation>
+      <xs:documentation xml:lang="en">actor-related time slots, which are used for dating </xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:complexType name="CalEvent">
+  <xs:complexType name="Event">
     <xs:annotation>
-      <xs:documentation xml:lang="en">User-related infos and values, which are used in an frontend </xs:documentation>
+      <xs:documentation xml:lang="en">actor-related time slots, which are used for dating </xs:documentation>
       <xs:documentation xml:lang="en">If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -35,14 +35,14 @@
               <xs:documentation xml:lang="en">An identifier for this calevent.</xs:documentation>
            </xs:annotation>
           </xs:element>
-          <xs:element name="active" minOccurs="0" maxOccurs="1" type="boolean">
+          <xs:element name="status" minOccurs="1" maxOccurs="1" type="code">
             <xs:annotation>
-              <xs:documentation xml:lang="en">Whether this calevent record is in active use. 
+              <xs:documentation xml:lang="en">Whether this calevent record is active or completed. 
            </xs:annotation>
           </xs:element>
-          <xs:element name="actor" minOccurs="0" maxOccurs="1" type="Reference">
-          </xs:element>
           <xs:element name="code" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+          </xs:element>
+          <xs:element name="actor" minOccurs="0" maxOccurs="1" type="Reference">
           </xs:element>
           <xs:element name="type" minOccurs="0" maxOccurs="1" type="code">
           </xs:element>
@@ -50,16 +50,24 @@
           </xs:element>
           <xs:element name="description" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
-          <xs:element name="period" minOccurs="1" maxOccurs="1" type="Period">
+          <xs:element name="start" minOccurs="1" maxOccurs="1" type="dateTime">
           </xs:element>
-          <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="CalEvent.Rendering">
+          <xs:element name="end" minOccurs="1" maxOccurs="1" type="dateTime">
+          </xs:element>
+          <xs:element name="location" minOccurs="0" maxOccurs="1" type="Reference">
+          </xs:element>
+          <xs:element name="reasonCode" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+          </xs:element>
+          <xs:element name="note" minOccurs="0" maxOccurs="1" type="Annotation">
+          </xs:element>
+          <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="Event.Rendering">
           </xs:element>
         <attributes>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:complexType name="CalEvent.Rendering">
+  <xs:complexType name="Event.Rendering">
     <xs:annotation>
       <xs:documentation xml:lang="en">CSS definitions.</xs:documentation>
     </xs:annotation>

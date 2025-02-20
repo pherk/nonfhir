@@ -91,7 +91,7 @@
           </xs:element>
           <xs:element name="location" minOccurs="0" maxOccurs="1" type="Reference">
           </xs:element>
-          <xs:element name="note" minOccurs="0" maxOccurs="1" type="string">
+          <xs:element name="note" minOccurs="0" maxOccurs="1" type="Annotation">
           </xs:element>
           <xs:element name="css" minOccurs="0" maxOccurs="1" type="ICal.CSS">
           </xs:element>
@@ -186,7 +186,7 @@
           </xs:element>
           <xs:element name="venue" minOccurs="0" maxOccurs="1" type="ICal.Venue">
           </xs:element>
-          <xs:element name="note" minOccurs="0" maxOccurs="1" type="string">
+          <xs:element name="note" minOccurs="0" maxOccurs="1" type="Annotation">
           </xs:element>
           <xs:element name="rrule" minOccurs="0" maxOccurs="1" type="ICal.RRule">
           </xs:element>
