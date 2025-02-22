@@ -158,19 +158,19 @@ declare function cal2event:cal2fc-events(
     let $refdss   := $schedules[type/@value='service']
     let $service-attributes := 
         map {
-            "location": map {"display" : "3.xxx"},
-            "class": "yellow",
-            "backgroundColor": "yellow",
-            "textColor": "blue",
-            "rendering": "background",
+            "location": map {"display" : "3.xxx"}
+          , "class": "yellow"
+          , "backgroundColor": "yellow"
+          , "textColor": "blue"
+          , "rendering": "background"
           }
     let $meeting-attributes := 
         map {
-            "location": map {"display" : "3.xxx"},
-            "class": "blue",
-            "backgroundColor": "lightblue",
-            "textColor": "black",
-            "rendering": "background",
+            "location": map {"display" : "3.xxx"}
+          , "class": "blue"
+          , "backgroundColor": "lightblue"
+          , "textColor": "black"
+          , "rendering": "background"
           }
     let $s := xs:date(format-dateTime($start,"[Y0001]-[M01]-[D01]"))
     for $ups in ($cal/schedule[global/type/@value='service'], $meetings)
