@@ -1,6 +1,6 @@
 xquery version "3.1";
 
-module namespace ncevent ="http://eNahar.org/ns/nonfhir/ncevent";
+module namespace nevent ="http://eNahar.org/ns/nonfhir/nevent";
 
 import module namespace config = "http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
 import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
@@ -28,7 +28,7 @@ declare namespace fhir   = "http://hl7.org/fhir";
  : 
  : @return bundle
  :)
-declare function ncevent:search-icalevents($request as map(*))
+declare function nevent:search-event($request as map(*))
 {
     let $accept := $request?accept
     let $realm  := $request?parameters?realm
@@ -53,13 +53,13 @@ declare function ncevent:search-icalevents($request as map(*))
  
     let $lll := util:log-app('TRACE', 'apps.eNahar', $services)
 
-    let $hds       := nholiday:search-holiday($request)//CalEvent
-    let $leaves    := nleave:search-leave(map:put($request, "status", ('confirmed','tentative')))//CalEvent
+    let $hds       := nholiday:search-holiday($request)//Event
+    let $leaves    := nleave:search-leave(map:put($request, "status", ('confirmed','tentative')))//Event
 (: 
     let $lll := util:log-app('TRACE', 'apps.eNahar', $leaves)
 :)
     (: get all relevant schedules :)
-    let $refdss    := distinct-values($services/schedule/global/reference/@value)
+    let $refdss    := distinct-values($services/scheduleReference/reference/@value)
     let $schedules := collection($config:schedule-base)/schedule[identifier/value[@value=$refdss]][active[@value="true"]]
  
     let $lll := util:log-app('TRACE', 'apps.eNahar', $schedules/name)

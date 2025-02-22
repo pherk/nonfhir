@@ -29,7 +29,7 @@ declare function nleave:read-leave($request as map(*)) as item()
     let $format := $request?parameters?_format
     let $elems  := $request?parameters?_elements
     let $uuid   := $request?parameters?id
-    let $leaves := collection($nleave:leaves)/CalEvent[id[@value=$uuid]]
+    let $leaves := collection($nleave:leaves)/Event[id[@value=$uuid]]
     return
       if (count($leaves)=1) then 
           switch ($accept)
@@ -70,10 +70,10 @@ declare function nleave:search-leave($request as map(*)){
 	        then $period[prefix/@value="ge"]/value/@value
 	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
     let $hits0 := if (count($owner)=0)
-        then $coll/CalEvent[period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
+        then $coll/Event[period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
         else let $oref := concat('metis/practitioners/', $owner)
             return 
-                $coll/CalEvent[actor/reference[@value=$oref]][period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
+                $coll/Event[actor/reference[@value=$oref]][period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
 
     let $sorted-hits :=
         for $c in $hits0
@@ -82,10 +82,10 @@ declare function nleave:search-leave($request as map(*)){
 (: TODO analyze elements id, owner, schedule :)
             if (count($elems)>0)
             then
-                <CalEvent>
+                <Event>
                     {$c/id}
                     {$c/actor}
-                </CalEvent>
+                </Event>
             else $c
     return
       switch ($format)
@@ -114,11 +114,13 @@ declare function nleave:search-leave($request as map(*)){
             order by $item/period/start/@value/string()
             return
                map {
-                     "resourceType" : "CalEvent"
+                     "resourceType" : "Event"
                    , "id" : $i
                    , "title" : $item/summary/@value/string()
                    , "period" : map {"start" : $start, "end" : $end}
-                   , "class" : $class
+                   , "rendering" : map {
+                          "class" : $class
+                          }
                    }
             },
             "lanes" : array {

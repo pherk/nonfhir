@@ -157,21 +157,21 @@ declare function cal2event:cal2fc-events(
     let $meetings := $schedules[type/@value='meeting']
     let $refdss   := $schedules[type/@value='service']
     let $service-attributes := 
-        <attributes>
-            <class>yellow</class>
-            <backgroundColor>yellow</backgroundColor>
-            <textColor>blue</textColor>
-            <rendering>background</rendering>
-            <room>3.xxx</room>
-        </attributes>
+        map {
+            "location": map {"display" : "3.xxx"},
+            "class": "yellow",
+            "backgroundColor": "yellow",
+            "textColor": "blue",
+            "rendering": "background",
+          }
     let $meeting-attributes := 
-        <attributes>
-            <class>blue</class>
-            <backgroundColor>lightblue</backgroundColor>
-            <textColor>black</textColor>
-            <rendering>background</rendering>
-            <room>3.xxx</room>
-        </attributes>
+        map {
+            "location": map {"display" : "3.xxx"},
+            "class": "blue",
+            "backgroundColor": "lightblue",
+            "textColor": "black",
+            "rendering": "background",
+          }
     let $s := xs:date(format-dateTime($start,"[Y0001]-[M01]-[D01]"))
     for $ups in ($cal/schedule[global/type/@value='service'], $meetings)
     let $isService := $ups/global/type/@value='service'
@@ -235,7 +235,7 @@ declare %private function cal2event:fc-eventJSON(
         , $date as xs:date
         , $title as xs:string
         , $desc as xs:string*
-        , $attributes as item()*
+        , $attr as map(*)
         ) as item()?
 {
     if ($e)
@@ -244,20 +244,22 @@ declare %private function cal2event:fc-eventJSON(
         let $start := dateTime($date, xs:time($e/start/@value))
         let $end   := dateTime($date, xs:time($e/end/@value))
         return
-        <json:value xmlns:json="http://www.json.org" json:array="true">
-            <id>{$id}</id>
-            <title>{$title}</title>
-            <description>{$desc}</description>
-            <start>{$start}</start>
-            <end>{$end}</end>
-            <!-- attributes can also be set in view-calendar.js: json source -->
-            {$attributes/*[not(
-                        self::editable
-                    or  self::allDay)
-                ]}
-            <editable json:literal='true'>false</editable>
-            <allDay json:literal='true'>false</allDay>
-        </json:value>
+            map {
+              "resourceType" : "Event"
+            , "id" : $id
+            , "title" : $title
+            , "description": $desc
+            , "period" : map {"start" : $start, "end": $end}
+            , "location": map {"display" : "3.xxx"}
+            , "rendering" : map {
+                    "class": "blue"
+                  , "backgroundColor": "lightblue"
+                  , "textColor": "black"
+                  , "rendering": "background"
+                  , "editable": false
+                  , "allDay": false
+                  }
+            }
     else ()
 };
 

@@ -106,7 +106,7 @@ declare function calmigr:update-2.0($c as item())
         <name value="{$name}"/>
         <comment value="{$comment}"/>
         {$c/timezone}
-        {$location}
+          {$location}
         { if (local-name($c)="cal")
         then
             for $s in $c/schedule
@@ -185,7 +185,10 @@ declare function calmigr:update-schedule-2.0($s as item())
         {$s/isSpecial}
         {$s/ff}
         {$period}
-        {$location}
+        <venue>
+          <priority value="normal"/>
+          {$location}
+        </venue>
         {$note}
         {$css}
         {$appLetter}

@@ -108,9 +108,9 @@ declare function nholiday:search-holiday($request as map(*))
         default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
 
-declare %private function nholiday:fc-event($e as element(CalEvent), $date as xs:date, $attributes as item()*) as element(CalEvent)?
+declare %private function nholiday:fc-event($e as element(Event), $date as xs:date, $attributes as item()*) as element(Event)?
 {
-  <CalEvent>
+  <Event>
     <id value="{$e/name/@value/string()}"/>
     <title value="{$e/description/@value/string()}"/>
     <type value="{$e/type/@value/string()}"/>
@@ -122,8 +122,10 @@ declare %private function nholiday:fc-event($e as element(CalEvent), $date as xs
                      then concat(xs:string($date), xs:string(xs:time(date:iso2dateTime($e/end/@value))))
                      else concat(xs:string($date),'T23:59:59')}"/>
     </period>
-    <allDay value="{$e/type/@value='official'}"/>
-    <editable>false</editable>
-    {$attributes/*[not( self::editable or  self::allDay) ]}
-  </CalEvent>
+    <rendering>
+      {$attributes/*[not( self::editable or  self::allDay) ]}
+      <editable>false</editable>
+      <allDay value="{$e/type/@value='official'}"/>
+    </rendering>
+  </Event>
 };

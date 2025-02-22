@@ -101,7 +101,7 @@
           "ICal",
           "ICalEvent"
         ],
-        "operationId": "ncevent:search-icalevent",
+        "operationId": "nevent:search-event",
         "summary": "search ICalEvents",
         "parameters": [
           {

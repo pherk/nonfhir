@@ -89,11 +89,11 @@
           </xs:element>
           <xs:element name="period" minOccurs="0" maxOccurs="1" type="Period">
           </xs:element>
-          <xs:element name="location" minOccurs="0" maxOccurs="1" type="Reference">
+          <xs:element name="venue" minOccurs="0" maxOccurs="1" type="ICal.Venue">
           </xs:element>
           <xs:element name="note" minOccurs="0" maxOccurs="1" type="Annotation">
           </xs:element>
-          <xs:element name="css" minOccurs="0" maxOccurs="1" type="ICal.CSS">
+          <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="Rendering">
           </xs:element>
           <xs:element name="appLetter" minOccurs="0" maxOccurs="1" type="ICal.AppLetter">
           </xs:element>
@@ -117,26 +117,6 @@
           <xs:element name="altName" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
           <xs:element name="template" minOccurs="0" maxOccurs="1" type="Reference">
-          </xs:element>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="ICal.CSS">
-    <xs:annotation>
-      <xs:documentation xml:lang="en">CSS definitions.</xs:documentation>
-    </xs:annotation>
-    <xs:complexContent>
-      <xs:extension base="BackboneElement">
-        <xs:sequence>
-          <xs:element name="className" minOccurs="0" maxOccurs="1" type="string">
-          </xs:element>
-          <xs:element name="backgroundColor" minOccurs="0" maxOccurs="1" type="string">
-          </xs:element>
-          <xs:element name="textColor" minOccurs="0" maxOccurs="1" type="string">
-          </xs:element>
-          <xs:element name="editable" minOccurs="0" maxOccurs="1" type="boolean">
-          </xs:element>
           </xs:element>
         </xs:sequence>
       </xs:extension>

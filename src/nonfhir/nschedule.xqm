@@ -86,12 +86,12 @@ declare function nschedule:search-schedule($request as map(*)){
         return
             if (string-length($elems)>0)
             then
-                <Schedule>
+                <ICal>
                     {$c/id}
                     {$c/type}
                     {$c/name}
                     {$c/ff}
-                </Schedule>
+                </ICal>
             else $c
     return
         switch ($accept)
@@ -103,7 +103,8 @@ declare function nschedule:search-schedule($request as map(*)){
                   for $service in $sorted-hits
                   return
                     map {
-                          "id" : $service/id/@value/string()
+                          "resourceType" : "ICal"
+                        , "id" : $service/id/@value/string()
                         , "text" : $service/name/@value/string()
                         }
                       }

@@ -19,12 +19,12 @@
   <xs:include schemaLocation="fhir-base.xsd"/>
   <xs:element name="Event" type="Event">
     <xs:annotation>
-      <xs:documentation xml:lang="en">actor-related time slots, which are used for dating </xs:documentation>
+      <xs:documentation xml:lang="en">Actor-related time slot, which is used for dating.</xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="Event">
     <xs:annotation>
-      <xs:documentation xml:lang="en">actor-related time slots, which are used for dating </xs:documentation>
+      <xs:documentation xml:lang="en">Actor-related time slot, which is used for dating. It also serves as base for holidays and leaves.</xs:documentation>
       <xs:documentation xml:lang="en">If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
@@ -50,9 +50,7 @@
           </xs:element>
           <xs:element name="description" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
-          <xs:element name="start" minOccurs="1" maxOccurs="1" type="dateTime">
-          </xs:element>
-          <xs:element name="end" minOccurs="1" maxOccurs="1" type="dateTime">
+          <xs:element name="period" minOccurs="1" maxOccurs="1" type="Period">
           </xs:element>
           <xs:element name="location" minOccurs="0" maxOccurs="1" type="Reference">
           </xs:element>
@@ -60,32 +58,9 @@
           </xs:element>
           <xs:element name="note" minOccurs="0" maxOccurs="1" type="Annotation">
           </xs:element>
-          <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="Event.Rendering">
+          <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="Rendering">
           </xs:element>
         <attributes>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="Event.Rendering">
-    <xs:annotation>
-      <xs:documentation xml:lang="en">CSS definitions.</xs:documentation>
-    </xs:annotation>
-    <xs:complexContent>
-      <xs:extension base="BackboneElement">
-        <xs:sequence>
-          <xs:element name="className" minOccurs="0" maxOccurs="1" type="string">
-          </xs:element>
-          <xs:element name="backgroundColor" minOccurs="0" maxOccurs="1" type="string">
-          </xs:element>
-          <xs:element name="textColor" minOccurs="0" maxOccurs="1" type="string">
-          </xs:element>
-          <xs:element name="editable" minOccurs="0" maxOccurs="1" type="boolean">
-          </xs:element>
-          <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="code">
-          </xs:element>
-          <xs:element name="lane" minOccurs="0" maxOccurs="1" type="integer">
-          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
