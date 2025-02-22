@@ -41,19 +41,19 @@
         <note value=""/>
     </schedule>
     <schedule>
-        <global>
+      <type value="meeting"/>
+      <scheduleReference>
             <reference value="enahar/schedules/me-strategie"/>
             <display value="Strategie"/>
-            <type value="meeting"/>
-        </global>
-        <note value=""/>
+      </scheduleReference>
+      <note value=""/>
     </schedule>
     <schedule>
-            <agenda>
+            <schedule>
                 <event>
                     <rrule>
             <freq value="daily"/>
-            <byWeekNo value=""/>
+            <byWeek value=""/>
             <byDay value="Mo,Di,Mi"/>
         </rrule>
             <name value="amb-MoDiMi"/>
@@ -68,12 +68,12 @@
                 </location>
                 <priority value="normal"/>
             </venue>
-            <note value=""/>
-        </event>
-                <event>
-                    <rrule>
+        <note value=""/>
+      </event>
+      <event>
+        <rrule>
             <freq value="daily"/>
-            <byWeekNo value=""/>
+            <byWeek value=""/>
             <byDay value="Fr"/>
         </rrule>
             <name value="amb-Fr"/>
@@ -93,7 +93,7 @@
                 <event>
                     <rrule>
             <freq value="daily"/>
-            <byWeekNo value=""/>
+            <byWeek value=""/>
             <byDay value="Do"/>
         </rrule>
             <name value="amb-Do"/>
@@ -116,14 +116,14 @@
             </period>
             <blocking value="true"/>
             <note value=""/>
-        </agenda>
-            <global>
-                <type value="service"/>
+        </schedule>
+          <type value="service"/>
+          <scheduleReference>
                 <reference value="enahar/schedules/amb-spz-arzt"/>
                 <display value="Arzt"/>
                 <isSpecial value="false"/>
                 <ff value="true"/>
-            </global>
+          </scheduleReference>
             <note value=""/>
         </schedule>
     <active value="true"/>
@@ -159,11 +159,11 @@
                 <display value="R3.008"/>
             </location>
     <schedule>
-            <agenda>
+            <schedule>
                 <event>
                     <rrule>
             <freq value="daily"/>
-            <byWeekNo value=""/>
+            <byWeek value=""/>
             <byDay value="Mo,Di,Mi,Do"/>
         </rrule>
             <name value="amb-Mo-Do"/>
@@ -183,7 +183,7 @@
             <event>
                 <rrule>
             <freq value="daily"/>
-            <byWeekNo value=""/>
+            <byWeek value=""/>
             <byDay value="Fr"/>
         </rrule>
             <name value="amb-Fr"/>
@@ -206,12 +206,12 @@
             </period>
             <blocking value="true"/>
             <note value=""/>
-        </agenda>
-                <global>
-                    <type value="worktime"/>
+        </schedule>
+           <type value="worktime"/>
+           <scheduleReference>
                     <reference value="enahar/schedules/worktime"/>
                     <display value="Reguläre AZ"/>
-                </global>
+                </scheduleReference>
                 <note value=""/>
             </schedule>
-</cal>
+</ICal>

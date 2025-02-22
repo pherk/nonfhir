@@ -78,7 +78,7 @@
         <xs:sequence>
           <xs:element name="type" minOccurs="0" maxOccurs="1" type="code">
           </xs:element>
-          <xs:element name="schedule" minOccurs="0" maxOccurs="1" type="Reference">
+          <xs:element name="basedOn" minOccurs="0" maxOccurs="1" type="Reference">
           </xs:element>
           <xs:element name="isSpecial" minOccurs="0" maxOccurs="1" type="boolean">
           </xs:element>

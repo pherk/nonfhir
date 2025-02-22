@@ -122,10 +122,10 @@ declare function calmigr:update-schedule-2.0($s as item())
     let $wasGlobal :=if ($s/global)
           then (
                  $s/global/type
-                , <scheduleReference>
+                , <basedOn>
                     <reference value="Schedule/{substring-after($s/global/reference/@value,"enahar/schedules/")}"/>
                     {$s/global/display}
-                  </scheduleReference>
+                  </basedOn>
                 )
           else ()
     let $appLetter := if ($s/appLetter)
@@ -157,14 +157,14 @@ declare function calmigr:update-schedule-2.0($s as item())
                 <text value="{$s/note/@value/string()}"/>
             </note>
         else ()
-    let $css  := if ($s/fc)
+    let $rendering  := if ($s/fc)
         then
-        <css>
+        <rendering>
             {$s/fc/className}
             {$s/fc/backgroundColor}
             {$s/fc/textColor}
             {$s/fc/editable}
-        </css>
+        </rendering>
         else ()
     let $pph := if ($s/timing/parallel-per-hour) then <parallelPerHour value="{$s/timing/parallel-per-hour/@value/string()}"/> else ()
     let $timing := if ($s/timing)
@@ -190,7 +190,7 @@ declare function calmigr:update-schedule-2.0($s as item())
           {$location}
         </venue>
         {$note}
-        {$css}
+        {$rendering}
         {$appLetter}
         {$timing}
         {
