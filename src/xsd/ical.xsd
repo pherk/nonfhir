@@ -49,13 +49,10 @@
           </xs:element>
           <xs:element name="serviceType" minOccurs="0" maxOccurs="unbound" type="CodeableReference">
           </xs:element>
-          <xs:element name="speciality" minOccurs="0" maxOccurs="unbound" type="CodeableConcept">
+          <xs:element name="specialty" minOccurs="0" maxOccurs="unbound" type="CodeableConcept">
           </xs:element>
           <xs:element name="actor" minOccurs="1" maxOccurs="unbound" type="Reference">
           <xs:annotation>was owner</xs:annotation>
-          </xs:element>
-          <xs:element name="group" minOccurs="1" maxOccurs="1" type="string">
-          <xs:annotation>use speciality</xs:annotation>
           </xs:element>
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
@@ -99,7 +96,7 @@
           </xs:element>
           <xs:element name="timing" minOccurs="0" maxOccurs="1" type="ICal.Timing">
           </xs:element>
-          <xs:element name="agenda" minOccurs="0" maxOccurs="unbound" type="ICal.Schedule">
+          <xs:element name="schedule" minOccurs="0" maxOccurs="unbound" type="ICal.Schedule">
           </xs:element>
           <xs:element name="event" minOccurs="0" maxOccurs="unbound" type="ICal.Event">
           </xs:element>
