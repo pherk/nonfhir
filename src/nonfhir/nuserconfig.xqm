@@ -4,9 +4,9 @@ module namespace nuc ="http://eNahar.org/ns/nonfhir/nuserconfig";
 
 import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
 import module namespace config="http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
-(:
-import module namespace parse = "http://enahar.org/exist/apps/nabu/parse" at "../../FHIR/meta/parse-fhir-resources.xqm";
-:)
+
+import module namespace parse = "http://eNahar.org/ns/lib/parse" at "../json/parse-fhir-resources.xqm";
+
 import module namespace roaster="http://e-editiones.org/roaster";
 import module namespace errors="http://e-editiones.org/roaster/errors";
 import module namespace date  ="http://eNahar.org/ns/lib/date";
@@ -38,7 +38,7 @@ declare function nuc:read-userconfig($request as map(*)) as item()
 };
 
 
-declare %private function nuserconfig:doPUT(
+declare %private function nuc:doPUT(
       $content as item()
     , $realm as xs:string
     , $loguid as xs:string
@@ -98,9 +98,9 @@ declare %private function nuserconfig:doPUT(
     return
     try {
         let $store := system:as-user('vdba', 'kikl823!', (
-            xmldb:store($nuserconfig:uconfig-data, $file, $data)
-            , sm:chmod(xs:anyURI($nuserconfig:uconfig-data || '/' || $file), $config:data-perms)
-            , sm:chgrp(xs:anyURI($nuserconfig:uconfig-data || '/' || $file), $config:data-group)))
+            xmldb:store($config:uconfig-data, $file, $data)
+            , sm:chmod(xs:anyURI($config:uconfig-data || '/' || $file), $config:data-perms)
+            , sm:chgrp(xs:anyURI($config:uconfig-data || '/' || $file), $config:data-group)))
         return
             $data
     } catch * {
@@ -108,7 +108,7 @@ declare %private function nuserconfig:doPUT(
     }
 };
 
-declare %private function nuserconfig:doPOST(
+declare %private function nuc:doPOST(
       $content as item()
     , $realm as xs:string
     , $loguid as xs:string
@@ -167,9 +167,9 @@ declare %private function nuserconfig:doPOST(
     return
     try {
         let $store := system:as-user('vdba', 'kikl823!', (
-            xmldb:store($nuserconfig:uconfig-data, $file, $data)
-            , sm:chmod(xs:anyURI($nuserconfig:uconfig-data || '/' || $file), $config:data-perms)
-            , sm:chgrp(xs:anyURI($nuserconfig:uconfig-data || '/' || $file), $config:data-group)))
+            xmldb:store($config:uconfig-data, $file, $data)
+            , sm:chmod(xs:anyURI($config:uconfig-data || '/' || $file), $config:data-perms)
+            , sm:chgrp(xs:anyURI($config:uconfig-data || '/' || $file), $config:data-group)))
         return
             (
               mutil:rest-response(200, 'userconfig sucessfully stored.')
@@ -187,19 +187,19 @@ declare %private function nuserconfig:doPOST(
  : 
  : @return <response>
  :)
-declare function nuserconfig:putUserConfigJSON($request as map(*))
+declare function nuc:putUserConfigJSON($request as map(*))
 {
     let $json := util:binary-to-string($content)
     let $realm := ($realm,"kikl-spz")[1]
     let $loguid := ($loguid,"u-admin")[1]
     let $lognam := ($lognam,"putbot")[1]
-    let $pmap := ju:json-to-xml(fn:parse-json($json))
+    let $pmap := parse:json-to-xml(fn:parse-json($json))
     let $r := parse:resource-to-FHIR($pmap, "4.3")
 let $lll := util:log-app('TRACE','apps.nabu',$r)
     return
         if ($r)
         then
-            let $xml := nuserconfig:doPUT($r, $realm, $loguid, $lognam)
+            let $xml := nuc:doPUT($r, $realm, $loguid, $lognam)
             return
                 (
                  mutil:rest-response(200, 'userconfig sucessfully stored.')
@@ -216,7 +216,7 @@ let $lll := util:log-app('TRACE','apps.nabu',$r)
  : 
  : @return <response>
  :)
-declare function nuserconfig:putUserConfigXML($request as map(*))
+declare function nuc:putUserConfigXML($request as map(*))
 {
 let $lll := util:log-app('TRACE','apps.nabu',$content)
     let $content := if($content/fhir:*)
@@ -229,7 +229,7 @@ let $lll := util:log-app('TRACE','apps.nabu',$content)
     return
         if ($content/fhir:*)
         then
-            let $xml := nuserconfig:doPUT($content/fhir:*, $realm, $loguid, $lognam)
+            let $xml := nuc:doPUT($content/fhir:*, $realm, $loguid, $lognam)
             return
                 (
                  mutil:rest-response(200, 'userconfig sucessfully stored.')

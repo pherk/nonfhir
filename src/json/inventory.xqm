@@ -8,7 +8,7 @@ xquery version "3.1";
 : @see http://enahar.org
 :
 :)
-module namespace inventory = "http://enahar.org/exist/apps/nabu/inventory";
+module namespace inventory = "http://eNahar.org/ns/lib/inventory";
 
 declare variable $inventory:baseComplexTypes :=
     (

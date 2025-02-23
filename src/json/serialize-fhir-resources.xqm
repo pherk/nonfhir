@@ -10,9 +10,9 @@ xquery version "3.1";
 : @see http://enahar.org
 :
 :)
-module namespace serialize = "http://enahar.org/exist/apps/nabu/serialize";
+module namespace serialize = "http://eNahar.org/ns/lib/serialize";
 
-import module namespace inventory = "http://enahar.org/exist/apps/nabu/inventory" at "../../FHIR/meta/inventory.xqm";
+import module namespace inventory = "http://eNahar.org/ns/lib/inventory" at "../json/inventory.xqm";
 
 declare function serialize:resource2json(
           $r as item()

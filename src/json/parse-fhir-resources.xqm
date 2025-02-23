@@ -7,12 +7,17 @@ xquery version "3.1";
  : 
  : @version 0.1 partially validating, adding id attribute for complex elements
  :)
-module namespace parse = "http://enahar.org/exist/apps/nabu/parse";
+module namespace parse = "http://eNahar.org/ns/lib/parse";
 
-import module namespace ju = "http://joewiz.org/ns/xquery/json-util" at "../../modules/json-util.xqm";
-import module namespace inventory = "http://enahar.org/exist/apps/nabu/inventory" at "../../FHIR/meta/inventory.xqm";
+import module namespace ju = "http://joewiz.org/ns/xquery/json-util" at "../json/json-util.xqm";
+import module namespace inventory = "http://eNahar.org/ns/lib/inventory" at "../json/inventory.xqm";
 
 declare namespace fhir   = "http://hl7.org/fhir";
+
+declare function parse:json-to-xml($j as item())
+{
+    ju:json-to-xml($j)
+};
 
 declare function parse:resource-to-FHIR(
       $xml as item()*
