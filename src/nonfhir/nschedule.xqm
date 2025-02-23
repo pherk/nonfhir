@@ -41,7 +41,7 @@ declare function nschedule:read-schedule($request as map(*)) as item()
     let $lognam := $request?parameters?lognam
     let $format := $request?parameters?_format
     let $uuid   := $request?parameters?id
-    let $schedules := collection($nschedule:schedule-data)/cal[id[@value=$uuid]]
+    let $schedules := collection($config:ical-data)/cal[id[@value=$uuid]]
     return
         if (count($schedules)=1) then
         switch ($accept)
@@ -74,8 +74,8 @@ declare function nschedule:search-schedule($request as map(*)){
     let $active := $request?parameters?active
     let $lll := util:log-app('TRACE','app.nabu', $request?parameters)
     let $hits0 := if ($type and $type!='')
-        then collection($nschedule:schedule-data)/schedule[type[@value=$type]][active[@value=$active]]
-        else collection($nschedule:schedule-data)/schedule[active[@value="true"]]
+        then collection($config:ical-data)/schedule[type[@value=$type]][active[@value=$active]]
+        else collection($config:ical-data)/schedule[active[@value="true"]]
     let $valid := if ($name)
         then $hits0
         else $hits0/schedule[matches(name/@value,$name)]
@@ -132,8 +132,8 @@ declare function nschedule:update-schedule($request as map(*))
              default return 'sched-' || $content/schedule/name/@value/string()
         else 
             let $id := $content/schedule/id/@value/string()
-            let $scheds := collection($nschedule:schedule-data)/schedule[id[@value = $id]]
-            let $move := mutil:moveToHistory($scheds, $nschedule:scheduleHistory)
+            let $scheds := collection($config:ical-data)/schedule[id[@value = $id]]
+            let $move := mutil:moveToHistory($scheds, $config:icalHistory)
             return
                 $id
     let $version := if ($isNew) 

@@ -11,8 +11,6 @@ import module namespace query  = "http://eNahar.org/ns/nonfhir/query" at "../mod
 
 declare namespace fhir   = "http://hl7.org/fhir";
 
-declare variable $nical:ical-data := "/db/apps/nonfhir/resources";
-
 
 (:~
  : GET: /ICal/{uuid}
@@ -29,7 +27,7 @@ declare function nical:read-ical($request as map(*)) as item()
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $uuid   := $request?parameters?id
-    let $cals := collection($nical:ical-data)/ICal[id[@value=$uuid]]
+    let $cals := collection($config:ical-data)/ICal[id[@value=$uuid]]
     return
       if (count($cals)=1) then
         switch ($accept)
@@ -65,7 +63,7 @@ declare function nical:search-ical($request as map(*)){
     let $fillSpecial := $request?parameters?fillSpecial
     let $active := $request?parameters?active
     let $oref := concat('metis/practitioners/', $actor)
-    let $coll := collection($nical:cal-data)
+    let $coll := collection($config:cal-data)
     let $hits0 := if ($actor != '')
         then $coll/ICal[actor/reference[@value=$oref]][active[@value=$active]]
         (: from PractitionerRole/code mapping? specialty :)
@@ -112,7 +110,7 @@ declare function nical:update-ical($request as map(*)){
         then "cal-" || substring-after($content/ICal/actor/reference/@value,'metis/practitioners/')
         else             
             let $id := $content/ICal/id/@value/string()
-            let $cals := collection($nical:cals)/ICal[id[@value = $id]]
+            let $cals := collection($config:cal-data)/ICal[id[@value = $id]]
             let $move := mutil:moveToHistory($cals, $config:icalHistory)
             return
                 $id

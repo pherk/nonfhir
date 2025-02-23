@@ -29,7 +29,7 @@ declare function nleave:read-leave($request as map(*)) as item()
     let $format := $request?parameters?_format
     let $elems  := $request?parameters?_elements
     let $uuid   := $request?parameters?id
-    let $leaves := collection($nleave:leaves)/Event[id[@value=$uuid]]
+    let $leaves := collection($config:leave-data)/Event[id[@value=$uuid]]
     return
       if (count($leaves)=1) then 
           switch ($accept)
@@ -61,7 +61,7 @@ declare function nleave:search-leave($request as map(*)){
     let $group  := query:analyze($request?parameters?group, "string")
     let $period := query:analyze($request?parameters?period, "date")
     let $status := query:analyze($request?parameters?status, "token")
-    let $coll := collection($nleave:leaves)
+    let $coll := collection($config:leave-data)
     let $now := date:now()
     let $tmax := if (count($period[prefix/@value="le"])=1)
 	        then $period[prefix/@value="le"]/value/@value
@@ -154,7 +154,7 @@ declare function nleave:update-leave($request as map(*)){
         then "l-" || substring-after($content/leave/owner/reference/@value,'Practitioner/')
         else
             let $id := $content/leave/id/@value/string()
-            let $leaves := collection($nleave:leaves)/leave[id[@value = $id]]
+            let $leaves := collection($config:leave-data)/leave[id[@value = $id]]
             let $move := mutil:moveToHistory($leaves, $config:leavehistory)
             return
                 $id

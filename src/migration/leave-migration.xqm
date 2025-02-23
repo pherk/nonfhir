@@ -16,12 +16,8 @@ for $o in subsequence($es,1,10)
 return
     let $data := leavemigr:update-2.0($o)
     let $file := $data/@xml:id/string() || ".xml"
-    let $ical-data := "/db/apps/iCalData/data/Leave"
     return
-        (: 
         system:as-user('vdba', 'kikl823!', (
-            xmldb:store($leave-data, $file, $data)
-            , sm:chmod(xs:anyURI($leave-data || '/' || $file), $config:data-perms)
-            , sm:chgrp(xs:anyURI($leave-datai || '/' || $file), $config:data-group)))
-        :)
-        $data
+            xmldb:store($config:leave-data, $file, $data)
+            , sm:chmod(xs:anyURI($config:leave-data || '/' || $file), $config:data-perms)
+            , sm:chgrp(xs:anyURI($config:leave-data || '/' || $file), $config:data-group)))

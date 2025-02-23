@@ -48,9 +48,9 @@
           </xs:element>
           <xs:element name="email" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
-          <xs:element name="displayname" minOccurs="0" maxOccurs="1" type="string">
+          <xs:element name="displayName" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
-          <xs:element name="title" minOccurs="0" maxOccurs="1" type="string">
+          <xs:element name="prefix" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
           <xs:element name="gender" minOccurs="0" maxOccurs="1" type="AdministrativeGender">
             <xs:annotation>
@@ -66,7 +66,7 @@
               <xs:documentation xml:lang="en">The date of registration for the individual.</xs:documentation>
            </xs:annotation>
           </xs:element>
-          <xs:element name="lastlogin" minOccurs="0" maxOccurs="1" type="dateTime">
+          <xs:element name="lastLogin" minOccurs="0" maxOccurs="1" type="dateTime">
             <xs:annotation>
               <xs:documentation xml:lang="en">The date of registration for the individual.</xs:documentation>
            </xs:annotation>

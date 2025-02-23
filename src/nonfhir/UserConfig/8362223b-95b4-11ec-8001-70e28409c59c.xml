@@ -22,11 +22,11 @@
         <display value="Peter Herkenrath"/>
     </subject>
     <welcome value="Willkommen"/>
-    <welcomeSub value="???"/>
+    <welcome value="???"/>
     <avatar value="oldman"/>
     <email value="peter.herkenrath@uk-koeln.de"/>
     <displayName value="pmh"/>
-    <title value="Dr.med."/>
+    <prefix value="Dr.med."/>
     <gender value="male"/>
     <education value="Arzt"/>
     <profession value="Kinderarzt"/>

@@ -61,15 +61,16 @@ declare variable $config:root :=
             concat($config:app-root, "/", $root)
 ;
 
-declare variable $config:fhir-data     := "/db/apps/metisData/data/FHIR";
-declare variable $config:nonfhir-data  := "/db/apps/metisData/data/NonFHIR";
-declare variable $config:history-data  := "/db/apps/metisHistory/data";
-declare variable $config:holiday-data    := concat($config:nonfhir-data,'/Holiday');
-declare variable $config:holidayHistory  := concat($config:history-data,'/Holiday');
-declare variable $config:leave-data    := concat($config:nonfhir-data,'/Leave');
-declare variable $config:leaveHistory  := concat($config:history-data,'/Leave');
+declare variable $config:nonfhir-data  := "/db/apps/iCalData/data";
+declare variable $config:history-data  := "/db/apps/iCalHistory/data";
+declare variable $config:holiday-data    := concat($config:nonfhir-data,'/ICal');
+declare variable $config:holidayHistory  := concat($config:history-data,'/ICal');
+declare variable $config:leave-data    := concat($config:nonfhir-data,'/Entry');
+declare variable $config:leaveHistory  := concat($config:history-data,'/Entry');
 declare variable $config:ical-data    := concat($config:nonfhir-data,'/ICal');
 declare variable $config:icalHistory  := concat($config:history-data,'/ICal');
+declare variable $config:uconfig-data    := concat($config:nonfhir-data,'/UserConfig');
+declare variable $config:uconfigHistory  := concat($config:history-data,'/UserConfig');
 
 declare variable $config:resources := concat($config:root,'/resources');
 declare variable $config:templs    := concat($config:root,'/templates');

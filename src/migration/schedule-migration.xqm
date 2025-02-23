@@ -15,15 +15,7 @@ for $o in $es
 return
     let $data := calmigr:update-2.0($o)
     let $file := $data/@xml:id/string() || ".xml"
-    let $cudir:= switch($data/cutype//code/@value)
-        case 'individual' return 'Individual'
-        case 'room'   return 'Room'
-        case 'role'   return 'Role'
-        case 'schedule' return 'Schedule'
-        default return error('invalid cutype')
-    let $ical-data := "/db/apps/icalData/data"
     return
-        system:as-user('vdba', 'kikl823!', (
-            xmldb:store($ical-data || '/' || $cudir  , $file, $data)
-            , sm:chmod(xs:anyURI($ical-data || '/' || $cudir || '/' || $file), $config:data-perms)
-            , sm:chgrp(xs:anyURI($ical-data || '/' || $cudir || '/' || $file), $config:data-group)))
+            xmldb:store($config:ical-data, $file, $data)
+            , sm:chmod(xs:anyURI($config:ical-data || '/' || $file), $config:data-perms)
+            , sm:chgrp(xs:anyURI($config:ical-data || '/' || $file), $config:data-group)))
