@@ -57,17 +57,19 @@ declare function nical:search-ical($request as map(*)){
     let $format := $request?parameters?_format
     let $elems  := query:analyze($request?parameters?_elements, "string")
     let $actor  := $request?parameters?actor
-    let $specialty  := $request?parameters?specialty
+    let $service  := $request?parameters?serviceType
     let $schedule := $request?parameters?schedule
     let $period := $request?parameters?period
     let $fillSpecial := $request?parameters?fillSpecial
-    let $active := $request?parameters?active
+    let $active := query:analyze($request?parameters?active, "boolean", true())
     let $oref := concat('metis/practitioners/', $actor)
-    let $coll := collection($config:cal-data)
-    let $hits0 := if ($actor != '')
+    let $coll := collection($config:ical-data)
+    let $hits0 := if (count($actor)>0)
         then $coll/ICal[actor/reference[@value=$oref]][active[@value=$active]]
         (: from PractitionerRole/code mapping? specialty :)
-        else $coll/ICal[specialty//code[@value=$specialty]][active[@value=$active]]
+        else if (count($service)>0)
+        then $coll/ICal[serviceType//code[@value=$service]][active[@value=$active]]
+        else $coll/ICal[active[@value=$active]]
 
     let $matched :=
         for $c in $hits0
@@ -76,7 +78,8 @@ declare function nical:search-ical($request as map(*)){
             if (count($elems)>0)
             then
                 <ICal>
-                { for $p in $c/*
+                  {$c/id}
+                { for $p in $c/*[not(self::id)]
                   return
                     if (local-name($p)=$elems) then $p else ()
                 }
@@ -92,7 +95,7 @@ declare function nical:search-ical($request as map(*)){
 };
 
 (:~
- : PUT: enahar/ical
+ : PUT: /ICal/{$uuid}
  : Update an existing calendar or store a new one. 
  : 
  : @param $content
@@ -103,6 +106,7 @@ declare function nical:update-ical($request as map(*)){
     let $realm := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
+    let $uuid   := $request?parameters?id
     let $content := $request?body/node()
 
     let $isNew   := not($content/ICal/@xml:id)
@@ -110,7 +114,7 @@ declare function nical:update-ical($request as map(*)){
         then "cal-" || substring-after($content/ICal/actor/reference/@value,'metis/practitioners/')
         else             
             let $id := $content/ICal/id/@value/string()
-            let $cals := collection($config:cal-data)/ICal[id[@value = $id]]
+            let $cals := collection($config:ical-data)/ICal[id[@value = $id]]
             let $move := mutil:moveToHistory($cals, $config:icalHistory)
             return
                 $id
@@ -151,9 +155,9 @@ declare function nical:update-ical($request as map(*)){
     return
     try {
         let $store := system:as-user('vdba', 'kikl823!', (
-            xmldb:store($config:ical-data || '/' || $cudir  , $file, $data)
-            , sm:chmod(xs:anyURI($config:ical-data || '/' || $cudir || '/' || $file), $config:data-perms)
-            , sm:chgrp(xs:anyURI($config:ical-data || '/' || $cudir || '/' || $file), $config:data-group)))
+            xmldb:store($config:ical-data, $file, $data)
+            , sm:chmod(xs:anyURI($config:ical-data || '/' || $file), $config:data-perms)
+            , sm:chgrp(xs:anyURI($config:ical-data || '/' || $file), $config:data-group)))
         return
           switch ($accept)
           case "application/xml" return $data
@@ -187,7 +191,8 @@ function nical:validateCalXML(
         , $mode as xs:string*
         ) as item()+
 {
-    let $cals := $nical:cals/ICal[id[@value=$uuid]]
+    let $coll := collection($config:ical-data)/ICal[id[@value=$uuid]]
+    let $cals := $coll/ICal[id[@value=$uuid]]
     return
         if (count($cals)=1)
         then 
@@ -260,7 +265,8 @@ function nical:updateScheduleXML(
     let $today := current-dateTime()
     let $oref := concat('metis/practitioners/',$actor)
     let $sref := concat('enahar/schedules/', $sid)
-    let $cals := $nical:cals/ICal[actor/reference/@value=$oref]
+    let $coll := collection($config:ical-data)/ICal[id[@value=$uuid]]
+    let $cals := $coll/ICal[actor/reference/@value=$oref]
     return
         if (count($cals)=1)
         then 
@@ -358,11 +364,12 @@ declare function nical:search-service($request as map(*))
     let $lll := util:log-app('DEBUG', 'apps.eNahar', $schedule)
     let $oref := concat('metis/practitioners/', $actor)
     let $sref := concat('enahar/schedules/', $schedule)
+    let $coll := collection($config:ical-data)
     let $gcals := if ($specialty='' and $actor='')
-        then $nical:cals/cal[active[@value="true"]]
+        then $coll/ICal[active[@value="true"]]
         else if ($actor!='')
-        then $nical:cals/cal[actor/reference[@value=$oref]][active[@value="true"]]
-        else $nical:cals/cal[speciality//code[@value=$specialty]][active[@value="true"]]
+        then $coll/ICal[actor/reference[@value=$oref]][active[@value="true"]]
+        else $coll/ICal[specialty//code[@value=$specialty]][active[@value="true"]]
     let $valid := if ($schedule='')
         then $gcals
         else $gcals/schedule[global/reference[@value=$sref]]/.. (: tricky: match any cal with a certain schedule :)

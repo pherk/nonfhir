@@ -10,9 +10,9 @@ declare namespace fhir   = "http://hl7.org/fhir";
 declare function calmigr:update-2.0($c as item())
 {
     let $version := ($c/meta/versionID/@value/string(),$c/meta/versionId/@value/string())[1]
-    let $loguid  := $c/lastModifiedBy/reference/@value/string()
-    let $lognam  := $c/lastModifiedBy/display/@value/string()
-    let $lastUpd := $c/lastModified/@value/string()
+    let $loguid  := ($c/lastModifiedBy/reference/@value/string(), "metis/practitioners/u-admin")[1]
+    let $lognam  := ($c/lastModifiedBy/display/@value/string(), "migbot")[1]
+    let $lastUpd := ($c/lastModified/@value/string(), xs:string(date:now()))[1]
     let $identifier := if ($c/identifier)
         then
             <identifier>
@@ -30,6 +30,14 @@ declare function calmigr:update-2.0($c as item())
                     <code value="{if ($c/cutype//code/@value='person') then 'individual' else 'role'}"/>
                 </coding>
             </cutype>
+        else if (local-name($c)='schedule')
+        then
+            <cutype>
+                <coding>
+                    <system value="http://eNahar.org/ns/system/ical-usertype"/>
+                    <code value="{$c/type/@value/string()}"/>
+                </coding>
+            </cutype>
         else
             <cutype>
                 <coding>
@@ -37,12 +45,20 @@ declare function calmigr:update-2.0($c as item())
                     <code value="schedule"/>
                 </coding>
             </cutype>
-    let $caltype := if ($c/caltype)
+    let $caltype := if ($c/caltype/@value)
         then
             <caltype>
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-caltype"/>
                     <code value="{$c/caltype/@value/string()}"/>
+                </coding>
+            </caltype>
+        else if ($c/caltype/coding)
+        then
+            <caltype>
+                <coding>
+                    <system value="http://eNahar.org/ns/system/ical-caltype"/>
+                    <code value="{$c/caltype//code/@value/string()}"/>
                 </coding>
             </caltype>
         else
@@ -85,7 +101,7 @@ declare function calmigr:update-2.0($c as item())
             <versionId value="{$version}"/>
                 <extension url="https://eNahar.org/ns/extension/lastModifiedBy">
                     <valueReference>
-                        <reference value="{$loguid}"/>
+                        <reference value="Practitioner/{$loguid}"/>
                         <display value="{$lognam}"/>
                     </valueReference>
                 </extension>

@@ -16,6 +16,19 @@ declare namespace fhir   = "http://hl7.org/fhir";
 declare function query:analyze(
       $params as item()*
     , $type as xs:string
+    , $default as item()
+    ) as item()+
+{
+  let $r := query:analyze($params,$type)
+  return
+    if (count($r)>0)
+    then $r
+    else $default
+};
+
+declare function query:analyze(
+      $params as item()*
+    , $type as xs:string
     ) as item()*
 {
    for $s in $params
@@ -24,6 +37,7 @@ declare function query:analyze(
      case "string"    return tokenize($s, ",")
      case "reference" return tokenize($s, ",")
      case "token"     return tokenize($s, ",")
+     case "boolean"   return (for $bs in tokenize($s, ",") then xs:boolean($bs) else ())[1]
      case "date"      return let $ds := tokenize($s, ",")
                            for $d in $ds
                            return query:analyzeDate($d)

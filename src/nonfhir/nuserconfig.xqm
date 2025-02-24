@@ -26,7 +26,7 @@ declare function nuc:read-userconfig($request as map(*)) as item()
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
-    let $uuid := $request?parameters?uuid
+    let $uuid := $request?parameters?id
     let $ucs := collection($config:uconfig-data)/UserConfig[id/@value=$uuid]
     return
       if (count($ucs)=1) then
@@ -189,6 +189,7 @@ declare %private function nuc:doPOST(
  :)
 declare function nuc:putUserConfigJSON($request as map(*))
 {
+    let $uuid := $request?parameters?id
     let $json := util:binary-to-string($content)
     let $realm := ($realm,"kikl-spz")[1]
     let $loguid := ($loguid,"u-admin")[1]

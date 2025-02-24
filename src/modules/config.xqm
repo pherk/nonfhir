@@ -61,14 +61,16 @@ declare variable $config:root :=
             concat($config:app-root, "/", $root)
 ;
 
-declare variable $config:nonfhir-data  := "/db/apps/iCalData/data";
-declare variable $config:history-data  := "/db/apps/iCalHistory/data";
+declare variable $config:nonfhir-data  := "/db/apps/nonFHIRData/data";
+declare variable $config:history-data  := "/db/apps/nonFHIRHistory/data";
 declare variable $config:holiday-data    := concat($config:nonfhir-data,'/ICal');
 declare variable $config:holidayHistory  := concat($config:history-data,'/ICal');
-declare variable $config:leave-data    := concat($config:nonfhir-data,'/Entry');
-declare variable $config:leaveHistory  := concat($config:history-data,'/Entry');
+declare variable $config:leave-data    := concat($config:nonfhir-data,'/Event');
+declare variable $config:leaveHistory  := concat($config:history-data,'/Event');
 declare variable $config:ical-data    := concat($config:nonfhir-data,'/ICal');
 declare variable $config:icalHistory  := concat($config:history-data,'/ICal');
+declare variable $config:schedule-data    := concat($config:nonfhir-data,'/ICal');
+declare variable $config:scheduleHistory  := concat($config:history-data,'/ICal');
 declare variable $config:uconfig-data    := concat($config:nonfhir-data,'/UserConfig');
 declare variable $config:uconfigHistory  := concat($config:history-data,'/UserConfig');
 

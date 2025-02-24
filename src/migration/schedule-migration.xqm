@@ -16,6 +16,7 @@ return
     let $data := calmigr:update-2.0($o)
     let $file := $data/@xml:id/string() || ".xml"
     return
+        system:as-user('vdba', 'kikl823!', (
             xmldb:store($config:ical-data, $file, $data)
             , sm:chmod(xs:anyURI($config:ical-data || '/' || $file), $config:data-perms)
             , sm:chgrp(xs:anyURI($config:ical-data || '/' || $file), $config:data-group)))

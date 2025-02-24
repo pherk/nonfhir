@@ -70,15 +70,16 @@ declare function nschedule:search-schedule($request as map(*)){
     let $elems  := $request?parameters?_elements
     let $type   := $request?parameters?type
     let $name   := $request?parameters?name
-    let $group  := $request?parameters?group
-    let $active := $request?parameters?active
+    let $serviceType := $request?parameters?serviceType
+    let $active := query:analyze($request?parameters?active,'boolean', true())
     let $lll := util:log-app('TRACE','app.nabu', $request?parameters)
-    let $hits0 := if ($type and $type!='')
-        then collection($config:ical-data)/schedule[type[@value=$type]][active[@value=$active]]
-        else collection($config:ical-data)/schedule[active[@value="true"]]
-    let $valid := if ($name)
-        then $hits0
-        else $hits0/schedule[matches(name/@value,$name)]
+    let $coll  := collection($config:ical-data)
+    let $hits0 := if (count($type)>0)
+        then $coll/ICal[active[@value=$active]][schedule[type[@value=$type]]
+        else $coll/ICal[active[@value=$active]]
+    let $valid := if (count($name)>0)
+        then $hits0/schedule[matches(name/@value,$name)]
+        else $hits0
 
     let $sorted-hits :=
         for $c in $hits0
@@ -87,10 +88,11 @@ declare function nschedule:search-schedule($request as map(*)){
             if (string-length($elems)>0)
             then
                 <ICal>
-                    {$c/id}
-                    {$c/type}
-                    {$c/name}
-                    {$c/ff}
+                  {$c/id}
+                { for $p in $c/*[not(self::id)]
+                  return
+                    if (local-name($p)=$elems) then $p else ()
+                }
                 </ICal>
             else $c
     return
@@ -124,6 +126,7 @@ declare function nschedule:update-schedule($request as map(*))
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
+    let $uuid   := $request?parameters?id
     let $content:= $request?parameters?body/node()
     let $isNew   := not($content/schedule/@xml:id)
     let $cid   := if ($isNew)

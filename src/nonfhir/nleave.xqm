@@ -83,8 +83,11 @@ declare function nleave:search-leave($request as map(*)){
             if (count($elems)>0)
             then
                 <Event>
-                    {$c/id}
-                    {$c/actor}
+                  {$c/id}
+                { for $p in $c/*[not(self::id)]
+                  return
+                    if (local-name($p)=$elems) then $p else ()
+                }
                 </Event>
             else $c
     return
@@ -147,6 +150,7 @@ declare function nleave:update-leave($request as map(*)){
     let $realm := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
+    let $uuid   := $request?parameters?id
     let $content := $request?body/node()
 
     let $isNew   := not($content/leave/@xml:id)

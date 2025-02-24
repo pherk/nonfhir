@@ -7,12 +7,12 @@ declare namespace rest   = "http://exquery.org/ns/restxq";
 declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
 declare namespace fhir   = "http://hl7.org/fhir";
 
-let $ec := collection('/db/apps/metisData/data/Leaves')
+let $ec := collection('/db/apps/metisData/data/FHIR/Leaves')
 let $es := $ec/leave
 
 let $realm := 'kikl-spz'
 
-for $o in subsequence($es,1,10)
+for $o in $es
 return
     let $data := leavemigr:update-2.0($o)
     let $file := $data/@xml:id/string() || ".xml"
