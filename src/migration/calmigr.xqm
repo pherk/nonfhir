@@ -30,14 +30,6 @@ declare function calmigr:update-2.0($c as item())
                     <code value="{if ($c/cutype//code/@value='person') then 'individual' else 'role'}"/>
                 </coding>
             </cutype>
-        else if (local-name($c)='schedule')
-        then
-            <cutype>
-                <coding>
-                    <system value="http://eNahar.org/ns/system/ical-usertype"/>
-                    <code value="{$c/type/@value/string()}"/>
-                </coding>
-            </cutype>
         else
             <cutype>
                 <coding>
@@ -61,7 +53,15 @@ declare function calmigr:update-2.0($c as item())
                     <code value="{$c/caltype//code/@value/string()}"/>
                 </coding>
             </caltype>
-        else
+        else if (local-name($c)='schedule')
+        then
+            <caltype>
+                <coding>
+                    <system value="http://eNahar.org/ns/system/ical-caltype"/>
+                    <code value="{$c/type/@value/string()}"/>
+                </coding>
+            </caltype>
+          else
             <caltype>
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-caltype"/>
