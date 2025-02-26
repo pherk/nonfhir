@@ -73,6 +73,10 @@ declare variable $config:schedule-data    := concat($config:nonfhir-data,'/ICal'
 declare variable $config:scheduleHistory  := concat($config:history-data,'/ICal');
 declare variable $config:uconfig-data    := concat($config:nonfhir-data,'/UserConfig');
 declare variable $config:uconfigHistory  := concat($config:history-data,'/UserConfig');
+declare variable $config:error-data    := concat($config:nonfhir-data,'/Error');
+declare variable $config:errorHistory  := concat($config:history-data,'/Error');
+declare variable $config:report-data   := concat($config:nonfhir-data,'/Report');
+declare variable $config:reportHistory := concat($config:history-data,'/Report');
 
 declare variable $config:resources := concat($config:root,'/resources');
 declare variable $config:templs    := concat($config:root,'/templates');

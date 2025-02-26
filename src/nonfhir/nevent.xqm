@@ -8,7 +8,7 @@ import module namespace query  = "http://eNahar.org/ns/nonfhir/query" at "../mod
 import module namespace nical  = "http://eNahar.org/ns/nonfhir/nical" at "../nonfhir/nical.xqm";
 import module namespace nholiday = "http://eNahar.org/ns/nonfhir/nholiday" at "../nonfhir/nholiday.xqm";
 import module namespace nleave = "http://eNahar.org/ns/nonfhir/nleave" at "../nonfhir/nleave.xqm";
-import module namespace cal2event = "http://eNahar.org/ns/nonfhir/cal2event" at "../nonfhir/cal2event.xqm";
+import module namespace cal2event = "http://eNahar.org/ns/nonfhir/cal2event" at "../nonfhir/ICal/cal2event.xqm";
 
 import module namespace roaster="http://e-editiones.org/roaster";
 import module namespace errors="http://e-editiones.org/roaster/errors";

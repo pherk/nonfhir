@@ -41,7 +41,7 @@ declare function nschedule:read-schedule($request as map(*)) as item()
     let $lognam := $request?parameters?lognam
     let $format := $request?parameters?_format
     let $uuid   := $request?parameters?id
-    let $schedules := collection($config:ical-data)/cal[id[@value=$uuid]]
+    let $schedules := collection($config:ical-data)/ICal[id[@value=$uuid]]
     return
         if (count($schedules)=1) then
         switch ($accept)
@@ -52,7 +52,7 @@ declare function nschedule:read-schedule($request as map(*)) as item()
 };
 
 (:~
- : GET: enahar/schedule?query
+ : GET: /Schedule?query
  : get schedules
  :
  : @param $type   string
@@ -75,7 +75,7 @@ declare function nschedule:search-schedule($request as map(*)){
     let $lll := util:log-app('TRACE','app.nabu', $request?parameters)
     let $coll  := collection($config:ical-data)
     let $hits0 := if (count($type)>0)
-        then $coll/ICal[active[@value=$active]][schedule[type[@value=$type]]
+        then $coll/ICal[active[@value=$active]][serviceType[@value=$type]]
         else $coll/ICal[active[@value=$active]]
     let $valid := if (count($name)>0)
         then $hits0/schedule[matches(name/@value,$name)]
@@ -128,37 +128,37 @@ declare function nschedule:update-schedule($request as map(*))
     let $lognam := $request?parameters?lognam
     let $uuid   := $request?parameters?id
     let $content:= $request?parameters?body/node()
-    let $isNew   := not($content/schedule/@xml:id)
+    let $isNew   := not($content/ICal/@xml:id)
     let $cid   := if ($isNew)
-        then switch($content/schedule/type/@value) 
-             case 'meeting' return "me-" || $content/schedule/name/@value/string()
-             default return 'sched-' || $content/schedule/name/@value/string()
+        then switch($content/ICal/caltype//code/@value) 
+             case 'meeting' return "me-" || $content/ICal/name/@value/string()
+             default return 'sched-' || $content/ICal/name/@value/string()
         else 
-            let $id := $content/schedule/id/@value/string()
-            let $scheds := collection($config:ical-data)/schedule[id[@value = $id]]
+            let $id := $content/ICal/id/@value/string()
+            let $scheds := collection($config:ical-data)/ICal[id[@value = $id]]
             let $move := mutil:moveToHistory($scheds, $config:icalHistory)
             return
                 $id
     let $version := if ($isNew) 
         then "0"
-        else xs:integer($content/schedule/meta/versionId/@value/string()) + 1
-    let $elems := $content/schedule/*[not(
+        else xs:integer($content/ICal/meta/versionId/@value/string()) + 1
+    let $elems := $content/ICal/*[not(
                    self::meta
                 or self::id
                 or self::identifier
                 )]
     let $uuid := if ($isNew)
-        then switch($content/schedule/type/@value) 
+        then switch($content/ICal/caltype//code/@value) 
              case 'meeeting' return "me-" || util:uuid()
              default return 'sched-' || util:uuid()
         else $cid
-    let $meta := $content/schedule/meta/*[not(
-                   self::versionID
+    let $meta := $content/ICal/meta/*[not(
+                   self::versionId
                 or self::lastUpdated
                 or self::extension
                 )]
     let $data :=
-        <schedule xml:id="{$uuid}">
+        <ICal xml:id="{$uuid}">
             <id value="{$cid}"/>
             <meta>
                 <versionId value="{$version}"/>
@@ -176,7 +176,7 @@ declare function nschedule:update-schedule($request as map(*))
                 <value value="{$cid}"/>
             </identifier>
             {$elems}
-        </schedule>
+        </ICal>
         
 (:
     let $lll := util:log-app('TRACE','apps.nabu',$data)

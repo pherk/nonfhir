@@ -165,7 +165,7 @@ declare function nleave:update-leave($request as map(*)){
 
     let $version := if ($isNew)
         then "0"
-        else xs:integer($content/leave/meta/versionID/@value/string()) + 1
+        else xs:integer($content/leave/meta/versionId/@value/string()) + 1
     let $elems := $content/leave/*[not(
                     self::meta
                 or  self::id
