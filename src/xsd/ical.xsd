@@ -52,7 +52,9 @@
           <xs:element name="specialty" minOccurs="0" maxOccurs="unbound" type="CodeableConcept">
           </xs:element>
           <xs:element name="actor" minOccurs="1" maxOccurs="unbound" type="Reference">
-          <xs:annotation>was owner</xs:annotation>
+             <xs:annotation>
+               <xs:documentation xml:lang="en">was owner.</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
