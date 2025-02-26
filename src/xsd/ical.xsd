@@ -170,7 +170,6 @@
           </xs:element>
           <xs:element name="exdate" minOccurs="0" maxOccurs="unbound" type="date">
           </xs:element>
-          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
