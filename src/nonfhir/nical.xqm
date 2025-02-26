@@ -64,18 +64,23 @@ declare function nical:search-ical($request as map(*)){
     let $period := $request?parameters?period
     let $fillSpecial := $request?parameters?fillSpecial
     let $active := query:analyze($request?parameters?active, "boolean", true())
-    let $oref := concat('metis/practitioners/', $actor)
     let $coll := collection($config:ical-data)
-    let $hits0 := if (count($actor)>0)
-        then $coll/ICal[actor/reference[@value=$oref]][active[@value=$active]]
-        (: from PractitionerRole/code mapping? specialty :)
-        else if (count($service)>0)
-        then $coll/ICal[serviceType//code[@value=$service]][active[@value=$active]]
+    let $hits0 := if (count($cutype)>0)
+        then $coll/ICal[cutype//code[@value=$cutype]][active[@value=$active]]
         else $coll/ICal[active[@value=$active]]
+    let $hits1 := if (count($cutype)>0)
+        then $hits0/../ICal[caltype//code[@value=$cutype]]
+        else $hits0
+    let $hits2 := if (count($actor)>0)
+        then let $oref := concat('metis/practitioners/', $actor)
+             return $hits1/../ICal[actor/reference[@value=$oref]]
+        else if (count($service)>0)
+        then $hits1/../ICal[serviceType//code[@value=$service]]
+        else $hits1
 
     let $matched :=
-        for $c in $hits0
-        order by lower-case($c/actor/display/@value/string())
+        for $c in $hits2
+        order by lower-case($c/name/@value/string())
         return
             if (count($elems)>0)
             then
