@@ -38,7 +38,7 @@
           </xs:element>
           <xs:element name="active" minOccurs="0" maxOccurs="1" type="boolean">
             <xs:annotation>
-              <xs:documentation xml:lang="en">Whether this ICal record is in active use. 
+              <xs:documentation xml:lang="en">Whether this ICal record is in active use.</xs:documentation>
            </xs:annotation>
           </xs:element>
           <xs:element name="cutype" minOccurs="0" maxOccurs="1" type="CodeableConcept">
@@ -64,7 +64,6 @@
           </xs:element>
           <xs:element name="schedule" minOccurs="0" maxOccurs="unbound" type="ICal.Schedule">
           </xs:element>
-        <attributes>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

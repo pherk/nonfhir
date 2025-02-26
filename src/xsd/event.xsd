@@ -37,7 +37,7 @@
           </xs:element>
           <xs:element name="status" minOccurs="1" maxOccurs="1" type="code">
             <xs:annotation>
-              <xs:documentation xml:lang="en">Whether this calevent record is active or completed. 
+              <xs:documentation xml:lang="en">Whether this calevent record is active or completed.</xs:documentation>
            </xs:annotation>
           </xs:element>
           <xs:element name="code" minOccurs="0" maxOccurs="1" type="CodeableConcept">
@@ -60,7 +60,6 @@
           </xs:element>
           <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="Rendering">
           </xs:element>
-        <attributes>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

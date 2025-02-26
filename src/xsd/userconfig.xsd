@@ -37,7 +37,7 @@
           </xs:element>
           <xs:element name="active" minOccurs="0" maxOccurs="1" type="boolean">
             <xs:annotation>
-              <xs:documentation xml:lang="en">Whether this user record is in active use. 
+              <xs:documentation xml:lang="en">Whether this user record is in active use.</xs:documentation>
            </xs:annotation>
           </xs:element>
           <xs:element name="subject" minOccurs="1" maxOccurs="1" type="Reference">
@@ -76,6 +76,7 @@
           <xs:element name="room" minOccurs="0" maxOccurs="unbound" type="code">
           </xs:element>
           <xs:element name="card" type="Card" minOccurs="0" maxOccurs="unbounded">
+          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

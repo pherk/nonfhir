@@ -37,7 +37,7 @@
           </xs:element>
           <xs:element name="active" minOccurs="0" maxOccurs="1" type="boolean">
             <xs:annotation>
-              <xs:documentation xml:lang="en">Whether this card record is in active use. 
+              <xs:documentation xml:lang="en">Whether this card record is in active use.</xs:documentation>
            </xs:annotation>
           </xs:element>
           <xs:element name="title" minOccurs="1" maxOccurs="1" type="string">
