@@ -12,8 +12,8 @@ import module namespace date  = "http://eNahar.org/ns/lib/date";
 (:~
 import module namespace xqtime= "http://eNahar.org/ns/lib/xqtime";
 :)
-import module namespace cal-util = "http://eNahar.org/ns/nonfhir/cal-util" at "../nonfhir/ICal/cal-utils.xqm";
-import module namespace meeting = "http://eNahar.org/ns/nonfhir/meeting" at "../nonfhir/ICal/meeting.xqm";
+import module namespace cal-util = "http://eNahar.org/ns/nonfhir/cal-util" at "../ICal/cal-utils.xqm";
+import module namespace meeting = "http://eNahar.org/ns/nonfhir/meeting" at "../ICal/meeting.xqm";
 
 
 declare %private function cal2event:isSpecialAmb($g) as xs:boolean

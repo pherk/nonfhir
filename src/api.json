@@ -1190,7 +1190,12 @@
             "in": "query",
             "description": "user type of ical",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "primary",
+                "role",
+                "schedule"
+              ]
             }
           },
           {
@@ -1198,7 +1203,14 @@
             "in": "query",
             "description": "type of ical",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "service",
+                "function",
+                "worktime",
+                "meeting",
+                "holiday"
+              ]
             }
           },
           {

@@ -2,6 +2,8 @@ xquery version "3.1";
 
 module namespace calmigr = "http://eNahar.org/ns/nonfhir/cal-migration";
 
+import module namespace date = "http://eNahar.org/ns/lib/date";
+
 declare namespace rest   = "http://exquery.org/ns/restxq";
 declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
 declare namespace fhir   = "http://hl7.org/fhir";
@@ -101,7 +103,7 @@ declare function calmigr:update-2.0($c as item())
             <versionId value="{$version}"/>
                 <extension url="https://eNahar.org/ns/extension/lastModifiedBy">
                     <valueReference>
-                        <reference value="Practitioner/{$loguid}"/>
+                        <reference value="{$loguid}"/>
                         <display value="{$lognam}"/>
                     </valueReference>
                 </extension>

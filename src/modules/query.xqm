@@ -37,7 +37,7 @@ declare function query:analyze(
      case "string"    return tokenize($s, ",")
      case "reference" return tokenize($s, ",")
      case "token"     return tokenize($s, ",")
-     case "boolean"   return (for $bs in tokenize($s, ",") then xs:boolean($bs) else ())[1]
+     case "boolean"   return (for $bs in tokenize($s, ",") return xs:boolean($bs))[1]
      case "date"      return let $ds := tokenize($s, ",")
                            for $d in $ds
                            return query:analyzeDate($d)

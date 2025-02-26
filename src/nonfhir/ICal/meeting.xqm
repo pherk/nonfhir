@@ -13,7 +13,7 @@ module namespace meeting = "http://eNahar.org/ns/nonfhir/meeting";
 
 import module namespace functx =  "http://www.functx.com";
 
-import module namespace cal-util = "http://eNahar.org/ns/nonfhir/cal-util" at "../nonfhir/ICal/cal-utils.xqm";
+import module namespace cal-util = "http://eNahar.org/ns/nonfhir/cal-util" at "../ICal/cal-utils.xqm";
 import module namespace ical  = "http://eNahar.org/ns/lib/ical";
 import module namespace ice   = "http://eNahar.org/ns/lib/ice";
 import module namespace xqtime= "http://eNahar.org/ns/lib/xqtime";

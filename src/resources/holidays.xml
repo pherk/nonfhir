@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ICal>
+<ICal xml:id="ical-holidays">
   <id value="ical-holidays"/>
   <meta>
     <tag>
       <text value=""/>
     </tag>
     <versionId value="0"/>
+    <lastUpdated value="2025-02-27T020:00:00"/>
   </meta>
   <identifier>
       <use value="usual"/>
@@ -16,23 +17,25 @@
   <active value="true"/>
   <cutype>
     <coding>
-      <system value="http://eNahar.org/ns/extension/ical-type"/>
-      <code value="system"/>
-      <display value="Feiertage"/>
+      <system value="http://eNahar.org/ns/extension/ical-usertype"/>
+      <code value="schedule"/>
      </coding>
-    <text value="Feiertage"/>
   </cutype>
   <caltype>
     <coding>
       <system value="http://eNahar.org/ns/extension/ical-caltype"/>
-        <code value="primary"/>
-        <display value="Hauptkalender"/>
+        <code value="holiday"/>
+        <display value="Feiertage"/>
       </coding>
-      <text value="Hauptkalender"/>
+      <text value="Feiertage"/>
   </caltype>
   <name value="holidays"/>
   <comment value="Holiday Profile for Germany/Nordrhein-Westphalen.\nThe structure definition is similar to fhir:Schedule. The semantic deviates from ical rfc5445 and rfc6321.\nFurther details see Wiki."/>
   <timezone value="MEZ"/>
+  <location>
+      <reference value="metis/locations/kikl-spz"/>
+      <display value="UKK Köln SPZ"/>
+  </location>
   <schedule>
     <className value="holiday"/>
     <blocking value="true"/>

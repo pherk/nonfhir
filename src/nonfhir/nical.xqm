@@ -57,6 +57,8 @@ declare function nical:search-ical($request as map(*)){
     let $format := $request?parameters?_format
     let $elems  := query:analyze($request?parameters?_elements, "string")
     let $actor  := $request?parameters?actor
+    let $cutype := $request?parameters?cutype
+    let $caltype  := $request?parameters?caltype
     let $service  := $request?parameters?serviceType
     let $schedule := $request?parameters?schedule
     let $period := $request?parameters?period
