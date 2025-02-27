@@ -35,8 +35,8 @@ declare function nholiday:read-holiday($request as map(*))
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
-    let $uuid := $request?parameters?uuid
-    let $hdes := collection($config:holiday-data)/ICal[id/@value="ical-holidays"]
+    let $uuid := $request?parameters?id
+    let $hdes := collection($config:holiday-data)/ICal[id/@value=$uuid]
     return
       if (count($hdes)=1) then
         switch ($accept)
@@ -66,7 +66,7 @@ declare function nholiday:search-holiday($request as map(*))
     let $name   := query:analyze($request?parameters?name, "string")
     let $period := query:analyze($request?parameters?period, "date")
     let $type   := query:analyze($request?parameters?type, "string")
-    let $hds    := collection($config:holiday-data)/ICal
+    let $hds    := collection($config:holiday-data)/ICal[caltype//code[@value='holiday']]
     let $events := if (count($name)>0)
         then $hds//event[name/@value=$name]
         else $hds//event
