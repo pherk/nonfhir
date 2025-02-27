@@ -70,10 +70,10 @@ declare function nleave:search-leave($request as map(*)){
 	        then $period[prefix/@value="ge"]/value/@value
 	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
     let $hits0 := if (count($owner)=0)
-        then $coll/Event[period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
+        then $coll/Event[code//code[@value='leave']][period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
         else let $oref := concat('metis/practitioners/', $owner)
             return 
-                $coll/Event[actor/reference[@value=$oref]][period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
+                $coll/Event[code//code[@value='leave']][actor/reference[@value=$oref]][period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
 
     let $sorted-hits :=
         for $c in $hits0

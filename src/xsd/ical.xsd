@@ -57,11 +57,9 @@
           </xs:element>
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
+          <xs:element name="organization" minOccurs="0" maxOccurs="unbound" type="Reference">
+          </xs:element>
           <xs:element name="comment" minOccurs="0" maxOccurs="1" type="markdown">
-          </xs:element>
-          <xs:element name="timezone" minOccurs="0" maxOccurs="1" type="code">
-          </xs:element>
-          <xs:element name="location" minOccurs="0" maxOccurs="1" type="Reference">
           </xs:element>
           <xs:element name="schedule" minOccurs="0" maxOccurs="unbound" type="ICal.Schedule">
           </xs:element>
@@ -85,6 +83,8 @@
           <xs:element name="ff" minOccurs="0" maxOccurs="1" type="boolean">
           </xs:element>
           <xs:element name="period" minOccurs="0" maxOccurs="1" type="Period">
+          </xs:element>
+          <xs:element name="timezone" minOccurs="0" maxOccurs="1" type="code">
           </xs:element>
           <xs:element name="venue" minOccurs="0" maxOccurs="1" type="ICal.Venue">
           </xs:element>

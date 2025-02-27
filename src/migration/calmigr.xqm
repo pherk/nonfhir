@@ -113,6 +113,12 @@ declare function calmigr:update-2.0($c as item())
         <active value="{$active}"/>
         {$cutype}
         {$caltype}
+        <serviceCategory>
+          <coding>
+            <system value="http://hl7.org/fhir/ValueSet/service-category"/>
+            <code value="SPZ"/>
+          </coding>
+        </serviceCategory>
         {$serviceType}
         <specialty>
             <coding>
@@ -121,10 +127,12 @@ declare function calmigr:update-2.0($c as item())
             </coding>
         </specialty>
         {$actor}
+        <organization>
+          <reference value="Organization/kikl-spz"/>
+          <display value="UKK SPZ"/>
+        </organization>
         <name value="{$name}"/>
         <comment value="{$comment}"/>
-        {$c/timezone}
-          {$location}
         { if (local-name($c)="cal")
         then
             for $s in $c/schedule
@@ -203,6 +211,7 @@ declare function calmigr:update-schedule-2.0($s as item())
         {$s/isSpecial}
         {$s/ff}
         {$period}
+        <timezone value="MEZ"/>
         <venue>
           <priority value="normal"/>
           {$location}
