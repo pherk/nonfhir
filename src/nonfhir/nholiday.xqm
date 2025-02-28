@@ -91,10 +91,10 @@ declare function nholiday:search-holiday($request as map(*))
               else
                 let $attributes := 
                  ( 
-                   <class>{$hds//className/@value/string()}</class>
-                 , <backgroundColor>#006400</backgroundColor>
-                 , <textColor>#ffffff</textColor>
-                 , <editable>{$hds/editable/@value/string()}</editable>
+                   <className value="{$hds//className/@value/string()}"/>
+                 , <backgroundColor value="#006400"/>
+                 , <textColor value="#ffffff"/>
+                 , <editable value="{$hds/editable/@value/string()}"/>
                  )
                 return
                   nholiday:fc-event($hde, $date, $attributes)
@@ -108,7 +108,7 @@ declare function nholiday:search-holiday($request as map(*))
         default return error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
 
-declare %private function nholiday:fc-event($e as element(Event), $date as xs:date, $attributes as item()*) as element(Event)?
+declare %private function nholiday:fc-event($e as element(event), $date as xs:date, $attributes as item()*) as element(Event)?
 {
   <Event>
     <id value="{$e/name/@value/string()}"/>
@@ -124,7 +124,7 @@ declare %private function nholiday:fc-event($e as element(Event), $date as xs:da
     </period>
     <rendering>
       {$attributes/*[not( self::editable or  self::allDay) ]}
-      <editable>false</editable>
+      <editable value="false"/>
       <allDay value="{$e/type/@value='official'}"/>
     </rendering>
   </Event>

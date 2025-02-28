@@ -10,6 +10,10 @@ xquery version "3.1";
 :)
 module namespace inventory = "http://eNahar.org/ns/lib/inventory";
 
+declare namespace xs   = "http://www.w3.org/2001/XMLSchema";
+declare namespace fhir = "http://hl7.org/fhir";
+declare namespace xhtml= "http://www.w3.org/1999/xhtml";
+
 declare variable $inventory:baseComplexTypes :=
     (
           'Extension'
@@ -62,6 +66,7 @@ declare variable $inventory:baseComplexTypes :=
         , "ElementDefinition.Binding"
         , "ElementDefinition.Discriminator"
         , "ParameterDefinition"
+        , 'Rendering'
     );
 declare variable $inventory:primitive :=
     (
@@ -125,7 +130,8 @@ declare variable $inventory:complex :=
         , 'SampledData'
         , 'Signature'
         , 'Timing'
-        , 'meta'
+        , 'Meta'
+        , 'Rendering'
     );
 declare variable $inventory:complexMeta := 
     (
@@ -179,13 +185,13 @@ declare function inventory:baseInfo(
         $fhir_version
     ) as element(base)
 {
-    let $inventory:base := doc('/db/apps/nabu/FHIR-XSD-' || $fhir_version || '/fhir-base.xsd')
+    let $inventory:base := (doc('/db/apps/nonfhir/xsd/fhir-base.xsd'),doc('/db/apps/nonfhir/xsd/rendering.xsd'))
     let $xsd-complex  := $inventory:base/xs:schema/xs:complexType[not(@name=$inventory:primitive)]
     let $simple := for $e in $inventory:primitive
             return
                 <simple name='{$e}' class='primitive'/>
     let $complex := for $c in $xsd-complex
-            let $cont := $c/xs:complexContent/xs:extension[@base='Element']
+            let $cont := $c/xs:complexContent/xs:extension[@base=('DataType','Element')]
             return
                 if ($cont/xs:sequence)
                 then
@@ -235,7 +241,7 @@ declare %private function inventory:element(
           $e as element(xs:element)
         , $domain as xs:string*) as element(element)
 {
-(:
+(: 
 let $lll := util:log-app('TRACE','apps.nabu',$e)
 let $lll := util:log-app('TRACE','apps.nabu',$domain)
 :)
@@ -303,7 +309,7 @@ declare function inventory:domainInfo(
     , $fhir_version as xs:string
     ) as element(domain)
 {
-    let $inventory:xsd := collection('/db/apps/nabu/FHIR-XSD-' || $fhir_version)
+    let $inventory:xsd := collection('/db/apps/nonfhir/xsd')
 
     let $xsd-domain := $inventory:xsd/xs:schema/xs:complexType[@name=$domain]/xs:complexContent/xs:extension[@base=('DomainResource','BackboneElement','Resource')]
     let $xsd-elems  := $xsd-domain/xs:sequence/xs:element |
@@ -348,7 +354,7 @@ declare function inventory:datatypeInfo(
     , $fhir_version as xs:string
     ) as item()*
 {
-    let $inventory:xsd := collection('/db/apps/nabu/FHIR-XSD-' || $fhir_version)
+    let $inventory:xsd := collection('/db/apps/nonfhir/xsd')
     let $xsd-domain := $inventory:xsd/xs:schema/xs:complexType[@name=$datatype]/xs:complexContent/xs:extension[@base='Element']
     let $xsd-attribute := $xsd-domain/xs:attribute
     let $class := inventory:typeclass($datatype)

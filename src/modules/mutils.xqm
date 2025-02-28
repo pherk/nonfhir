@@ -156,7 +156,7 @@ declare function mutil:prepareResultBundleJSON(
                 <lastUpdated value="{date:now()}"/>
             </meta>  
             <type value="searchset"/>   
-            <total value="3"/> 
+            <total value="{$count}"/> 
             <link> 
                 <relation value="self"/> 
                 <url value="https://example.com/base/PractitionerRole?patient=347&amp;_include=MedicationRequest.medication"/> 

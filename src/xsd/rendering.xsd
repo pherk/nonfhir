@@ -28,7 +28,7 @@
       <xs:documentation xml:lang="en">If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
-      <xs:extension base="Element">
+      <xs:extension base="DataType">
         <xs:sequence>
           <xs:element name="className" minOccurs="0" maxOccurs="1" type="string">
           </xs:element>
