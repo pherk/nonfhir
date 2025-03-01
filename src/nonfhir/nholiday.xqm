@@ -90,12 +90,12 @@ declare function nholiday:search-holiday($request as map(*))
               then nholiday:fc-event($hde, $date, ())
               else
                 let $attributes := 
-                 ( 
+                 <attrs> 
                    <className value="{$hds//className/@value/string()}"/>
-                 , <backgroundColor value="#006400"/>
-                 , <textColor value="#ffffff"/>
-                 , <editable value="{$hds/editable/@value/string()}"/>
-                 )
+                   <backgroundColor value="#006400"/>
+                   <textColor value="#ffffff"/>
+                   <editable value="{$hds/editable/@value/string()}"/>
+                 </attrs>
                 return
                   nholiday:fc-event($hde, $date, $attributes)
           else ()
@@ -112,6 +112,13 @@ declare %private function nholiday:fc-event($e as element(event), $date as xs:da
 {
   <Event>
     <id value="{$e/name/@value/string()}"/>
+    <status value="in-progress"/>
+    <code>
+      <coding>
+        <system value="http://eNahar.org/ns/system/event-code"/>
+        <code value="holiday"/>
+      </coding>
+    </code>
     <title value="{$e/description/@value/string()}"/>
     <type value="{$e/type/@value/string()}"/>
     <period>

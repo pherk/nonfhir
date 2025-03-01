@@ -35,6 +35,10 @@
               <xs:documentation xml:lang="en">An identifier for this calevent.</xs:documentation>
            </xs:annotation>
           </xs:element>
+          <xs:element name="basedOn" minOccurs="0" maxOccurs="1" type="Reference">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">References the ICal the Event bases on</xs:documentation>
+           </xs:annotation>
           <xs:element name="status" minOccurs="1" maxOccurs="1" type="code">
             <xs:annotation>
               <xs:documentation xml:lang="en">Whether this calevent record is active or completed.</xs:documentation>
@@ -58,7 +62,34 @@
           </xs:element>
           <xs:element name="note" minOccurs="0" maxOccurs="1" type="Annotation">
           </xs:element>
+          <xs:element name="timing" minOccurs="0" maxOccurs="1" type="Event.Timing">
+          </xs:element>
           <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="Rendering">
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Event.Timing">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">timing defaults for dating.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="BackboneElement">
+        <xs:sequence>
+          <xs:element name="pre" minOccurs="0" maxOccurs="1" type="integer">
+          </xs:element>
+          <xs:element name="exam" minOccurs="0" maxOccurs="1" type="integer">
+          </xs:element>
+          <xs:element name="post" minOccurs="0" maxOccurs="1" type="integer">
+          </xs:element>
+          <xs:element name="overBookable" minOccurs="0" maxOccurs="1" type="boolean">
+          </xs:element>
+          <xs:element name="blocking" minOccurs="0" maxOccurs="1" type="boolean">
+          </xs:element>
+          <xs:element name="parallelPerHour" minOccurs="0" maxOccurs="1" type="integer">
+          </xs:element>
+          <xs:element name="query" minOccurs="0" maxOccurs="1" type="code">
           </xs:element>
         </xs:sequence>
       </xs:extension>

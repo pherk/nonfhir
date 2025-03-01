@@ -59,12 +59,12 @@ declare function nevent:search-event($request as map(*))
     let $lll := util:log-app('TRACE', 'apps.eNahar', $leaves)
 :)
     (: get all relevant schedules :)
-    let $refdss    := distinct-values($services/scheduleReference/reference/@value)
+    let $refdss    := distinct-values($services/basedOn/reference/@value)
     let $schedules := collection($config:schedule-base)/schedule[identifier/value[@value=$refdss]][active[@value="true"]]
  
     let $lll := util:log-app('TRACE', 'apps.eNahar', $schedules/name)
 
-    let $matched := cal2event:cal2xml($services, $s, $e, $hds, $leaves, $schedules,$fillSpecial='true')
+    let $matched := cal2event:slot-events($services, $s, $e, $hds, $leaves, $schedules, $fillSpecial='true')
     return
         switch ($accept)
         case "application/xml" return 

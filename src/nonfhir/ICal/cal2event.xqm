@@ -21,15 +21,15 @@ declare %private function cal2event:isSpecialAmb($g) as xs:boolean
     $g/isSpecial/@value='true' and $g/ff/@value='true'
 };
 
-declare function cal2event:cal2xml(
-          $services as element(cal)*
+declare function cal2event:slot-events(
+          $services as element(ICal)*
         , $start as xs:dateTime
         , $end as xs:dateTime
-        , $hds as element(event)*
-        , $leaves as element(leave)*
-        , $schedules as element(schedule)*
+        , $hds as element(Event)*
+        , $leaves as element(Event)*
+        , $schedules as element(ICal)*
         , $fillSpecial as xs:boolean
-        ) as item()*
+        ) as element(Event)*
 {
     let $meetings := $schedules[type[@value='meeting']]
     let $refdss   := $schedules[type[@value='service']]
@@ -47,80 +47,95 @@ declare function cal2event:cal2xml(
     let $date  := xs:date(format-date($sa + xs:dayTimeDuration('P1D')*$d,"[Y0001]-[M01]-[D01]"))
     let $hd := cal-util:isHoliday($date, $hds)
     return
-        <day>
-            <date value="{$date}"/>
-        {
-            if (cal-util:isAllDayHoliday($hd)) 
-            then    ()
-            else
-                for $s in distinct-values($services/schedule/global/reference/@value)
-                let $sdisp   := head($services/schedule/global[reference/@value=$s]/display/@value/string())
-                let $agendas := if ($fillSpecial and cal2event:isSpecialAmb($services/schedule/global[reference/@value=$s]))
+       if (cal-util:isAllDayHoliday($hd)) 
+       then    ()
+       else
+          for $s in distinct-values($services/schedule/basedOn/reference/@value)
+          let $sdisp   := head($services/schedule/basedOn[reference/@value=$s]/display/@value/string())
+          let $agendas := if ($fillSpecial and cal2event:isSpecialAmb($services/schedule/basedOn[reference/@value=$s]))
                     then if ($date >= $nowd1 and $date <= $nowd14)
                          then cal-util:filterValidAgendas(
-                                      $services/schedule[global/reference/@value=$s]/agenda
+                                      $services/schedule[basedOn/reference/@value=$s]/schedule
                                     , $now1
                                     , min(($now14,$end)))
                          else ()
                     else cal-util:filterValidAgendas(
-                                      $services/schedule[global/reference/@value=$s]/agenda
+                                      $services/schedule[basedOn/reference/@value=$s]/schedule
                                     , $start
                                     , $end)
-                let $timing  := $refdss/../schedule[identifier/value[@value=$s]]/timing
+          let $timing  := $refdss/../schedule[identifier/value[@value=$s]]/timing
+          return
+            if (count($agendas)=0)
+              then ()
+              else
+                for $a in distinct-values($services/actor/reference/@value)
+                let $acal := $services[actorr/reference/@value=$a]
+                let $name := $acal/actor/display/@value/string()
+                let $isAllDayLeave := cal-util:isAllDayLeave($date, $a, $leaves)
                 return
-                    if (count($agendas)>0)
-                    then
-                        <schedule ref="{$s}" display="{$sdisp}">
-                        { $timing }
-                        {
-                            for $a in distinct-values($services/owner/reference/@value)
-                            let $acal := $services[owner/reference/@value=$a]
-                            let $name := $acal/owner/display/@value/string()
-                            let $isAllDayLeave := cal-util:isAllDayLeave($date, $a, $leaves)
-                            return
-                                if ($isAllDayLeave)
-                                then ()
-                                else
+                  if ($isAllDayLeave)
+                  then ()
+                  else
         let $lll := util:log-app('TRACE','apps.eNahar',$date) 
-                                    let $shifts    := cal-util:filterValidAgendas($acal/schedule[global/reference/@value=$s]/agenda,$date)/event
-                                    let $rrEvents  := (ice:match-rdates(dateTime($date,xs:time("00:00:00")),$shifts)
+                    let $shifts    := cal-util:filterValidAgendas($acal/schedule[basedOn/reference/@value=$s]/agenda,$date)/event
+                    let $rrEvents  := (ice:match-rdates(dateTime($date,xs:time("00:00:00")),$shifts)
                                                       ,ice:match-rrules(dateTime($date,xs:time("00:00:00")), $shifts))
 
         let $lll := util:log-app('TRACE','apps.eNahar',$rrEvents) 
 
-                                    let $exEvents  := ice:match-exdates($date,$shifts)
-                                    let $rawEvents := functx:distinct-nodes($rrEvents[not(.=$exEvents)])
-                                    let $rawTPs    := cal-util:event2tp($date, $rawEvents)
+                    let $exEvents  := ice:match-exdates($date,$shifts)
+                    let $rawEvents := functx:distinct-nodes($rrEvents[not(.=$exEvents)])
+                    let $rawTPs    := cal-util:event2tp($date, $rawEvents)
 (: 
         let $lll := util:log-app('TRACE','apps.eNahar',$rawTPs)
 :)
-                                    let $mes  := meeting:events($acal,$date,$meetings)
-                                    let $validTPs  := cal-util:filterPartialLeaves($rawTPs,$date,$a,$leaves,$hd,$mes)
+                    let $mes  := meeting:events($acal,$date,$meetings)
+                    let $validTPs  := cal-util:filterPartialLeaves($rawTPs,$date,$a,$leaves,$hd,$mes)
   
         let $lll := util:log-app('TRACE','apps.eNahar',$validTPs)
-
-                                    return
-                                        if (count($validTPs)>0)
-                                        then 
-                                            <actor ref="{$a}" display="{$name}">
-                                                {   
-                                                    if ($acal/schedule[global/reference/@value=$s]/timing)
-                                                    then
+                    return
+                      if (count($validTPs)=0)
+                      then ()
+                      else
+                        let $timing := if ($acal/schedule[basedOn/reference/@value=$s]/timing)
+                              then
                                                         cal2event:merge(
                                                           $refdss[identifier/value/@value=$s]/timing/*
-                                                        , $acal/schedule[global/reference/@value=$s]/timing/*
+                                                        , $acal/schedule[basedOn/reference/@value=$s]/timing/*
                                                         )
-                                                    else ()
-                                                }
-                                                { $validTPs }
-                                            </actor>
-                                        else
-                                            ()
-                        }
-                        </schedule>
-                    else ()
-        }
-        </day>
+                              else ()
+                        for $tp in $validTPs
+                        return
+        <Event>
+          <id value="{uuid:id()}"/>
+          <extension url="http://eNahar.org/ns/extension/event-date">
+            <valueDate value="{$date}"/>
+          </extension>
+          <status value="in-progress"/>
+          <code>
+            <coding>
+             <system value="http://eNahar.org/ns/system/event-code"/>
+              <code value="ical"/>
+            </coding>
+          <code>
+          <basedOn>
+            <reference value="{$s}"/>
+            <display value="{$sdisp}"/>
+          </basedOn>
+          <type value="slot"/>
+          <actor>
+            <reference value="{$a}"/>
+            <display value="{$name}"/>
+          </actor>
+          <period>
+            <start value="{$tp/@start/string()"/>
+            <end value="{$tp/@end/string()}"/>
+          </period>
+          <location>
+            <reference value=""/>
+            <display value=""/>
+          </location>
+        </Event>
 }; 
 
 declare function cal2event:merge(
@@ -145,13 +160,13 @@ declare function cal2event:merge(
                 element { $k } { attribute value { map:get($params,$k) }}
 };
 
-declare function cal2event:cal2fc-events(
-          $cal as element(cal)
+declare function cal2event:ical-events(
+          $cal as element(ICal)
         , $start as xs:dateTime
         , $end as xs:dateTime
-        , $hds as element(event)*
-        , $leaves as element(leave)*
-        , $schedules as element(schedule)*
+        , $hds as element(Event)*
+        , $leaves as element(Event)*
+        , $schedules as element(ICal)*
         ) as item()*
 {
     let $meetings := $schedules[type/@value='meeting']
@@ -173,8 +188,8 @@ declare function cal2event:cal2fc-events(
           , "rendering": "background"
           }
     let $s := xs:date(format-dateTime($start,"[Y0001]-[M01]-[D01]"))
-    for $ups in ($cal/schedule[global/type/@value='service'], $meetings)
-    let $isService := $ups/global/type/@value='service'
+    for $ups in ($cal/schedule[type/@value='service'], $meetings)
+    let $isService := $ups/type/@value='service'
     let $title    := if ($ups/global)
         then $ups/global/display/@value/string() (: cal schedules :)
         else $ups/name/@value/string()           (: meeting schedules :)
@@ -247,18 +262,14 @@ declare %private function cal2event:fc-eventJSON(
             map {
               "resourceType" : "Event"
             , "id" : $id
+            , "status" : "in-progress"
+            , "code" : map {"coding" : map {"system" : "http://eNahar.org/ns/system-event-code", "code" : "ical"}}
             , "title" : $title
             , "description": $desc
+            , "type" : "fullcalendar"
             , "period" : map {"start" : $start, "end": $end}
             , "location": map {"display" : "3.xxx"}
-            , "rendering" : map {
-                    "class": "blue"
-                  , "backgroundColor": "lightblue"
-                  , "textColor": "black"
-                  , "rendering": "background"
-                  , "editable": false
-                  , "allDay": false
-                  }
+            , "rendering" : $attr
             }
     else ()
 };
