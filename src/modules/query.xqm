@@ -16,7 +16,7 @@ declare namespace fhir   = "http://hl7.org/fhir";
 declare function query:analyze(
       $params as item()*
     , $type as xs:string
-    , $default as item()
+    , $default as item()+
     ) as item()+
 {
   let $r := query:analyze($params,$type)

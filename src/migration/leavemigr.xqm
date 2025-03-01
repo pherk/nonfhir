@@ -36,6 +36,7 @@ declare function leavemigr:update-2.0($e as item())
         <status value="{$e/status//code/@value/string()}"/>
         <code>
             <coding>
+                <system value="http://eNahar.org/ns/system/event-code"/>
                 <code value="leave"/>
             </coding>
         </code>
@@ -45,7 +46,9 @@ declare function leavemigr:update-2.0($e as item())
         {$e/description}
         {$e/period}
         <reasonCode>
-            {$e/cause/*}
+          <coding>
+            <system value="http://eNahar.org/ns/system/event-reason"/>
+            {$e/cause/coding/*}
         </reasonCode>
         {$note}
         </Event>

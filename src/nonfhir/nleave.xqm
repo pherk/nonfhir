@@ -52,7 +52,7 @@ declare function nleave:read-leave($request as map(*)) as item()
  :)
 declare function nleave:search-leave($request as map(*)){
     let $user   := sm:id()//sm:real/sm:username/string()
-    let $accept := $request?parameters?accept
+    let $accept := $request?accept
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
@@ -61,7 +61,7 @@ declare function nleave:search-leave($request as map(*)){
     let $actor  := query:analyze($request?parameters?actor,"reference")
     let $group  := query:analyze($request?parameters?group, "string")
     let $period := query:analyze($request?parameters?period, "date")
-    let $status := query:analyze($request?parameters?status, "token")
+    let $status := query:analyze($request?parameters?status, "token", ("tentative","confirmed"))
     let $coll := collection($config:leave-data)
     let $now := date:now()
     let $tmax := if (count($period[prefix/@value="le"])=1)
@@ -71,10 +71,10 @@ declare function nleave:search-leave($request as map(*)){
 	        then $period[prefix/@value="ge"]/value/@value
 	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
     let $hits0 := if (count($actor)=0)
-        then $coll/Event[code//code[@value='leave']][period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
+        then $coll/Event[code//code[@value='leave']][period[start[@value le $tmax]][end[@value ge $tmin]]][status[@value=$status]]
         else let $oref := concat('metis/practitioners/', $actor)
             return 
-                $coll/Event[code//code[@value='leave']][actor/reference[@value=$oref]][period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
+                $coll/Event[code//code[@value='leave']][actor/reference[@value=$oref]][period[start[@value le $tmax]][end[@value ge $tmin]]][status[@value=$status]]
     let $sorted-hits :=
         for $c in $hits0
         order by lower-case($c/actor/display/@value/string())
@@ -82,7 +82,7 @@ declare function nleave:search-leave($request as map(*)){
 (: TODO analyze elements id, owner, schedule :)
             if (count($elems)>0)
             then
-                <Event>
+                <Event xmlns="http://hl7.org/fhir">
                   {$c/id}
                 { for $p in $c/*[not(self::id)]
                   return
@@ -95,10 +95,8 @@ declare function nleave:search-leave($request as map(*)){
       case "application/xml" return
         mutil:prepareResultBundleXML($sorted-hits, 1, "*")
       case "application/json" return
-        mutil:prepareResultBundleJSON($sorted-hits, 1, "*")
-      default return
        if ($format = "d3") then
-        let $actors = ()  (: from groups or so :)
+        let $actors := ()  (: from groups or so :)
         return
         map {
           "items" : array {
@@ -139,7 +137,9 @@ declare function nleave:search-leave($request as map(*)){
             }
         }
         else 
-        mutil:prepareResultBundleJSON($sorted-hits, 1, "*")
+          mutil:prepareResultBundleJSON($sorted-hits, 1, "*")
+      default return
+          error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
 };
 
 (:~
@@ -156,7 +156,7 @@ declare function nleave:update-leave($request as map(*)){
     let $uuid   := $request?parameters?id
     let $content := $request?body/node()
 
-    let $isNew   := not($content/leave/@xml:id)
+    let $isNew   := not($content/Event/@xml:id)
     let $cid   := if ($isNew)
         then "l-" || substring-after($content/Event/actor/reference/@value,'Practitioner/')
         else
@@ -169,7 +169,7 @@ declare function nleave:update-leave($request as map(*)){
     let $version := if ($isNew)
         then "0"
         else xs:integer($content/Event/meta/versionId/@value/string()) + 1
-    let $elems := $content/leave/*[not(
+    let $elems := $content/Event/*[not(
                     self::meta
                 or  self::id
                 or  self::period

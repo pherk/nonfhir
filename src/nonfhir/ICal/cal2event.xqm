@@ -128,7 +128,7 @@ declare function cal2event:slot-events(
             <display value="{$name}"/>
           </actor>
           <period>
-            <start value="{$tp/@start/string()}}"/>
+            <start value="{$tp/@start/string()}"/>
             <end value="{$tp/@end/string()}"/>
           </period>
           <location>

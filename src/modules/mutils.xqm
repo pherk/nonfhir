@@ -6,7 +6,7 @@ xquery version "3.1";
 module namespace mutil ="http://eNahar.org/ns/nonfhir/util";
 
 import module namespace date      = "http://eNahar.org/ns/lib/date";
-import module namespace serialize = "http://enahar.org/exist/apps/nabu/serialize" at "/db/apps/nabu/FHIR/meta/serialize-fhir-resources.xqm";
+import module namespace serialize = "http://eNahar.org/ns/lib/serialize" at "/db/apps/nonfhir/json/serialize-fhir-resources.xqm";
 
 declare namespace rest   = "http://exquery.org/ns/restxq";
 declare namespace http = "http://expath.org/ns/http-client";
