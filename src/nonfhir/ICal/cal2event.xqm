@@ -34,7 +34,8 @@ declare function cal2event:slot-events(
     let $meetings := $schedules[type[@value='meeting']]
     let $refdss   := $schedules[type[@value='service']]
     let $lll := util:log-app('TRACE','apps.eNahar',count($meetings))
-    let $lll := util:log-app('TRACE','apps.eNahar',count($services))
+    let $lll := util:log-app('TRACE','apps.eNahar', count($services))
+    let $lll := util:log-app('TRACE','apps.eNahar', count($services/schedule[type/@value=('service','worktime')]))
     let $lll := util:log-app('TRACE','apps.eNahar',$fillSpecial)
     let $nowd1 := date:today() + xs:dayTimeDuration("P1D")
     let $nowd14 := $nowd1 + xs:dayTimeDuration("P14D")
@@ -50,26 +51,28 @@ declare function cal2event:slot-events(
        if (cal-util:isAllDayHoliday($hd)) 
        then    ()
        else
-          for $s in distinct-values($services/schedule/basedOn/reference/@value)
-          let $sdisp   := head($services/schedule/basedOn[reference/@value=$s]/display/@value/string())
-          let $agendas := if ($fillSpecial and cal2event:isSpecialAmb($services/schedule/basedOn[reference/@value=$s]))
+          for $s in distinct-values($services/schedule[type/@value=('service','worktime')]/basedOn/reference/@value)
+          let $sdisp   := head($services/schedule/basedOn[reference[@value=$s]]/display/@value/string())
+    let $lll := util:log-app('TRACE','apps.eNahar',$sdisp)
+          let $agendas := if ($fillSpecial and cal2event:isSpecialAmb($services/schedule[basedOn/reference[@value=$s]]))
                     then if ($date >= $nowd1 and $date <= $nowd14)
                          then cal-util:filterValidAgendas(
-                                      $services/schedule[basedOn/reference/@value=$s]/schedule
+                                      $services/schedule[basedOn/reference[@value=$s]]/schedule
                                     , $now1
                                     , min(($now14,$end)))
                          else ()
                     else cal-util:filterValidAgendas(
-                                      $services/schedule[basedOn/reference/@value=$s]/schedule
+                                      $services/schedule[basedOn/reference[@value=$s]]/schedule
                                     , $start
                                     , $end)
           let $timing  := $refdss/../schedule[identifier/value[@value=$s]]/timing
+    let $lll := util:log-app('TRACE','apps.eNahar',$agendas)
           return
             if (count($agendas)=0)
               then ()
               else
                 for $a in distinct-values($services/actor/reference/@value)
-                let $acal := $services[actorr/reference/@value=$a]
+                let $acal := $services[actor/reference/@value=$a]
                 let $name := $acal/actor/display/@value/string()
                 let $isAllDayLeave := cal-util:isAllDayLeave($date, $a, $leaves)
                 return
@@ -77,7 +80,7 @@ declare function cal2event:slot-events(
                   then ()
                   else
         let $lll := util:log-app('TRACE','apps.eNahar',$date) 
-                    let $shifts    := cal-util:filterValidAgendas($acal/schedule[basedOn/reference/@value=$s]/agenda,$date)/event
+                    let $shifts    := cal-util:filterValidAgendas($acal/schedule[basedOn/reference[@value=$s]]/schedule,$date)/event
                     let $rrEvents  := (ice:match-rdates(dateTime($date,xs:time("00:00:00")),$shifts)
                                                       ,ice:match-rrules(dateTime($date,xs:time("00:00:00")), $shifts))
 

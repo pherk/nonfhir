@@ -361,7 +361,7 @@ declare function nical:search-service($request as map(*))
     let $format := $request?parameters?_format
     let $elems  := $request?parameters?_elements
     let $actor  := $request?parameters?actor
-    let $specialty  := $request?parameters?specialty
+    let $serviceType := $request?parameters?serviceType
     let $schedule := $request?parameters?schedule
     let $period := $request?parameters?period
     let $fillSpecial := $request?parameters?fillSpecial
@@ -370,16 +370,16 @@ declare function nical:search-service($request as map(*))
     let $lll := util:log-app('DEBUG', 'apps.eNahar', $actor)
     let $lll := util:log-app('DEBUG', 'apps.eNahar', $schedule)
     let $oref := concat('metis/practitioners/', $actor)
-    let $sref := concat('enahar/schedules/', $schedule)
+    let $sref := concat('Schedule/', $schedule)
     let $coll := collection($config:ical-data)
-    let $gcals := if ($specialty='' and $actor='')
+    let $gcals := if (count($serviceType)=0 and count($actor)=0)
         then $coll/ICal[active[@value="true"]]
-        else if ($actor!='')
+        else if (count($actor)>0)
         then $coll/ICal[actor/reference[@value=$oref]][active[@value="true"]]
-        else $coll/ICal[specialty//code[@value=$specialty]][active[@value="true"]]
-    let $valid := if ($schedule='')
+        else $coll/ICal[serviceType//code[@value=$serviceType]][active[@value="true"]]
+    let $valid := if (count($schedule)=0)
         then $gcals
-        else $gcals/schedule[global/reference[@value=$sref]]/.. (: tricky: match any cal with a certain schedule :)
+        else $gcals/schedule[basedOn/reference[@value=$sref]]/.. (: tricky: match any cal with a certain schedule :)
 
     let $sorted-hits :=
         for $qcal in $valid
@@ -388,14 +388,14 @@ declare function nical:search-service($request as map(*))
             <ICal>
             { $qcal/*[not(self::schedule)] }
             {   (: filter schedule :)
-                if ($schedule='')
-                then $qcal/schedule[global/reference/@value ne 'enahar/schedules/worktime']
+                if (count($schedule)=0)
+                then $qcal/schedule[basedOn/reference[@value ne 'Schedule/worktime']]
                 else 
                     (
-                        $qcal/schedule[global/reference/@value=$sref]
-                    ,   $qcal/schedule[global/type/@value='meeting']
+                        $qcal/schedule[basedOn/reference[@value=$sref]]
+                    ,   $qcal/schedule[type/@value='meeting']
                     ,   if ($fillSpecial='true')
-                        then $qcal/schedule[global/isSpecial/@value='true'][global/ff/@value='true'][global/reference/@value!=$sref]
+                        then $qcal/schedule[isSpecial/@value='true'][ff/@value='true'][basedOn/reference[@value!=$sref]]
                         else ()
                     )
             }

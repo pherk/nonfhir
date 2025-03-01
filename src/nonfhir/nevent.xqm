@@ -43,10 +43,10 @@ declare function nevent:search-event($request as map(*))
     let $fillSpecial := query:analyze($request?parameters?fillSpecial, "boolean")
     let $now := date:now()
     let $e := if (count($period[prefix/@value="le"])=1)
-	        then $period[prefix/@value="le"]/value/@value
+	        then date:iso2dateTime($period[prefix/@value="le"]/value/@value)
 	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
     let $s := if (count($period[prefix/@value="ge"])=1)
-	        then $period[prefix/@value="ge"]/value/@value
+	        then date:iso2dateTime($period[prefix/@value="ge"]/value/@value)
 	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
     (: get all user cals with selected schedules :)
     let $services:= nical:search-service($request)//ICal

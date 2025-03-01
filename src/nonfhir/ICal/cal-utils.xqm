@@ -15,23 +15,32 @@ import module namespace ice   = "http://eNahar.org/ns/lib/ice";
 import module namespace xqtime= "http://eNahar.org/ns/lib/xqtime";
 import module namespace date  = "http://eNahar.org/ns/lib/date";
 
-declare function local:less($a as xs:string, $b as xs:dateTime)
+declare function local:less($a as xs:string*, $b as xs:dateTime)
 {
-  if ($a="")
-  then true()
-  else xs:dateTime($a) <= $b
+  if ($a)
+  then if ($a="")
+    then true()
+    else xs:dateTime($a) <= $b
+  else true()
 };
-declare function local:greater($a as xs:string, $b as xs:dateTime)
+
+declare function local:greater($a as xs:string*, $b as xs:dateTime)
 {
-  if ($a="")
-  then true()
-  else xs:dateTime($a) > $b
+  if ($a)
+  then if ($a="")
+    then true()
+    else xs:dateTime($a) > $b
+  else true()
 };
 
 
-declare function cal-util:filterValidAgendas($agendas as item()*, $start as xs:dateTime, $end as xs:dateTime) as item()*
+declare function cal-util:filterValidAgendas($agendas as element(schedule)+, $start as xs:dateTime, $end as xs:dateTime) as element(schedule)*
 {
-    $agendas[local:less(period/start/@value/string(),$end)][local:greater(period/end/@value/string(),$start)]
+    let $lll := util:log-app('TRACE','apps.eNahar',$agendas)
+    let $lll := util:log-app('TRACE','apps.eNahar',$start)
+    let $lll := util:log-app('TRACE','apps.eNahar',$end)
+    return
+        $agendas[local:less(period/start/@value/string(),$end)][local:greater(period/end/@value/string(),$start)]
 };
 
 declare function cal-util:filterValidAgendas($agendas as item()*, $date as xs:date) as item()*
@@ -67,7 +76,7 @@ declare function cal-util:event2tp($date as xs:date, $events as element(event)*)
             xqtime:new($start,$end,$info)
 };
 
-declare %private function cal-util:hd2tp($date, $events as element(event)*) as element(tp)*
+declare %private function cal-util:hd2tp($date, $events as element(Event)*) as element(tp)*
 {
     for $e in $events
     let $lll := util:log-app('TRACE','apps.nabu',$events)
@@ -85,7 +94,7 @@ declare %private function cal-util:hd2tp($date, $events as element(event)*) as e
  : 
  : @return sequence of tp
  :)
-declare %private function cal-util:leave2tp($leaves as element(leave)*) as element(tp)*
+declare %private function cal-util:leave2tp($leaves as element(Event)*) as element(tp)*
 {
     for $l in $leaves
     return
@@ -108,12 +117,12 @@ declare %private function cal-util:leave2tp($leaves as element(leave)*) as eleme
  : 
  : return event
  :)
-declare function cal-util:isHoliday($date as xs:date, $hds as element(event)*) as element(event)?
+declare function cal-util:isHoliday($date as xs:date, $hds as element(Event)*) as element(Event)?
 {
     let $result := filter(
             $hds,
             function($e){
-                ($date = date:iso2date($e/start/@value)) and $e/type[@value=('official','traditional')]
+                ($date = date:iso2date($e/period/start/@value)) and $e/type[@value=('official','traditional')]
             })
     return
         $result
@@ -127,14 +136,14 @@ declare function cal-util:isHoliday($date as xs:date, $hds as element(event)*) a
  : 
  : return event
  :)
-declare function cal-util:isAllDayHoliday($e as element(event)?) as xs:boolean
+declare function cal-util:isAllDayHoliday($e as element(Event)?) as xs:boolean
 {
     if ($e and
             (
                 $e/type/@value=('official')  
             or 
                 ($e/type/@value=('traditional') and 
-                 tokenize($e/start/@value,'T')[2]<='08:00:00' and tokenize($e/end/@value,'T')[2]>='20:00:00')
+                 tokenize($e/period/start/@value,'T')[2]<='08:00:00' and tokenize($e/period/end/@value,'T')[2]>='20:00:00')
             )
         )
     then true()
@@ -150,7 +159,7 @@ declare function cal-util:isAllDayHoliday($e as element(event)?) as xs:boolean
  : 
  : return boolean
  :)
-declare function cal-util:isAllDayLeave($date as xs:date, $leaves as element(leave)*) as xs:boolean
+declare function cal-util:isAllDayLeave($date as xs:date, $leaves as element(Event)*) as xs:boolean
 {
     let $allday := $leaves[allDay/@value='true']
     return
@@ -170,7 +179,7 @@ declare function cal-util:isAllDayLeave($date as xs:date, $leaves as element(lea
 declare function cal-util:isAllDayLeave(
           $date as xs:date
         , $actor as xs:string
-        , $leaves as element(leave)*
+        , $leaves as element(Event)*
         ) as xs:boolean
 {
     let $m0 := $leaves[actor[reference[@value=$actor]]]
@@ -194,8 +203,8 @@ declare function cal-util:filterPartialLeaves(
       $rawTPs as element(tp)*
     , $date as xs:date
     , $actor as xs:string
-    , $leaves as element(leave)*
-    , $hd as element(event)?
+    , $leaves as element(Event)*
+    , $hd as element(Event)?
     , $meetings as element(tp)*
     ) as item()*
 {

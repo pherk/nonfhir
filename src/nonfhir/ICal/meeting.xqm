@@ -20,9 +20,9 @@ import module namespace xqtime= "http://eNahar.org/ns/lib/xqtime";
 
 
 declare function meeting:events(
-          $cal as element(cal)+
+          $cal as element(ICal)+
         , $date as xs:date
-        , $meetings as element(schedule)*
+        , $meetings as element(ICal)*
         ) as element(tp)*
 {
     let $lll := if (count($cal)>1)
@@ -30,11 +30,11 @@ declare function meeting:events(
             util:log-app('ERROR','apps.eNahar',$cal)
         else
             ()
-    let $mrefs := $cal/schedule/global[type/@value='meeting']/reference/@value/string()
+    let $mrefs := $cal/schedule[type/@value='meeting']/reference/@value/string()
     let $msas   := 
         for $mref in distinct-values($mrefs)
         return
-            $meetings/../schedule[identifier/value[@value=$mref]]/agenda
+            $meetings/../schedule[identifier/value[@value=$mref]]/schedule
     let $shifts     := cal-util:filterValidAgendas($msas,$date)/event
     let $rrEvents  := (ice:match-rdates($date,$shifts),ice:match-rrules($date, $shifts))
     (: let $lll := util:log-app('TRACE','apps.nabu',$rrEvents) :)
