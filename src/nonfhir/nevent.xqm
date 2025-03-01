@@ -60,7 +60,7 @@ declare function nevent:search-event($request as map(*))
 :)
     (: get all relevant schedules :)
     let $refdss    := distinct-values($services/basedOn/reference/@value)
-    let $schedules := collection($config:schedule-base)/schedule[identifier/value[@value=$refdss]][active[@value="true"]]
+    let $schedules := collection($config:schedule-data)/ICal[identifier/value[@value=$refdss]][active[@value="true"]]
  
     let $lll := util:log-app('TRACE', 'apps.eNahar', $schedules/name)
 

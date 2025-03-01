@@ -52,12 +52,13 @@ declare function nleave:read-leave($request as map(*)) as item()
  :)
 declare function nleave:search-leave($request as map(*)){
     let $user   := sm:id()//sm:real/sm:username/string()
+    let $accept := $request?parameters?accept
     let $realm  := $request?parameters?realm
     let $loguid := $request?parameters?loguid
     let $lognam := $request?parameters?lognam
     let $format := $request?parameters?_format
     let $elems  := query:analyze($request?parameters?_elements,"string")
-    let $owner  := query:analyze($request?parameters?owner,"reference")
+    let $actor  := query:analyze($request?parameters?actor,"reference")
     let $group  := query:analyze($request?parameters?group, "string")
     let $period := query:analyze($request?parameters?period, "date")
     let $status := query:analyze($request?parameters?status, "token")
@@ -69,12 +70,11 @@ declare function nleave:search-leave($request as map(*)){
     let $tmin := if (count($period[prefix/@value="ge"])=1)
 	        then $period[prefix/@value="ge"]/value/@value
 	        else error($errors:BAD_REQUEST, "query should define only one period of time", map { "info": $period})
-    let $hits0 := if (count($owner)=0)
+    let $hits0 := if (count($actor)=0)
         then $coll/Event[code//code[@value='leave']][period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
-        else let $oref := concat('metis/practitioners/', $owner)
+        else let $oref := concat('metis/practitioners/', $actor)
             return 
                 $coll/Event[code//code[@value='leave']][actor/reference[@value=$oref]][period[start[@value le $tmax]][end[@value ge $tmin]]][status[coding/code/@value=$status]]
-
     let $sorted-hits :=
         for $c in $hits0
         order by lower-case($c/actor/display/@value/string())
@@ -91,22 +91,25 @@ declare function nleave:search-leave($request as map(*)){
                 </Event>
             else $c
     return
-      switch ($format)
-      case "xml" return
+      switch ($accept)
+      case "application/xml" return
         mutil:prepareResultBundleXML($sorted-hits, 1, "*")
-      case "json" return
+      case "application/json" return
         mutil:prepareResultBundleJSON($sorted-hits, 1, "*")
-      case "d3" return
+      default return
+       if ($format = "d3") then
+        let $actors = ()  (: from groups or so :)
+        return
         map {
           "items" : array {
  (: TODO line 424 too much computing, ranks can be precomputed :)
-         for $item at $i in $matched
+         for $item at $i in $sorted-hits
             let $rank := index-of($actors//*:reference/@value/string(), $item/actor/reference/@value/string()) - 1
             let $start := if ($item/allDay/@value='true')
-                then xs:string(fn:dateTime(date:iso2date($l/period/start/@value),xs:time('00:00:00')))
+                then xs:string(fn:dateTime(date:iso2date($item/period/start/@value),xs:time('00:00:00')))
                 else $item/period/start/@value/string()
             let $end := if ($item/allDay/@value='true')
-                then xs:string(fn:dateTime(date:iso2date($l/period/start/@value),xs:time('23:59:59')))
+                then xs:string(fn:dateTime(date:iso2date($item/period/start/@value),xs:time('23:59:59')))
                 else $item/period/end/@value/string()
             let $class := if (xs:dateTime($start) > $now)
                 then 
@@ -135,7 +138,7 @@ declare function nleave:search-leave($request as map(*)){
                 }
             }
         }
-      default return
+        else 
         mutil:prepareResultBundleJSON($sorted-hits, 1, "*")
 };
 
@@ -155,17 +158,17 @@ declare function nleave:update-leave($request as map(*)){
 
     let $isNew   := not($content/leave/@xml:id)
     let $cid   := if ($isNew)
-        then "l-" || substring-after($content/leave/owner/reference/@value,'Practitioner/')
+        then "l-" || substring-after($content/Event/actor/reference/@value,'Practitioner/')
         else
-            let $id := $content/leave/id/@value/string()
-            let $leaves := collection($config:leave-data)/leave[id[@value = $id]]
+            let $id := $content/Event/id/@value/string()
+            let $leaves := collection($config:leave-data)/Event[id[@value = $id]]
             let $move := mutil:moveToHistory($leaves, $config:leavehistory)
             return
                 $id
 
     let $version := if ($isNew)
         then "0"
-        else xs:integer($content/leave/meta/versionId/@value/string()) + 1
+        else xs:integer($content/Event/meta/versionId/@value/string()) + 1
     let $elems := $content/leave/*[not(
                     self::meta
                 or  self::id
@@ -181,7 +184,7 @@ declare function nleave:update-leave($request as map(*)){
         then $cid
         else "l-" || util:uuid()
     let $data :=
-           <Leave xml:id="{$uuid}">
+           <Event xml:id="{$uuid}">
                <id value="{$cid}"/>
                <meta>
                    <versionId value="{$version}"/>
@@ -195,7 +198,7 @@ declare function nleave:update-leave($request as map(*)){
                </meta>
             { $elems }
             { $period }
-           </Leave>
+           </Event>
 
     let $lll := util:log-app('DEBUG','apps.nabu',$data)
 
@@ -203,9 +206,9 @@ declare function nleave:update-leave($request as map(*)){
     return
     try {
         let $store := system:as-user('vdba', 'kikl823!', (
-            xmldb:store($config:leave-data || '/' || $cudir  , $file, $data)
-            , sm:chmod(xs:anyURI($config:leave-data || '/' || $cudir || '/' || $file), $config:data-perms)
-            , sm:chgrp(xs:anyURI($config:leave-data || '/' || $cudir || '/' || $file), $config:data-group)))
+            xmldb:store($config:leave-data, $file, $data)
+            , sm:chmod(xs:anyURI($config:leave-data || '/' || $file), $config:data-perms)
+            , sm:chgrp(xs:anyURI($config:leave-data || '/' || $file), $config:data-group)))
         return
             $data
     } catch * {

@@ -107,7 +107,7 @@ declare function cal2event:slot-events(
                         for $tp in $validTPs
                         return
         <Event>
-          <id value="{uuid:id()}"/>
+          <id value="{util:uuid()}"/>
           <extension url="http://eNahar.org/ns/extension/event-date">
             <valueDate value="{$date}"/>
           </extension>
@@ -117,7 +117,7 @@ declare function cal2event:slot-events(
              <system value="http://eNahar.org/ns/system/event-code"/>
               <code value="ical"/>
             </coding>
-          <code>
+          </code>
           <basedOn>
             <reference value="{$s}"/>
             <display value="{$sdisp}"/>
@@ -128,7 +128,7 @@ declare function cal2event:slot-events(
             <display value="{$name}"/>
           </actor>
           <period>
-            <start value="{$tp/@start/string()"/>
+            <start value="{$tp/@start/string()}}"/>
             <end value="{$tp/@end/string()}"/>
           </period>
           <location>
