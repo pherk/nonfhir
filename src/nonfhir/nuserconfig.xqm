@@ -37,6 +37,59 @@ declare function nuc:read-userconfig($request as map(*)) as item()
       else error($errors:NOT_FOUND, "nuserconfig: ", map { "info": "invalid uuuid"})
 };
 
+(:~
+ : GET: /UserConfig?query
+ : search userconfig
+ :
+ : @param $actor   string
+ : @param $verified  boolean
+ : @return bundle of <UserConfig/>
+ :)
+declare function nuc:search-userconfig($request as map(*)){
+    let $user   := sm:id()//sm:real/sm:username/string()
+    let $accept := $request?accept
+    let $realm  := $request?parameters?realm
+    let $loguid := $request?parameters?loguid
+    let $lognam := $request?parameters?lognam
+    let $format := $request?parameters?_format
+    let $elems  := query:analyze($request?parameters?_elements,"string")
+    let $identifier := query:analyze($request?parameters?identifier,"token")
+    let $actor  := query:analyze($request?parameters?actor,"reference")
+    let $active := query:analyze($request?parameters?active, "boolean", "true")
+    let $verified := query:analyze($request?parameters?verified, "boolean", "true")
+    let $coll := collection($config:uc-data)
+    let $now := date:now()
+    let $hits0 := if (count($identifier)>0)
+        then $coll/UserConfig[identifier//code[@value=$identifier]]
+        else if (count($actor)=0)
+        then $coll/UserConfig[active[@value=$active]][verified[@value=$verified]]
+        else let $oref := concat('metis/practitioners/', $actor)
+            return 
+                $coll/UserConfig[actor/reference[@value=$oref]][active[@value=$active]]
+    let $sorted-hits :=
+        for $c in $hits0
+        order by lower-case($c/actor/display/@value/string())
+        return
+(: TODO analyze elements id, owner, schedule :)
+            if (count($elems)>0)
+            then
+                <UserConfig xmlns="http://hl7.org/fhir">
+                  {$c/id}
+                { for $p in $c/*[not(self::id)]
+                  return
+                    if (local-name($p)=$elems) then $p else ()
+                }
+                </UserConfig>
+            else $c
+    return
+      switch ($accept)
+      case "application/xml" return
+        mutil:prepareResultBundleXML($sorted-hits, 1, "*")
+      case "application/json" return
+          mutil:prepareResultBundleJSON($sorted-hits, 1, "*")
+      default return
+          error($errors:UNSUPPORTED_MEDIA_TYPE, "Accept: ", map { "info": "only xml and json allowed"})
+};
 
 declare %private function nuc:doPUT(
       $content as item()
