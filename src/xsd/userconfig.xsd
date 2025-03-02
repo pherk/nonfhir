@@ -95,6 +95,11 @@
               <xs:documentation xml:lang="en">The date of last login for the individual.</xs:documentation>
            </xs:annotation>
           </xs:element>
+          <xs:element name="lastRoom" minOccurs="0" maxOccurs="1" type="code">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">The room of last login.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
           <xs:element name="verified" minOccurs="0" maxOccurs="1" type="boolean">
             <xs:annotation>
               <xs:documentation xml:lang="en">True, if the admin has verified the account (SelfLogin).</xs:documentation>
@@ -107,8 +112,49 @@
           </xs:element>
           <xs:element name="card" minOccurs="0" maxOccurs="unbounded" type="Reference">
             <xs:annotation>
-              <xs:documentation xml:lang="en">Display units aka 'cards' for the user interaction with the system.</xs:documentation>
+              <xs:documentation xml:lang="en">Personalizable display units aka 'cards' for the user interaction with the system.</xs:documentation>
            </xs:annotation>
+          </xs:element>
+          <xs:element name="workset" minOccurs="0" maxOccurs="unbounded" type="Reference">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">the set of patients, on which the user was working recently.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="snippets" minOccurs="0" maxOccurs="unbounded" type="UserConfig.Template">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">the set of patients, on which the user was working recently.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="UserConfig.Template">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">An template with text for creating and editing medical documents.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="BackboneElement">
+        <xs:sequence>
+          <xs:element name="name" minOccurs="1" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">name of template</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="image" minOccurs="0" maxOccurs="1" type="Reference">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Reference to an icon or image.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="description" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">info about the text template.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="tei" minOccurs="1" maxOccurs="1" type="Narrative">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">The text template itself. Within the div of Narrative the TEIp5 namespace used</xs:documentation>
+            </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:extension>
