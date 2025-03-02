@@ -60,7 +60,7 @@ declare function nuc:search-userconfig($request as map(*)){
     let $coll := collection($config:uc-data)
     let $now := date:now()
     let $hits0 := if (count($identifier)>0)
-        then $coll/UserConfig[identifier//code[@value=$identifier]]
+        then $coll/UserConfig[identifier/value[@value=$identifier]]
         else if (count($actor)=0)
         then $coll/UserConfig[active[@value=$active]][verified[@value=$verified]]
         else let $oref := concat('metis/practitioners/', $actor)
