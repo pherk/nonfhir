@@ -41,18 +41,39 @@
            </xs:annotation>
           </xs:element>
           <xs:element name="title" minOccurs="1" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">The title will displayed in the header bar.</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="subtitle" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Optional subtitle will displayed in the header bar.</xs:documentation>
+           </xs:annotation>
           </xs:element>
-          <xs:element name="model" minOccurs="0" maxOccurs="unbound" type="string">
+          <xs:element name="model" minOccurs="0" maxOccurs="unbounded" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">card template.</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="icon" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">icon displayed if card is minimized.</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="iconColor" minOccurs="0" maxOccurs="1" type="code">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">icon color</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="persistence" minOccurs="0" maxOccurs="1" type="code">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">mode of persistence (transient, permanent)</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="status" minOccurs="0" maxOccurs="1" type="code">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">card status (open, closed, minimized, hidden)</xs:documentation>
+           </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:extension>

@@ -41,27 +41,54 @@
            </xs:annotation>
           </xs:element>
           <xs:element name="cutype" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">ICal actor class (individual, ...).</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="caltype" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">ICal type (service, holiday, meeting).</xs:documentation>
+           </xs:annotation>
           </xs:element>
-          <xs:element name="serviceCategory" minOccurs="0" maxOccurs="unbound" type="CodeableConcept">
+          <xs:element name="serviceCategory" minOccurs="0" maxOccurs="unbounded" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">service category, points to HealthCareServices</xs:documentation>
+           </xs:annotation>
           </xs:element>
-          <xs:element name="serviceType" minOccurs="0" maxOccurs="unbound" type="CodeableReference">
+          <xs:element name="serviceType" minOccurs="0" maxOccurs="unbounded" type="CodeableReference">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">service category, points to HealthCareServices</xs:documentation>
+           </xs:annotation>
           </xs:element>
-          <xs:element name="specialty" minOccurs="0" maxOccurs="unbound" type="CodeableConcept">
+          <xs:element name="specialty" minOccurs="0" maxOccurs="unbounded" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">specialties of the actor (professions)</xs:documentation>
+           </xs:annotation>
           </xs:element>
-          <xs:element name="actor" minOccurs="1" maxOccurs="unbound" type="Reference">
+          <xs:element name="actor" minOccurs="0" maxOccurs="unbounded" type="Reference">
              <xs:annotation>
-               <xs:documentation xml:lang="en">was owner.</xs:documentation>
+               <xs:documentation xml:lang="en">the individual which powers the services</xs:documentation>
              </xs:annotation>
           </xs:element>
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="string">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">human readable name of the ICal</xs:documentation>
+             </xs:annotation>
           </xs:element>
-          <xs:element name="organization" minOccurs="0" maxOccurs="unbound" type="Reference">
+          <xs:element name="organization" minOccurs="0" maxOccurs="unbounded" type="Reference">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">organizations which are represented by the services</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="comment" minOccurs="0" maxOccurs="1" type="markdown">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">further description of the ical services and interactions</xs:documentation>
+             </xs:annotation>
           </xs:element>
-          <xs:element name="schedule" minOccurs="0" maxOccurs="unbound" type="ICal.Schedule">
+          <xs:element name="schedule" minOccurs="0" maxOccurs="unbounded" type="ICal.Schedule">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">the concrete time tables of the services</xs:documentation>
+             </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:extension>
@@ -75,30 +102,69 @@
       <xs:extension base="BackboneElement">
         <xs:sequence>
           <xs:element name="type" minOccurs="0" maxOccurs="1" type="code">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">type of time table (service, meeting, ...)</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="basedOn" minOccurs="0" maxOccurs="1" type="Reference">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">template for time table. If the actor participates on other activities, this is the link for these (e.g. meetings) and the schedule has no own time table.</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="isSpecial" minOccurs="0" maxOccurs="1" type="boolean">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">if true, the schedule is a specialized service, which has other scheduling rules.</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="ff" minOccurs="0" maxOccurs="1" type="boolean">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">if true, the actor takes complete responsibility for the service.</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="period" minOccurs="0" maxOccurs="1" type="Period">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">the time interval in which the schedule's definitions are valid.</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="timezone" minOccurs="0" maxOccurs="1" type="code">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">the timezone, e.g. MEZ.</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="venue" minOccurs="0" maxOccurs="1" type="ICal.Venue">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">Defines location and reservation priorities, where the events will occur. Can be overrules in event definitions.</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="note" minOccurs="0" maxOccurs="1" type="Annotation">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">Further informations on the schedule.</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="Rendering">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">Further informations on the schedule's rendering in calendar.</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="appLetter" minOccurs="0" maxOccurs="1" type="ICal.AppLetter">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">link and template for sending appointment info to consumer of service (Terminbrief).</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="timing" minOccurs="0" maxOccurs="1" type="ICal.Timing">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">Further informations for the scheduling engine.</xs:documentation>
+             </xs:annotation>
           </xs:element>
-          <xs:element name="schedule" minOccurs="0" maxOccurs="unbound" type="ICal.Schedule">
+          <xs:element name="schedule" minOccurs="0" maxOccurs="unbounded" type="ICal.Schedule">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">sub time table, which combines several event definitions belonging together (no more than one level deep).</xs:documentation>
+             </xs:annotation>
           </xs:element>
-          <xs:element name="event" minOccurs="0" maxOccurs="unbound" type="ICal.Event">
+          <xs:element name="event" minOccurs="0" maxOccurs="unbounded" type="ICal.Event">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">the concrete or abstract event definitions (ICalendar model).</xs:documentation>
+             </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:extension>
@@ -112,8 +178,14 @@
       <xs:extension base="BackboneElement">
         <xs:sequence>
           <xs:element name="altName" minOccurs="0" maxOccurs="1" type="string">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">human readable name of the appLetter template.</xs:documentation>
+             </xs:annotation>
           </xs:element>
           <xs:element name="template" minOccurs="0" maxOccurs="1" type="Reference">
+             <xs:annotation>
+               <xs:documentation xml:lang="en">reference to the appLetter template.</xs:documentation>
+             </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:extension>
@@ -121,7 +193,7 @@
   </xs:complexType>
   <xs:complexType name="ICal.Timing">
     <xs:annotation>
-      <xs:documentation xml:lang="en">timing defaults for dating.</xs:documentation>
+      <xs:documentation xml:lang="en">timing defaults for scheduling engine, see also in event.xsd.</xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="BackboneElement">
@@ -152,24 +224,54 @@
       <xs:extension base="BackboneElement">
         <xs:sequence>
           <xs:element name="name" minOccurs="1" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">name for idendification.</xs:documentation>
+            </xs:annotation>
           </xs:element>
           <xs:element name="summary" minOccurs="0" maxOccurs="1" type="summary">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">display name for Event.</xs:documentation>
+            </xs:annotation>
           </xs:element>
           <xs:element name="description" minOccurs="0" maxOccurs="1" type="markdown">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">further informations, mostly not needed.</xs:documentation>
+            </xs:annotation>
           </xs:element>
           <xs:element name="start" minOccurs="1" maxOccurs="1" type="time">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">(abstract) start time for recurrence.</xs:documentation>
+            </xs:annotation>
           </xs:element>
-          <xs:element name="end" minOccurs="0" maxOccurs="1" type="time">
+          <xs:element name="end" minOccurs="1" maxOccurs="1" type="time">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">(abstract) start time for recurrence.</xs:documentation>
+            </xs:annotation>
           </xs:element>
           <xs:element name="venue" minOccurs="0" maxOccurs="1" type="ICal.Venue">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">location and priority for this single event.</xs:documentation>
+            </xs:annotation>
           </xs:element>
           <xs:element name="note" minOccurs="0" maxOccurs="1" type="Annotation">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">a note for admin purposes.</xs:documentation>
+            </xs:annotation>
           </xs:element>
           <xs:element name="rrule" minOccurs="0" maxOccurs="1" type="ICal.RRule">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">a single recurrence definition.</xs:documentation>
+            </xs:annotation>
           </xs:element>
-          <xs:element name="rdate" minOccurs="0" maxOccurs="unbound" type="date">
+          <xs:element name="rdate" minOccurs="0" maxOccurs="unbounded" type="date">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">additional concrete days for recurrence.</xs:documentation>
+            </xs:annotation>
           </xs:element>
-          <xs:element name="exdate" minOccurs="0" maxOccurs="unbound" type="date">
+          <xs:element name="exdate" minOccurs="0" maxOccurs="unbounded" type="date">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">additional concrete days for exclusion of recurrences.</xs:documentation>
+            </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:extension>
@@ -183,8 +285,14 @@
       <xs:extension base="BackboneElement">
         <xs:sequence>
           <xs:element name="priority" minOccurs="0" maxOccurs="1" type="code">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">priority for using the referenced location</xs:documentation>
+            </xs:annotation>
           </xs:element>
           <xs:element name="location" minOccurs="1" maxOccurs="1" type="Reference">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Reference to the location, where the event should occur.</xs:documentation>
+            </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:extension>
@@ -198,14 +306,29 @@
       <xs:extension base="BackboneElement">
         <xs:sequence>
           <xs:element name="freq" minOccurs="1" maxOccurs="1" type="code">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">basic frequency for the recur rule filters (daily, monthly, yearly).</xs:documentation>
+            </xs:annotation>
           </xs:element>
           <xs:element name="byYear" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">seldom used, e.g. holidays occuring once.</xs:documentation>
+            </xs:annotation>
           </xs:element>
           <xs:element name="byMonth" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">defines the month</xs:documentation>
+            </xs:annotation>
           </xs:element>
           <xs:element name="byWeek" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">defines the calendar week (KW) or even/odd</xs:documentation>
+            </xs:annotation>
           </xs:element>
           <xs:element name="byDay" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">defines the day within week or month (Mo, 3:Mo).</xs:documentation>
+            </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:extension>

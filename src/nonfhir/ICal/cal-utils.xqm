@@ -36,11 +36,7 @@ declare function local:greater($a as xs:string*, $b as xs:dateTime)
 
 declare function cal-util:filterValidAgendas($agendas as element(schedule)+, $start as xs:dateTime, $end as xs:dateTime) as element(schedule)*
 {
-    let $lll := util:log-app('TRACE','apps.eNahar',$agendas)
-    let $lll := util:log-app('TRACE','apps.eNahar',$start)
-    let $lll := util:log-app('TRACE','apps.eNahar',$end)
-    return
-        $agendas[local:less(period/start/@value/string(),$end)][local:greater(period/end/@value/string(),$start)]
+   $agendas[local:less(period/start/@value/string(),$end)][local:greater(period/end/@value/string(),$start)]
 };
 
 declare function cal-util:filterValidAgendas($agendas as item()*, $date as xs:date) as item()*
@@ -182,7 +178,7 @@ declare function cal-util:isAllDayLeave(
         , $leaves as element(Event)*
         ) as xs:boolean
 {
-    let $m0 := $leaves[actor[reference[@value=$actor]]]
+    let $m0 := $leaves[actor/reference[@value=$actor]]]
     let $m1 := $m0[allDay/@value='true']
     let $m2 := $m1[xs:date(tokenize(period/start/@value,'T')[1])<=$date][xs:date(tokenize(period/end/@value,'T')[1])>=$date]
     return
@@ -208,7 +204,7 @@ declare function cal-util:filterPartialLeaves(
     , $meetings as element(tp)*
     ) as item()*
 {
-    let $partialLeaves := $leaves[actor[reference[@value=$actor]]][allDay/@value="false"][xs:date(tokenize(period/start/@value,'T')[1])<=$date][xs:date(tokenize(period/end/@value,'T')[1])>=$date]
+    let $partialLeaves := $leaves[actor/reference[@value=$actor]]][allDay/@value="false"][xs:date(tokenize(period/start/@value,'T')[1])<=$date][xs:date(tokenize(period/end/@value,'T')[1])>=$date]
     let $pltps := cal-util:leave2tp($partialLeaves)
      let $lll := util:log-app('TRACE','apps.nabu',$date)
     let $absent := if ($hd)

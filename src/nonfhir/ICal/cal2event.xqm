@@ -66,13 +66,12 @@ declare function cal2event:slot-events(
                                     , $start
                                     , $end)
           let $timing  := $refdss/../schedule[identifier/value[@value=$s]]/timing
-    let $lll := util:log-app('TRACE','apps.eNahar',$agendas)
           return
             if (count($agendas)=0)
               then ()
               else
                 for $a in distinct-values($services/actor/reference/@value)
-                let $acal := $services[actor/reference/@value=$a]
+                let $acal := $services/../ICal[actor/reference[@value=$a]]
                 let $name := $acal/actor/display/@value/string()
                 let $isAllDayLeave := cal-util:isAllDayLeave($date, $a, $leaves)
                 return
@@ -83,9 +82,9 @@ declare function cal2event:slot-events(
                     let $shifts    := cal-util:filterValidAgendas($acal/schedule[basedOn/reference[@value=$s]]/schedule,$date)/event
                     let $rrEvents  := (ice:match-rdates(dateTime($date,xs:time("00:00:00")),$shifts)
                                                       ,ice:match-rrules(dateTime($date,xs:time("00:00:00")), $shifts))
-
+(:
         let $lll := util:log-app('TRACE','apps.eNahar',$rrEvents) 
-
+:)
                     let $exEvents  := ice:match-exdates($date,$shifts)
                     let $rawEvents := functx:distinct-nodes($rrEvents[not(.=$exEvents)])
                     let $rawTPs    := cal-util:event2tp($date, $rawEvents)
@@ -94,18 +93,19 @@ declare function cal2event:slot-events(
 :)
                     let $mes  := meeting:events($acal,$date,$meetings)
                     let $validTPs  := cal-util:filterPartialLeaves($rawTPs,$date,$a,$leaves,$hd,$mes)
-  
+(:  
         let $lll := util:log-app('TRACE','apps.eNahar',$validTPs)
+:)
                     return
                       if (count($validTPs)=0)
                       then ()
                       else
-                        let $timing := if ($acal/schedule[basedOn/reference/@value=$s]/timing)
+                        let $timing := if ($acal/schedule[basedOn/reference[@value=$s]]/timing)
                               then
-                                                        cal2event:merge(
-                                                          $refdss[identifier/value/@value=$s]/timing/*
-                                                        , $acal/schedule[basedOn/reference/@value=$s]/timing/*
-                                                        )
+                                  cal2event:merge(
+                                          $refdss[identifier/value/@value=$s]/timing/*
+                                        , $acal/schedule[basedOn/reference[@value=$s]]/timing/*
+                                        )
                               else ()
                         for $tp in $validTPs
                         return

@@ -37,7 +37,7 @@
           </xs:element>
           <xs:element name="basedOn" minOccurs="0" maxOccurs="1" type="Reference">
             <xs:annotation>
-              <xs:documentation xml:lang="en">References the ICal the Event bases on</xs:documentation>
+              <xs:documentation xml:lang="en">References the ICal template the Event bases on</xs:documentation>
            </xs:annotation>
           </xs:element>
           <xs:element name="status" minOccurs="1" maxOccurs="1" type="code">
@@ -46,26 +46,59 @@
            </xs:annotation>
           </xs:element>
           <xs:element name="code" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Event class</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="actor" minOccurs="0" maxOccurs="1" type="Reference">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">actor which takes part on the Event</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="type" minOccurs="0" maxOccurs="1" type="code">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Event type (slot)</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="title" minOccurs="1" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">human readable title e.g. for diplaying in calendar</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="description" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">human readable details on Event</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="period" minOccurs="1" maxOccurs="1" type="Period">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">the time interval the Event lasts</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="location" minOccurs="0" maxOccurs="1" type="Reference">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">the location where the Event occurs</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="reasonCode" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">the reason why the Event occurs</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="note" minOccurs="0" maxOccurs="1" type="Annotation">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">a note on the Event</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="timing" minOccurs="0" maxOccurs="1" type="Event.Timing">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">further timing informations on the Event</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="rendering" minOccurs="0" maxOccurs="1" type="Rendering">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">rendering informations e.g. for displaying the Event in an calendar</xs:documentation>
+           </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:extension>
@@ -79,18 +112,39 @@
       <xs:extension base="BackboneElement">
         <xs:sequence>
           <xs:element name="pre" minOccurs="0" maxOccurs="1" type="integer">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">time in minutes for event preparation</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="exam" minOccurs="0" maxOccurs="1" type="integer">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">core time in minutes the event is scheduled</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="post" minOccurs="0" maxOccurs="1" type="integer">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">time in minutes for after work, e.g. documentation</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="overBookable" minOccurs="0" maxOccurs="1" type="boolean">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">overbookability of appointment slots </xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="blocking" minOccurs="0" maxOccurs="1" type="boolean">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">if event blocks all other activitites (duty, meeting)</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="parallelPerHour" minOccurs="0" maxOccurs="1" type="integer">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">how many events can be scheduled in parallel (slots)</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="query" minOccurs="0" maxOccurs="1" type="code">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">how the event interacts with combined events</xs:documentation>
+           </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:extension>

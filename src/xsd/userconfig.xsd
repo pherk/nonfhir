@@ -41,25 +41,49 @@
            </xs:annotation>
           </xs:element>
           <xs:element name="subject" minOccurs="1" maxOccurs="1" type="Reference">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">the owner of this user record.</xs:documentation>
+           </xs:annotation>
           </xs:element>
-          <xs:element name="welcome" minOccurs="0" maxOccurs="unbound" type="string">
+          <xs:element name="welcome" minOccurs="0" maxOccurs="unbounded" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">lines which are display on login or so.</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="avatar" minOccurs="0" maxOccurs="1" type="code">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">user avatar.</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="email" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">user email for administrative purposes.</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="displayName" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">nickname chosen by user.</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="prefix" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">prefix for administrative addressing.</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="gender" minOccurs="0" maxOccurs="1" type="AdministrativeGender">
             <xs:annotation>
-              <xs:documentation xml:lang="en">Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.</xs:documentation>
+              <xs:documentation xml:lang="en">Administrative Gender - the gender that the user is considered to have for administration and record keeping purposes.</xs:documentation>
            </xs:annotation>
           </xs:element>
           <xs:element name="education" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">the basic education that the user is considered to have for administration and record keeping purposes.</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="profession" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">the profession that the user is performing.</xs:documentation>
+           </xs:annotation>
           </xs:element>
           <xs:element name="registered" minOccurs="0" maxOccurs="1" type="date">
             <xs:annotation>
@@ -68,14 +92,23 @@
           </xs:element>
           <xs:element name="lastLogin" minOccurs="0" maxOccurs="1" type="dateTime">
             <xs:annotation>
-              <xs:documentation xml:lang="en">The date of registration for the individual.</xs:documentation>
+              <xs:documentation xml:lang="en">The date of last login for the individual.</xs:documentation>
            </xs:annotation>
           </xs:element>
           <xs:element name="verified" minOccurs="0" maxOccurs="1" type="boolean">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">True, if the admin has verified the account (SelfLogin).</xs:documentation>
+           </xs:annotation>
           </xs:element>
-          <xs:element name="room" minOccurs="0" maxOccurs="unbound" type="code">
+          <xs:element name="room" minOccurs="0" maxOccurs="unbounded" type="code">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">The divisions or amulances in which the user is allowed to act.</xs:documentation>
+           </xs:annotation>
           </xs:element>
-          <xs:element name="card" type="Card" minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="card" minOccurs="0" maxOccurs="unbounded" type="Reference">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Display units aka 'cards' for the user interaction with the system.</xs:documentation>
+           </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:extension>
