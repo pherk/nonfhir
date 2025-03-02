@@ -3,10 +3,11 @@ xquery version "3.1";
 module namespace nuc ="http://eNahar.org/ns/nonfhir/nuserconfig";
 
 import module namespace mutil  = "http://eNahar.org/ns/nonfhir/util" at "../modules/mutils.xqm";
-import module namespace config="http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
-
+import module namespace config = "http://eNahar.org/ns/nonfhir/config" at '../modules/config.xqm';
+import module namespace query  = "http://eNahar.org/ns/nonfhir/query" at '../modules/query.xqm';
+(:
 import module namespace parse = "http://eNahar.org/ns/lib/parse" at "../json/parse-fhir-resources.xqm";
-
+:)
 import module namespace roaster="http://e-editiones.org/roaster";
 import module namespace errors="http://e-editiones.org/roaster/errors";
 import module namespace date  ="http://eNahar.org/ns/lib/date";
@@ -234,7 +235,7 @@ declare %private function nuc:doPOST(
 };
 
 (:~
- : PUT: nabu/UserConfig
+ : PUT: /UserConfig/{$id}
  : Update an existing userconfig or store a new one. The address XML is read
  : from the request body.
  : 
