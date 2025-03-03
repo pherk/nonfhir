@@ -98,7 +98,7 @@ declare function calmigr:update-2.0($c as item())
         else ()
     return
     <ICal xml:id="{$c/@xml:id/string()}" xmlns="http://hl7.org/fhir">
-        <id value="{$c/*:id}"/>
+        <id value="{$c/*:id/@value/string()}"/>
         <meta>
             <versionId value="{$version}"/>
                 <extension url="https://eNahar.org/ns/extension/lastModifiedBy">
@@ -135,7 +135,7 @@ declare function calmigr:update-2.0($c as item())
         <comment value="{$comment}"/>
         { if (local-name($c)="cal")
         then
-            for $s in $c/schedule
+            for $s in $c/*:schedule
             return
                 calmigr:update-schedule-2.0($s)
         else calmigr:update-schedule-2.0($c)
@@ -150,7 +150,7 @@ declare function calmigr:update-schedule-2.0($s as item())
                   <type xmlns="http://hl7.org/fhir" value="{$s/*:global/*:type/@value/string()}"/>
                 , <basedOn xmlns="http://hl7.org/fhir">
                     <reference value="Schedule/{substring-after($s/*:global/*:reference/@value,"enahar/schedules/")}"/>
-                    <display value="{$s/*global/*:display/@value/string()}"/>
+                    <display value="{$s/*:global/*:display/@value/string()}"/>
                   </basedOn>
                 )
           else ()
@@ -211,27 +211,36 @@ declare function calmigr:update-schedule-2.0($s as item())
     return
     <schedule xmlns="http://hl7.org/fhir">
         {$wasGlobal}
-        <isSpecial value="{$s/*:isSpecial/@value/string()}"/>
-        <ff value="{$s/*:ff/@value/string()}"/>
+        { if ($s/*:global/*:type/@value='meeting')
+          then ()
+          else 
+            ( if ($s/*:isSpecial) then
+                  <isSpecial value="{$s/*:isSpecial/@value/string()}"/> else ()
+            , if ($s/*:ff) then
+                  <ff value="{$s/*:ff/@value/string()}"/> else () 
+          )
+        }
         {$period}
         <timezone value="MEZ"/>
-        <venue>
-          <priority value="normal"/>
-          {$location}
-        </venue>
-        {$note}
-        {$rendering}
-        {$appLetter}
-        {$timing}
-        {
-        for $a in $s/*:agenda
-        return
-            calmigr:update-schedule-2.0($a)
-        }
-        {
-        for $e in $s/*:event
-        return
-            calmigr:update-event-2.0($e)
+        { if ($s/*:global/*:type/@value='meeting')
+          then ()
+          else
+          (
+            <venue>
+              <priority value="normal"/>
+              {$location}
+            </venue>
+          , $note
+          , $rendering
+          , $appLetter
+          , $timing
+          , for $a in $s/*:agenda
+            return
+              calmigr:update-schedule-2.0($a)
+          , for $e in $s/*:event
+            return
+              calmigr:update-event-2.0($e)
+          )
         }
     </schedule>
 };
@@ -249,13 +258,13 @@ declare function calmigr:update-event-2.0($e as element(event))
         <rrule xmlns="http://hl7.org/fhir">
         { 
           <freq value="{$e/*:rrule/*:freq/@value/string()}"/>
-        , if ($e/rrule/byYear and $e/rrule/byYear/@value!="") then 
+        , if ($e/*:rrule/*:byYear and $e/*:rrule/*:byYear/@value!="") then 
               <byYear value="{$e/*:rrule/*:byYear/@value/string()}"/> else ()
-        , if ($e/rrule/byMonth and $e/rrule/byMonth/@value!="") then
+        , if ($e/*:rrule/*:byMonth and $e/*:rrule/*:byMonth/@value!="") then
               <byMonth value="{$e/*:rrule/*:byMonth/@value/string()}"/> else ()
-        , if ($e/rrule/byWeekNo and $e/rrule/byWeekNo/@value!="") then
+        , if ($e/*:rrule/*:byWeekNo and $e/*:rrule/*:byWeekNo/@value!="") then
               <byWeek value="{$e/*:rrule/*:byWeekNo/@value/string()}"/> else ()
-        , if ($e/rrule/byDay and $e/rrule/byDay/@value!="") then
+        , if ($e/*:rrule/*:byDay and $e/*:rrule/*:byDay/@value!="") then
               <byDay value="{$e/*:rrule/*:byDay/@value/string()}"/> else ()
         }
         </rrule>
