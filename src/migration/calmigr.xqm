@@ -153,7 +153,11 @@ declare function calmigr:update-schedule-2.0($s as item())
                     <display value="{$s/*:global/*:display/@value/string()}"/>
                   </basedOn>
                 )
+          else if (local-name($s)='agenda')
+          then 
+                  <type xmlns="http://hl7.org/fhir" value="agenda"/>
           else ()
+                
     let $appLetter := if ($s/appLetter)
         then
         <appLetter xmlns="http://hl7.org/fhir">
@@ -272,7 +276,7 @@ declare function calmigr:update-event-2.0($e as element(event))
     let $location := if ($e/venue/location)
         then
             <location xmlns="http://hl7.org/fhir">
-              <reference value="Location/{substring-after($e/*:venue/*:location/*:reference/@value,'metis/locations/')}"/>
+              <reference value="{substring-after($e/*:venue/*:location/*:reference/@value,'metis/')}"/>
               <display value="{$e/*:venue/*:location/*:display/@value/string()}"/>
             </location>
         else ()
