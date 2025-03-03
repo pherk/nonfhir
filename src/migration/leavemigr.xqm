@@ -17,12 +17,12 @@ declare function leavemigr:update-2.0($e as item())
     let $note := if($e/note/@value!='')
         then
             <note xmlns="http://hl7.org/fhir">
-                <text value="{$e/note/@value/string()}"/>
+                <text value="{$e/*:note/@value/string()}"/>
             </note>
         else ()
     return
     <Event xml:id="{$e/@xml:id/string()}" xmlns="http://hl7.org/fhir">
-        {$e/id}
+        <id value="{$e/*:id}"/>
         <meta>
             <versionId value="{$version}"/>
                 <extension url="https://eNahar.org/ns/extension/lastModifiedBy">
@@ -33,22 +33,33 @@ declare function leavemigr:update-2.0($e as item())
                 </extension>
                 <lastUpdated value="{$lastUpd}"/>
         </meta>
-        <status value="{$e/status//code/@value/string()}"/>
+        <status value="{$e/*:status//*:code/@value/string()}"/>
         <code>
             <coding>
                 <system value="http://eNahar.org/ns/system/event-code"/>
                 <code value="leave"/>
             </coding>
         </code>
-        {$e/actor}
-        <type value="{if($e/allDay/@value='true') then 'allDay' else 'partial'}"/>
-        <title value="{$e/summary/@value/string()}"/>
-        {$e/description}
+        <actor>
+          <reference value="{$e/*:actor/*:reference/@value/string()}"/>
+          <display value="{$e/*:actor/*:display/@value/string()}"/>
+        </actor>
+        <type value="{if($e/*:allDay/@value='true') then 'allDay' else 'partial'}"/>
+        <title value="{$e/*:summary/@value/string()}"/>
+        <description value="{$e/*:description/@value/string()}"/>
         {$e/period}
+        <period xmlns="http://hl7.org/fhir">
+        {
+          if ($e/*:period/*:start/@value!="") then 
+            <start xmlns="http://hl7.org/fhir" value="{$e/*:period/*:start/@value/string()}"/> else ()
+        , if ($e/period/end/@value!="") then 
+            <end xmlns="http://hl7.org/fhir" value="{$e/*:period/*:end/@value/string()}"/> else ()
+        }
+        </period>
         <reasonCode>
           <coding>
             <system value="http://eNahar.org/ns/system/event-reason"/>
-            {$e/cause/coding/*}
+            <code value="{$e/*:cause/*:coding/*:code/@value/string()}"/>
         </reasonCode>
         {$note}
         </Event>

@@ -20,7 +20,7 @@ declare function calmigr:update-2.0($c as item())
             <identifier xmlns="http://hl7.org/fhir">
                 <use value="official"/>
                 <system value="http://eNahar.org/ns/system/ical-id"/>
-                <value value="Schedule/{substring-after($c/identifier/value/@value,"enahar/schedules/")}"/>
+                <value value="Schedule/{substring-after($c/*:identifier/*:value/@value,"enahar/schedules/")}"/>
             </identifier>
         else ()
     let $active  := $c/active/@value/string()
@@ -29,7 +29,7 @@ declare function calmigr:update-2.0($c as item())
             <cutype xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-usertype"/>
-                    <code value="{if ($c/cutype//code/@value='person') then 'individual' else 'role'}"/>
+                    <code value="{if ($c/*:cutype//*:code/@value='person') then 'individual' else 'role'}"/>
                 </coding>
             </cutype>
         else
@@ -44,7 +44,7 @@ declare function calmigr:update-2.0($c as item())
             <caltype xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-caltype"/>
-                    <code value="{$c/caltype/@value/string()}"/>
+                    <code value="{$c/*:caltype/@value/string()}"/>
                 </coding>
             </caltype>
         else if ($c/caltype/coding)
@@ -52,7 +52,7 @@ declare function calmigr:update-2.0($c as item())
             <caltype xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-caltype"/>
-                    <code value="{$c/caltype//code/@value/string()}"/>
+                    <code value="{$c/*:caltype//*:code/@value/string()}"/>
                 </coding>
             </caltype>
         else if (local-name($c)='schedule')
@@ -60,7 +60,7 @@ declare function calmigr:update-2.0($c as item())
             <caltype xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-caltype"/>
-                    <code value="{$c/type/@value/string()}"/>
+                    <code value="{$c/*:type/@value/string()}"/>
                 </coding>
             </caltype>
           else
@@ -75,7 +75,7 @@ declare function calmigr:update-2.0($c as item())
             <serviceType xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/service-type"/>
-                    <code value="{$c/owner/group/@value/string()}"/>
+                    <code value="{$c/*:owner/*:group/@value/string()}"/>
                 </coding>
             </serviceType>
         else ()
@@ -83,8 +83,8 @@ declare function calmigr:update-2.0($c as item())
     let $actor   := if ($c/owner)
         then
             <actor xmlns="http://hl7.org/fhir">
-              {$c/owner/reference}
-              {$c/owner/display}
+              <reference value="{$c/*:owner/*:reference/@value/string()}"/>
+              <display value="{$c/*:owner/*:display/@value/string()}"/>
             </actor>
         else ()
     let $name    := ($c/summary/@value/string(), $c/name/@value/string())[1]
@@ -92,13 +92,13 @@ declare function calmigr:update-2.0($c as item())
     let $location   := if ($c/location)
         then
             <location xmlns="http://hl7.org/fhir">
-              <reference value="Location/{substring-after($c/location/reference/@value,'metis/locations/')}"/>
-              {$c/location/display}
+              <reference value="Location/{substring-after($c/*:location/*:reference/@value,'metis/locations/')}"/>
+              <display value="{$c/*:location/*:display/@value/string()}"/>
             </location>
         else ()
     return
     <ICal xml:id="{$c/@xml:id/string()}" xmlns="http://hl7.org/fhir">
-        {$c/id}
+        <id value="{$c/*:id}"/>
         <meta>
             <versionId value="{$version}"/>
                 <extension url="https://eNahar.org/ns/extension/lastModifiedBy">
@@ -147,69 +147,72 @@ declare function calmigr:update-schedule-2.0($s as item())
 {
     let $wasGlobal :=if ($s/global)
           then (
-                  <type xmlns="http://hl7.org/fhir" value="{$s/global/type}"/>
+                  <type xmlns="http://hl7.org/fhir" value="{$s/*:global/*:type/@value/string()}"/>
                 , <basedOn xmlns="http://hl7.org/fhir">
-                    <reference value="Schedule/{substring-after($s/global/reference/@value,"enahar/schedules/")}"/>
-                    {$s/global/display}
+                    <reference value="Schedule/{substring-after($s/*:global/*:reference/@value,"enahar/schedules/")}"/>
+                    <display value="{$s/*global/*:display/@value/string()}"/>
                   </basedOn>
                 )
           else ()
     let $appLetter := if ($s/appLetter)
         then
         <appLetter xmlns="http://hl7.org/fhir">
-            <altName value="{$s/appLetter/alt-name/@value/string()}"/>
-            {$s/appLetter/template}
+           <reference value="Template/{$s/*:appLetter/*:template/*:name/@value/string()}"/>
+           <altName value="{$s/*:appLetter/*:alt-name/@value/string()}"/>
         </appLetter>
         else ()
     let $period := if ($s/period)
         then
             <period xmlns="http://hl7.org/fhir">
                 {
-                  if ($s/period/start/@value!="") then $s/period/start else ()
-                , if ($s/period/end/@value!="") then $s/period/end else ()
+                  if ($s/*:period/*:start/@value!="") then 
+                    <start xmlns="http://hl7.org/fhir" value="{$s/*:period/*:start/@value/string()}"/> else ()
+                , if ($s/period/end/@value!="") then 
+                    <end xmlns="http://hl7.org/fhir" value="{$s/*:period/*:end/@value/string()}"/> else ()
                 }
             </period>
         else ()
     let $location := if ($s/location)
         then
             <location xmlns="http://hl7.org/fhir">
-              <reference value="Location/{substring-after($s/location/reference/@value,'metis/locations/')}"/>
-              {$s/location/display}
+              <reference value="Location/{substring-after($s/*:location/*:reference/@value,'metis/locations/')}"/>
+              <display value="{$s/*:location/*:display/@value/string()}"/>
             </location>
         else ()
     let $note := if($s/note/@value!='')
         then
             <note xmlns="http://hl7.org/fhir">
-                <text value="{$s/note/@value/string()}"/>
+                <text value="{$s/*:note/@value/string()}"/>
             </note>
         else ()
     let $rendering  := if ($s/fc)
         then
         <rendering xmlns="http://hl7.org/fhir">
-            {$s/fc/className}
-            {$s/fc/backgroundColor}
-            {$s/fc/textColor}
-            {$s/fc/editable}
+            <className value="{$s/*:fc/*:className/@value/string()}"/>
+            <backgroundColor value="{$s/*:fc/*:backgroundColor/@value/string()}"/>
+            <textColor value="{$s/*:fc/*:textColor/@value/string()}"/>
+            <editable value="{$s/*:fc/*:editable/@value/string()}"/>
         </rendering>
         else ()
-    let $pph := if ($s/timing/parallel-per-hour) then <parallelPerHour value="{$s/timing/parallel-per-hour/@value/string()}"/> else ()
+    let $pph := if ($s/timing/parallel-per-hour) then
+        <parallelPerHour xmlns="http://hl7.org/fhir" value="{$s/*:timing/*:parallel-per-hour/@value/string()}"/> else ()
     let $timing := if ($s/timing)
         then
         <timing xmlns="http://hl7.org/fhir">
-            {$s/timing/pre}
-            {$s/timing/exam}
-            {$s/timing/post}
-            {$s/timing/overbookable}
-            {$s/timing/query}
-            {$s/blocking}
+            <pre value="{$s/*:timing/*:pre/@value/string()}"/>
+            <exam value="{$s/*:timing/*:exam/@value/string()}"/>
+            <post value="{$s/*:timing/*:post/@value/string()}"/>
+            <overbookable value="{$s/*:timing/*:overbookable/@value/string()}"/>
+            <query value="{$s/*:timing/*:query/@value/string()}"/>
+            <blocking value="{$s/*:blocking/@value/string()}"/>
             {$pph}
         </timing>
         else ()
     return
     <schedule xmlns="http://hl7.org/fhir">
         {$wasGlobal}
-        {$s/isSpecial}
-        {$s/ff}
+        <isSpecial value="{$s/*:isSpecial/@value/string()}"/>
+        <ff value="{$s/*:ff/@value/string()}"/>
         {$period}
         <timezone value="MEZ"/>
         <venue>
@@ -221,12 +224,12 @@ declare function calmigr:update-schedule-2.0($s as item())
         {$appLetter}
         {$timing}
         {
-        for $a in $s/agenda
+        for $a in $s/*:agenda
         return
             calmigr:update-schedule-2.0($a)
         }
         {
-        for $e in $s/event
+        for $e in $s/*:event
         return
             calmigr:update-event-2.0($e)
         }
@@ -238,42 +241,46 @@ declare function calmigr:update-event-2.0($e as element(event))
     let $note := if($e/note/@value!='')
         then
             <note xmlns="http://hl7.org/fhir">
-                <text value="{$e/note/@value/string()}"/>
+                <text value="{$e/*:note/@value/string()}"/>
             </note>
         else ()
     let $rrule := if ($e/rrule)
         then
         <rrule xmlns="http://hl7.org/fhir">
         { 
-          $e/rrule/freq
-        , if ($e/rrule/byYear and $e/rrule/byYear/@value!="") then $e/rrule/byYear else ()
-        , if ($e/rrule/byMonth and $e/rrule/byMonth/@value!="") then $e/rrule/byMonth else ()
-        , if ($e/rrule/byWeekNo and $e/rrule/byWeekNo/@value!="") then <byWeek value="{$e/rrule/byWeekNo/@value/string()}"/> else ()
-        , if ($e/rrule/byDay and $e/rrule/byDay/@value!="") then $e/rrule/byDay else ()
+          <freq value="{$e/*:rrule/*:freq/@value/string()}"/>
+        , if ($e/rrule/byYear and $e/rrule/byYear/@value!="") then 
+              <byYear value="{$e/*:rrule/*:byYear/@value/string()}"/> else ()
+        , if ($e/rrule/byMonth and $e/rrule/byMonth/@value!="") then
+              <byMonth value="{$e/*:rrule/*:byMonth/@value/string()}"/> else ()
+        , if ($e/rrule/byWeekNo and $e/rrule/byWeekNo/@value!="") then
+              <byWeek value="{$e/*:rrule/*:byWeekNo/@value/string()}"/> else ()
+        , if ($e/rrule/byDay and $e/rrule/byDay/@value!="") then
+              <byDay value="{$e/*:rrule/*:byDay/@value/string()}"/> else ()
         }
         </rrule>
         else ()
     let $location := if ($e/venue/location)
         then
             <location xmlns="http://hl7.org/fhir">
-              <reference value="Location/{substring-after($e/venue/location/reference/@value,'metis/locations/')}"/>
-              {$e/venue/location/display}
+              <reference value="Location/{substring-after($e/*:venue/*:location/*:reference/@value,'metis/locations/')}"/>
+              <display value="{$e/*:venue/*:location/*:display/@value/string()}"/>
             </location>
         else ()
     return
         <event xmlns="http://hl7.org/fhir">
-        {$e/name}
-        {$e/summary}
-        {$e/description}
-        {$e/start}
-        {$e/end}
-        {$note}
-        <venue>
-            <priority value="{$e/venue/priority/@value/string()}"/>
+          <name value="{$e/*:name/@value/string()}"/>
+          <summary value="{$e/*:summary/@value/string()}"/>
+          <description value="{$e/*:description/@value/string()}"/>
+          <start value="{$e/*:start/@value/string()}"/>
+          <end value="{$e/*:end/@value/string()}"/>
+          {$note}
+          <venue>
+            <priority value="{$e/*:venue/*:priority/@value/string()}"/>
             {$location}
-        </venue>
-        {$rrule}
-        {$e/rdate}
-        {$e/exdate}
+          </venue>
+          {$rrule}
+          { for $d in $e/*:rdate/* return <rdate value="{$d/@value/string()}"/> }
+          { for $d in $e/*:exdate/* return <exdate value="{$d/@value/string()}"/> }
         </event>
 };
