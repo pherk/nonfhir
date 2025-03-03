@@ -17,7 +17,7 @@ declare function calmigr:update-2.0($c as item())
     let $lastUpd := ($c/lastModified/@value/string(), xs:string(date:now()))[1]
     let $identifier := if ($c/identifier)
         then
-            <identifier>
+            <identifier xmlns="http://hl7.org/fhir">
                 <use value="official"/>
                 <system value="http://eNahar.org/ns/system/ical-id"/>
                 <value value="Schedule/{substring-after($c/identifier/value/@value,"enahar/schedules/")}"/>
@@ -26,14 +26,14 @@ declare function calmigr:update-2.0($c as item())
     let $active  := $c/active/@value/string()
     let $cutype := if ($c/cutype)
         then
-            <cutype>
+            <cutype xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-usertype"/>
                     <code value="{if ($c/cutype//code/@value='person') then 'individual' else 'role'}"/>
                 </coding>
             </cutype>
         else
-            <cutype>
+            <cutype xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-usertype"/>
                     <code value="schedule"/>
@@ -41,7 +41,7 @@ declare function calmigr:update-2.0($c as item())
             </cutype>
     let $caltype := if ($c/caltype/@value)
         then
-            <caltype>
+            <caltype xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-caltype"/>
                     <code value="{$c/caltype/@value/string()}"/>
@@ -49,7 +49,7 @@ declare function calmigr:update-2.0($c as item())
             </caltype>
         else if ($c/caltype/coding)
         then
-            <caltype>
+            <caltype xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-caltype"/>
                     <code value="{$c/caltype//code/@value/string()}"/>
@@ -57,14 +57,14 @@ declare function calmigr:update-2.0($c as item())
             </caltype>
         else if (local-name($c)='schedule')
         then
-            <caltype>
+            <caltype xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-caltype"/>
                     <code value="{$c/type/@value/string()}"/>
                 </coding>
             </caltype>
           else
-            <caltype>
+            <caltype xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/ical-caltype"/>
                     <code value="primary"/>
@@ -72,7 +72,7 @@ declare function calmigr:update-2.0($c as item())
             </caltype>
     let $serviceType := if ($c/owner/group and $c/owner/group/@value!='')
         then
-            <serviceType>
+            <serviceType xmlns="http://hl7.org/fhir">
                 <coding>
                     <system value="http://eNahar.org/ns/system/service-type"/>
                     <code value="{$c/owner/group/@value/string()}"/>
@@ -82,7 +82,7 @@ declare function calmigr:update-2.0($c as item())
     let $active  := $c/active/@value/string()
     let $actor   := if ($c/owner)
         then
-            <actor>
+            <actor xmlns="http://hl7.org/fhir">
               {$c/owner/reference}
               {$c/owner/display}
             </actor>
@@ -91,13 +91,13 @@ declare function calmigr:update-2.0($c as item())
     let $comment := $c/description/@value/string()
     let $location   := if ($c/location)
         then
-            <location>
+            <location xmlns="http://hl7.org/fhir">
               <reference value="Location/{substring-after($c/location/reference/@value,'metis/locations/')}"/>
               {$c/location/display}
             </location>
         else ()
     return
-    <ICal xml:id="{$c/@xml:id/string()}">
+    <ICal xml:id="{$c/@xml:id/string()}" xmlns="http://hl7.org/fhir">
         {$c/id}
         <meta>
             <versionId value="{$version}"/>
@@ -147,8 +147,8 @@ declare function calmigr:update-schedule-2.0($s as item())
 {
     let $wasGlobal :=if ($s/global)
           then (
-                 $s/global/type
-                , <basedOn>
+                  <type xmlns="http://hl7.org/fhir" value="{$s/global/type}"/>
+                , <basedOn xmlns="http://hl7.org/fhir">
                     <reference value="Schedule/{substring-after($s/global/reference/@value,"enahar/schedules/")}"/>
                     {$s/global/display}
                   </basedOn>
@@ -156,14 +156,14 @@ declare function calmigr:update-schedule-2.0($s as item())
           else ()
     let $appLetter := if ($s/appLetter)
         then
-        <appLetter>
+        <appLetter xmlns="http://hl7.org/fhir">
             <altName value="{$s/appLetter/alt-name/@value/string()}"/>
             {$s/appLetter/template}
         </appLetter>
         else ()
     let $period := if ($s/period)
         then
-            <period>
+            <period xmlns="http://hl7.org/fhir">
                 {
                   if ($s/period/start/@value!="") then $s/period/start else ()
                 , if ($s/period/end/@value!="") then $s/period/end else ()
@@ -172,20 +172,20 @@ declare function calmigr:update-schedule-2.0($s as item())
         else ()
     let $location := if ($s/location)
         then
-            <location>
+            <location xmlns="http://hl7.org/fhir">
               <reference value="Location/{substring-after($s/location/reference/@value,'metis/locations/')}"/>
               {$s/location/display}
             </location>
         else ()
     let $note := if($s/note/@value!='')
         then
-            <note>
+            <note xmlns="http://hl7.org/fhir">
                 <text value="{$s/note/@value/string()}"/>
             </note>
         else ()
     let $rendering  := if ($s/fc)
         then
-        <rendering>
+        <rendering xmlns="http://hl7.org/fhir">
             {$s/fc/className}
             {$s/fc/backgroundColor}
             {$s/fc/textColor}
@@ -195,7 +195,7 @@ declare function calmigr:update-schedule-2.0($s as item())
     let $pph := if ($s/timing/parallel-per-hour) then <parallelPerHour value="{$s/timing/parallel-per-hour/@value/string()}"/> else ()
     let $timing := if ($s/timing)
         then
-        <timing>
+        <timing xmlns="http://hl7.org/fhir">
             {$s/timing/pre}
             {$s/timing/exam}
             {$s/timing/post}
@@ -206,7 +206,7 @@ declare function calmigr:update-schedule-2.0($s as item())
         </timing>
         else ()
     return
-    <schedule>
+    <schedule xmlns="http://hl7.org/fhir">
         {$wasGlobal}
         {$s/isSpecial}
         {$s/ff}
@@ -235,16 +235,15 @@ declare function calmigr:update-schedule-2.0($s as item())
 
 declare function calmigr:update-event-2.0($e as element(event))
 {
-    let $name := $e/title/@value/string()
     let $note := if($e/note/@value!='')
         then
-            <note>
+            <note xmlns="http://hl7.org/fhir">
                 <text value="{$e/note/@value/string()}"/>
             </note>
         else ()
     let $rrule := if ($e/rrule)
         then
-        <rrule>
+        <rrule xmlns="http://hl7.org/fhir">
         { 
           $e/rrule/freq
         , if ($e/rrule/byYear and $e/rrule/byYear/@value!="") then $e/rrule/byYear else ()
@@ -256,13 +255,13 @@ declare function calmigr:update-event-2.0($e as element(event))
         else ()
     let $location := if ($e/venue/location)
         then
-            <location>
+            <location xmlns="http://hl7.org/fhir">
               <reference value="Location/{substring-after($e/venue/location/reference/@value,'metis/locations/')}"/>
               {$e/venue/location/display}
             </location>
         else ()
     return
-        <event>
+        <event xmlns="http://hl7.org/fhir">
         {$e/name}
         {$e/summary}
         {$e/description}

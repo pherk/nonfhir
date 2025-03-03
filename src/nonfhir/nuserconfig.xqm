@@ -58,18 +58,18 @@ declare function nuc:search-userconfig($request as map(*)){
     let $actor  := query:analyze($request?parameters?actor,"reference")
     let $active := query:analyze($request?parameters?active, "boolean", "true")
     let $verified := query:analyze($request?parameters?verified, "boolean", "true")
-    let $coll := collection($config:uc-data)
+    let $coll := collection($config:uconfig-data)
     let $now := date:now()
     let $hits0 := if (count($identifier)>0)
-        then $coll/UserConfig[identifier/value[@value=$identifier]]
+        then $coll/fhir:UserConfig[fhir:identifier[fhir:value/@value=$identifier]]
         else if (count($actor)=0)
-        then $coll/UserConfig[active[@value=$active]][verified[@value=$verified]]
+        then $coll/fhir:UserConfig[fhir:active[@value=$active]][fhir:verified[@value=$verified]]
         else let $oref := concat('metis/practitioners/', $actor)
             return 
-                $coll/UserConfig[actor/reference[@value=$oref]][active[@value=$active]]
+                $coll/fhir:UserConfig[fhir:actor/fhir:reference[@value=$oref]][fhir:active[@value=$active]]
     let $sorted-hits :=
         for $c in $hits0
-        order by lower-case($c/actor/display/@value/string())
+        order by lower-case($c/fhir:actor/fhir:display/@value/string())
         return
 (: TODO analyze elements id, owner, schedule :)
             if (count($elems)>0)
@@ -241,6 +241,7 @@ declare %private function nuc:doPOST(
  : 
  : @return <response>
  :)
+(:
 declare function nuc:putUserConfigJSON($request as map(*))
 {
     let $uuid := $request?parameters?id
@@ -263,7 +264,7 @@ let $lll := util:log-app('TRACE','apps.nabu',$r)
         else
             mutil:rest-response(422, 'no content? Ask the admin.') 
 };
-
+:)
 (:~
  : PUT: /UserConfig/{$uuid}
  : Update an existing userconfig or store a new one. The address XML is read

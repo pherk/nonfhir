@@ -16,12 +16,12 @@ declare function leavemigr:update-2.0($e as item())
 
     let $note := if($e/note/@value!='')
         then
-            <note>
+            <note xmlns="http://hl7.org/fhir">
                 <text value="{$e/note/@value/string()}"/>
             </note>
         else ()
     return
-    <Event xml:id="{$e/@xml:id/string()}">
+    <Event xml:id="{$e/@xml:id/string()}" xmlns="http://hl7.org/fhir">
         {$e/id}
         <meta>
             <versionId value="{$version}"/>
