@@ -92,7 +92,7 @@ declare function calmigr:update-2.0($c as item())
     let $location   := if ($c/location)
         then
             <location xmlns="http://hl7.org/fhir">
-              <reference value="Location/{substring-after($c/*:location/*:reference/@value,'metis/locations/')}"/>
+              <reference value="{substring-after($c/*:location/*:reference/@value,'metis/')}"/>
               <display value="{$c/*:location/*:display/@value/string()}"/>
             </location>
         else ()
@@ -171,7 +171,7 @@ declare function calmigr:update-schedule-2.0($s as item())
                 {
                   if ($s/*:period/*:start/@value!="") then 
                     <start xmlns="http://hl7.org/fhir" value="{$s/*:period/*:start/@value/string()}"/> else ()
-                , if ($s/period/end/@value!="") then 
+                , if ($s/*:period/*:end/@value!="") then 
                     <end xmlns="http://hl7.org/fhir" value="{$s/*:period/*:end/@value/string()}"/> else ()
                 }
             </period>
@@ -179,7 +179,7 @@ declare function calmigr:update-schedule-2.0($s as item())
     let $location := if ($s/location)
         then
             <location xmlns="http://hl7.org/fhir">
-              <reference value="Location/{substring-after($s/*:location/*:reference/@value,'metis/locations/')}"/>
+              <reference value="{substring-after($s/*:location/*:reference/@value,'metis/')}"/>
               <display value="{$s/*:location/*:display/@value/string()}"/>
             </location>
         else ()

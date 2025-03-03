@@ -22,7 +22,7 @@ declare function leavemigr:update-2.0($e as item())
         else ()
     return
     <Event xml:id="{$e/@xml:id/string()}" xmlns="http://hl7.org/fhir">
-        <id value="{$e/*:id}"/>
+        <id value="{$e/*:id/@value/string()}"/>
         <meta>
             <versionId value="{$version}"/>
                 <extension url="https://eNahar.org/ns/extension/lastModifiedBy">
@@ -47,12 +47,11 @@ declare function leavemigr:update-2.0($e as item())
         <type value="{if($e/*:allDay/@value='true') then 'allDay' else 'partial'}"/>
         <title value="{$e/*:summary/@value/string()}"/>
         <description value="{$e/*:description/@value/string()}"/>
-        {$e/period}
-        <period xmlns="http://hl7.org/fhir">
+        <period>
         {
           if ($e/*:period/*:start/@value!="") then 
             <start xmlns="http://hl7.org/fhir" value="{$e/*:period/*:start/@value/string()}"/> else ()
-        , if ($e/period/end/@value!="") then 
+        , if ($e/*:period/*:end/@value!="") then 
             <end xmlns="http://hl7.org/fhir" value="{$e/*:period/*:end/@value/string()}"/> else ()
         }
         </period>
@@ -60,6 +59,7 @@ declare function leavemigr:update-2.0($e as item())
           <coding>
             <system value="http://eNahar.org/ns/system/event-reason"/>
             <code value="{$e/*:cause/*:coding/*:code/@value/string()}"/>
+          </coding>
         </reasonCode>
         {$note}
         </Event>

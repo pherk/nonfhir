@@ -30,16 +30,19 @@
       <text value="Feiertage"/>
   </caltype>
   <name value="holidays"/>
-  <comment value="Holiday Profile for Germany/Nordrhein-Westphalen.\nThe structure definition is similar to fhir:Schedule. The semantic deviates from ical rfc5445 and rfc6321.\nFurther details see Wiki."/>
+  <comment value="Holiday Profile for Germany/Nordrhein-Westphalen.\nThe structure definition is similar to fhir:Schedule. The semantics deviates from ical rfc5445 and rfc6321.\nFurther details see Wiki."/>
   <timezone value="MEZ"/>
   <location>
       <reference value="metis/locations/kikl-spz"/>
       <display value="UKK Köln SPZ"/>
   </location>
   <schedule>
+    <type value="agenda"/>
+    <rendering>
     <className value="holiday"/>
     <blocking value="true"/>
     <editable value="false"/>
+    </rendering>
     <event>
         <name value="neujahr"/>
         <description value="Neujahr"/>
